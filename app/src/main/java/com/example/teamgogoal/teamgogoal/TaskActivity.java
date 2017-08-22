@@ -49,8 +49,8 @@ public class TaskActivity extends AppCompatActivity {
     String currTid="",nextID="",currID="";
     LoginActivity.User user;
     AlertDialog.Builder cheerDialog;
-    AlertDialog msg=null;
-    AlertDialog dialog=null;
+    AlertDialog msg=null,dialog=null;   //dialog建興的
+    AlertDialog.Builder msgDialog=null;
     View addTaskMsg;
     final String[] list = {"earth", "jupiter", "mars"};
     SocketTrans socketTrans=LoginActivity.socketTrans;
@@ -58,45 +58,55 @@ public class TaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task);
-       try{
-           Bundle bundle = getIntent().getExtras();
-           user=LoginActivity.getUser();
-           currTid=bundle.getString("tid");
-           String t_name=bundle.getString("t_name");
+        try{
+            Bundle bundle = getIntent().getExtras();
+            user=LoginActivity.getUser();
+            currTid=bundle.getString("tid");
+            String t_name=bundle.getString("t_name");
 
 
 
-           db=new TaskDB(LoginActivity.getLocalHost()+"readmission.php");
+            db=new TaskDB(LoginActivity.getLocalHost()+"readmission.php");
 
-           LayoutInflater factory = LayoutInflater.from(this);
-           View addTargetMsg = factory.inflate(R.layout.activity_task_add_msg, null);
-           taskll=(LinearLayout)findViewById(R.id.taskll);
+            LayoutInflater factory = LayoutInflater.from(this);
+            addTaskMsg = factory.inflate(R.layout.activity_task_add_msg, null);
+            taskll=(LinearLayout)findViewById(R.id.taskll);
 
-           taskNameTxt=(EditText) addTargetMsg.findViewById(R.id.taskNameTxt);
-           taskContent=(EditText) addTargetMsg.findViewById(R.id.taskContent);
-           spinner=(Spinner) addTargetMsg.findViewById(R.id.spinner);
-           ArrayAdapter<String> lunchList = new ArrayAdapter<>(TaskActivity.this,
-                   android.R.layout.simple_spinner_dropdown_item,
-                   list);
-           spinner.setAdapter(lunchList);
-           remindTimeTxt=(EditText)addTargetMsg.findViewById(R.id.remindTimeTxt);
-           submitTaskBtn=(Button)addTargetMsg.findViewById(R.id.submitTargetBtn);
-           cannelTaskBtn=(Button)addTargetMsg.findViewById(R.id.cannelBtn);
-           clearTaskMessageBtn=(Button)addTargetMsg.findViewById(R.id.clearMessageBtn);
+            taskNameTxt=(EditText) addTaskMsg.findViewById(R.id.taskNameTxt);
 
-           new DbOperationTask().execute("read");
+            taskContent=(EditText) addTaskMsg.findViewById(R.id.taskContent);
+            spinner=(Spinner) addTaskMsg.findViewById(R.id.spinner);
+            ArrayAdapter<String> lunchList = new ArrayAdapter<>(TaskActivity.this,
+                    android.R.layout.simple_spinner_dropdown_item,
+                    list);
+            spinner.setAdapter(lunchList);
+            remindTimeTxt=(EditText)addTaskMsg.findViewById(R.id.remindTimeTxt);
+            submitTaskBtn=(Button)addTaskMsg.findViewById(R.id.submitTaskBtn);
+            cannelTaskBtn=(Button)addTaskMsg.findViewById(R.id.cannelTaskBtn);
+            clearTaskMessageBtn=(Button)addTaskMsg.findViewById(R.id.clearTaskMessageBtn);
+            msgDialog = new AlertDialog.Builder(TaskActivity.this)
+                    .setView(addTaskMsg);
+            msgDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialogInterface) {
+                    initial();
+                }
+            });
 
-           LayoutInflater factoryCheerMsg = LayoutInflater.from(this);
-           View cheerMsg = factoryCheerMsg.inflate(R.layout.activity_cheer_msg, null);
-           submit=(Button) cheerMsg.findViewById(R.id.cheerBtn);
-           cheerEt=(EditText) cheerMsg.findViewById(R.id.cheerEt);
-           cheerDialog = new AlertDialog.Builder(TaskActivity.this);
-           cheerDialog.setView(cheerMsg);
-           taskTitle=(TextView)findViewById(R.id.taskTitle);
-           taskTitle.setText(t_name);
-       }catch(Exception e){
-           Log.v("jim_Task_onCreate",e.toString());
-       }
+
+            new DbOperationTask().execute("read");
+
+            LayoutInflater factoryCheerMsg = LayoutInflater.from(this);
+            View cheerMsg = factoryCheerMsg.inflate(R.layout.activity_cheer_msg, null);
+            submit=(Button) cheerMsg.findViewById(R.id.cheerBtn);
+            cheerEt=(EditText) cheerMsg.findViewById(R.id.cheerEt);
+            cheerDialog = new AlertDialog.Builder(TaskActivity.this);
+            cheerDialog.setView(cheerMsg);
+            taskTitle=(TextView)findViewById(R.id.taskTitle);
+            taskTitle.setText(t_name);
+        }catch(Exception e){
+            Log.v("jim_Task_onCreate",e.toString());
+        }
     }
 
     protected void showCheerMsg(){
@@ -386,7 +396,7 @@ public class TaskActivity extends AppCompatActivity {
             case R.id.selectRemindTime:
                 alarm();
                 break;
-            case R.id.cannelBtn:
+            case R.id.cannelTaskBtn:
                 cancel();
                 break;
             case R.id.submitTaskBtn:
@@ -412,15 +422,12 @@ public class TaskActivity extends AppCompatActivity {
         }
     }
     protected void showmsg(){
-        View write_record;
+        if(msg==null) msg=msgDialog.show();
+        else msg.show();
 
-        write_record = LayoutInflater.from(TaskActivity.this).inflate(R.layout.activity_task_add_msg, null);
-        dialog = new AlertDialog.Builder(TaskActivity.this)
-                .setView(write_record)
-                .show();
     }
     protected void alarm(){
-       final EditText remindTime=(EditText) findViewById(R.id.remindTimeTxt);
+        final EditText remindTime=remindTimeTxt;
         // Use the current time as the default values for the picker
         final Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
@@ -430,6 +437,7 @@ public class TaskActivity extends AppCompatActivity {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 remindTime.setText(hourOfDay + ":" + minute);
+                Log.v("jim_alarm",hourOfDay + ":" + minute);
             }
         }, hour, minute, false).show();
     }
@@ -444,7 +452,7 @@ public class TaskActivity extends AppCompatActivity {
     }
     protected  void cancel(){
         initial();
-        dialog.dismiss();
+        msg.dismiss();
     }
     public class TaskUIStructure{
         TaskDB.TaskDetail td;
