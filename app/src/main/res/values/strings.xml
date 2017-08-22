@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TeamGoGoal</string>
+    <string-array name="array_name">
+        <item>earth</item>
+        <item>mars</item>
+        <item>jupiter</item>
+    </string-array>
+</resources>
