@@ -1,6 +1,9 @@
 package com.example.teamgogoal.teamgogoal;
 
 import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,6 +16,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +29,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,6 +48,7 @@ public class TargetActivity extends AppCompatActivity {
     LinearLayout targetll;
     EditText targetNameEt,targeContentEt,startTimeEt,endTimeEt,participatorTxt;
     Button submitTargetBtn,clearTargetBtn,cannelBtn;
+    ImageView targetProfilePicture;
     View addTargetMsg;
     Spinner spinner;
     String nextID="",currID="";
@@ -52,11 +61,7 @@ public class TargetActivity extends AppCompatActivity {
         try{
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_target);
-
             targetll=(LinearLayout) findViewById(R.id.taskLinearLayout);
-
-
-
             db= new TargetDB();
             LayoutInflater factory = LayoutInflater.from(this);
             addTargetMsg = factory.inflate(R.layout.activity_target_add_msg, null);
@@ -69,6 +74,7 @@ public class TargetActivity extends AppCompatActivity {
             submitTargetBtn=(Button)addTargetMsg.findViewById(R.id.submitTargetBtn);
             clearTargetBtn=(Button)addTargetMsg.findViewById(R.id.clearMessageBtn);
             cannelBtn=(Button)addTargetMsg.findViewById(R.id.cannelBtn);
+            targetProfilePicture=(ImageView)findViewById(R.id.targetProfilePicture);
             spinner=(Spinner) addTargetMsg.findViewById(R.id.spinner);
             dialog.setView(addTargetMsg);
             dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -78,20 +84,72 @@ public class TargetActivity extends AppCompatActivity {
                 }
             });
             user=LoginActivity.getUser();
-            new DbOperationTask().execute("readTarget");
 
 
-           /* Thread t=new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    String result=socketTrans.getResult();
-                    Toast.makeText(TargetActivity.this,result,Toast.LENGTH_SHORT).show();
-                }
-            });*/
+
         }catch(Exception e){
             Log.v("jim",e.toString());
         }
     }
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // TODO Auto-generated method stub
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) { // 攔截返回鍵
+            targetMap.clear();
+            finish();
+        }
+        return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loading();
+    }
+    protected  void loading(){
+        synchronized(this) {
+            new DbOperationTask().execute("readTarget");
+
+            //帥哥峻禾部分
+            String imageUrl = localhost + "profile picture/" + user.uid;
+            new AsyncTask<String, Void, Bitmap>()
+            {
+                @Override
+                protected Bitmap doInBackground(String... params)
+                {
+                    String url = params[0];
+                    return getBitmapFromURL(url);
+                }
+
+                @Override
+                protected void onPostExecute(Bitmap result)
+                {
+                    targetProfilePicture.setImageBitmap (result);
+                    super.onPostExecute(result);
+                }
+            }.execute(imageUrl);
+        }
+    }
+
+    //帥哥峻禾部分
+    public Bitmap getBitmapFromURL(String imageUrl){
+        try
+        {
+            URL url = new URL(imageUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap bitmap = BitmapFactory.decodeStream(input);
+            return bitmap;
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public void onClick(View view){
         int id=view.getId();
         switch (id){
@@ -117,16 +175,23 @@ public class TargetActivity extends AppCompatActivity {
             case R.id.button2:
                 toRequest();
                 break;
+            case R.id.loadBtn:
+                loading();
+                break;
+            //帥哥峻禾部分
+            case R.id.editProfile:
+                toEditProfile();
+                break;
         }
     }
-    protected  void toRequest(){
-        if(request==null){
-            Bundle bundle = getIntent().getExtras();
-            request=bundle.getString("loadingRequest");
-        }
-
+    //帥哥峻禾部分
+    private void toEditProfile() {
         intent=new Intent();
-        intent.putExtra("loadingRequest",request);
+        intent.setClass(TargetActivity.this, EditProfile.class);
+        startActivity(intent);
+    }
+    protected  void toRequest(){
+        intent=new Intent();
         intent.setClass(TargetActivity.this, RequestActivity.class);
         startActivity(intent);
     }
@@ -135,6 +200,7 @@ public class TargetActivity extends AppCompatActivity {
         try{
             if(msg==null){
                 msg=dialog.show();
+                participatorTxt.setText(user.account);
             }else{
                 msg.show();
             }
@@ -147,11 +213,6 @@ public class TargetActivity extends AppCompatActivity {
             if((targetNameEt.getText().toString().equals("") || targeContentEt.getText().toString().equals("") || startTimeEt.getText().toString().equals("") || endTimeEt.getText().toString().equals("") || participatorTxt.getText().toString().equals(""))){
                 Toast.makeText(this,"請輸入完整資訊",Toast.LENGTH_SHORT).show();
             }else{
-
-
-
-
-
                 LinearLayout tll=new LinearLayout(this);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -271,58 +332,61 @@ public class TargetActivity extends AppCompatActivity {
             while (it.hasNext()) {
 
                 Map.Entry<String, TargetDB.TargetDetail> set = (Map.Entry) it.next();
-                LinearLayout tll = new LinearLayout(this);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(30, 20, 30, 0);
-                tll.setOrientation(LinearLayout.HORIZONTAL);
-                tll.setLayoutParams(layoutParams);
-                tll.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View view) {
-                        final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"read", "update", "delete"}, view.getId());
-                        mutiItemDialog.show();
-                        return false;
-                    }
-
-                });
-
-                tll.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        enterTaskActivity(view.getId());
-                    }
-                });
-
-                ImageView img = new ImageView(this);
-                img=toCircleImage(R.drawable.images,img);
-                //等比例放大縮小
-                img.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                //允許img可以改變大小
-                img.setAdjustViewBounds(true);
-                //建立layout，並且設定大小
-                layoutParams = new LinearLayout.LayoutParams(250, 250);
-                layoutParams.setMargins(0, 0, 20, 0);
-                //設定好的layout丟給imageview
-                img.setLayoutParams(layoutParams);
-
-                TextView txt = new TextView(this);
-                txt.setGravity(Gravity.BOTTOM);
-
-                txt.setText(set.getValue().targetName);
-
-                tll.addView(img);
-                tll.addView(txt);
-                String s=set.getValue().tid.trim();
+                String s = set.getValue().tid.trim();
                 Integer key = Integer.parseInt(s);
-                tll.setId(key);
+                if(!targetMap.containsKey(key)) {
+                    LinearLayout tll = new LinearLayout(this);
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    layoutParams.setMargins(30, 20, 30, 0);
+                    tll.setOrientation(LinearLayout.HORIZONTAL);
+                    tll.setLayoutParams(layoutParams);
+                    tll.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View view) {
+                            final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"read", "update", "delete"}, view.getId());
+                            mutiItemDialog.show();
+                            return false;
+                        }
 
-                TargetUIStructure targetUIS=new TargetUIStructure(set.getValue(),tll,img,txt);
-                targetMap.put(key, targetUIS);
-                try {
-                    targetll.addView(tll);
-                }catch(Exception e){
-                    Log.v("jim12",e.toString());
+                    });
+
+                    tll.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            enterTaskActivity(view.getId());
+                        }
+                    });
+
+                    ImageView img = new ImageView(this);
+                    img = toCircleImage(R.drawable.images, img);
+                    //等比例放大縮小
+                    img.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                    //允許img可以改變大小
+                    img.setAdjustViewBounds(true);
+                    //建立layout，並且設定大小
+                    layoutParams = new LinearLayout.LayoutParams(250, 250);
+                    layoutParams.setMargins(0, 0, 20, 0);
+                    //設定好的layout丟給imageview
+                    img.setLayoutParams(layoutParams);
+
+                    TextView txt = new TextView(this);
+                    txt.setGravity(Gravity.BOTTOM);
+
+                    txt.setText(set.getValue().targetName);
+
+                    tll.addView(img);
+                    tll.addView(txt);
+
+                    tll.setId(key);
+
+                    TargetUIStructure targetUIS = new TargetUIStructure(set.getValue(), tll, img, txt);
+                    targetMap.put(key, targetUIS);
+                    try {
+                        targetll.addView(tll);
+                    } catch (Exception e) {
+                        Log.v("jim12", e.toString());
+                    }
                 }
             }
 
@@ -492,6 +556,8 @@ public class TargetActivity extends AppCompatActivity {
             this.txtName=txtNam;
         }
     }
+
+
 
     //-----------------帥哥建興開始-----------------
     public void checkReview(View view) {

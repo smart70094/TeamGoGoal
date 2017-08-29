@@ -84,16 +84,24 @@ public class TargetDB  {
     }
     protected void createParticipator(String id,String param1){
         String str[]=param1.split(",");
-        String php="createParticipator.php";
+        String php,params;
+
         for(int i=0;i<str.length;i++){
-            String params="table=participator & tid="+id.trim()+" & account="+str[i];
-            socketTrans.setParams("register_request",user.account.trim(),str[i].trim(),"1");
-            socketTrans.send(socketTrans.getParams());
-            String result=socketTrans.getResult();
-            Log.v("jim_createParticipator",result);
-            //String ans=viaParams(params,php);
+            if(str[i].equals(user.account)) {
+                php="createParticipator.php";
+                params="table=participator & tid="+id.trim()+" & account="+str[i];
+                viaParams(params,php);
+            }else{
+                php="createRegisterRequest.php";
+                params="table=registerrequest & originator="+user.account+" & cmd=request_ask & cmdContext="+id.trim()+" & subject="+str[i];
+                String result=viaParams(params,php);
+                Log.v("jim_TargetDB_createParticipator",result);
+                /*socketTrans.setParams("register_request", user.account.trim(), str[i].trim(), id.trim());
+                socketTrans.send(socketTrans.getParams());
+                String result = socketTrans.getResult();
+                Log.v("jim_createParticipator", result);*/
+            }
         }
-        //SocketTrans socketTrans=new SocketTrans(param1);
     }
     protected void createParticipator(String tid,String originator,String subject){
         socketTrans.setParams("register_request",originator,subject,tid);
@@ -120,12 +128,7 @@ public class TargetDB  {
         String php="deleteParticipator";
         viaParams(params,php);
     }
-    protected  void deleteRegisterRequest(String rid){
-        String params="table=registerrequest & rid="+rid;
-        String php="deleteregisterrequest.php";
-        String result=viaParams(params,php);
-        Log.v("jim",result);
-    }
+
     //Data
     public static class TargetDetail{
             String tid,targetName,targetContent,state,auth,startTime,endTime,planet,participator;

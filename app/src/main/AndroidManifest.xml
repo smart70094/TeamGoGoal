@@ -3,6 +3,8 @@
     package="com.example.teamgogoal.teamgogoal">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -23,6 +25,7 @@
         <activity android:name=".RequestActivity"></activity>
         <activity android:name=".Review"></activity>
         <activity android:name=".Record"></activity>
+        <activity android:name=".EditProfile"></activity>
 
     </application>
 

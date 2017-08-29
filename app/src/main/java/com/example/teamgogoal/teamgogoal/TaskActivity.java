@@ -92,10 +92,7 @@ public class TaskActivity extends AppCompatActivity {
                     initial();
                 }
             });
-
-
             new DbOperationTask().execute("read");
-
             LayoutInflater factoryCheerMsg = LayoutInflater.from(this);
             View cheerMsg = factoryCheerMsg.inflate(R.layout.activity_cheer_msg, null);
             submit=(Button) cheerMsg.findViewById(R.id.cheerBtn);
@@ -414,7 +411,7 @@ public class TaskActivity extends AppCompatActivity {
             Integer key=Integer.parseInt(currID.trim());
             TaskUIStructure taskUIS=taskMap.get(key);
             Log.v("jim_cheerSubmit",taskUIS.td.auth);
-            socketTrans.setParams("register_cheer",user.account,"123");
+            socketTrans.setParams("register_cheer",user.account,"456",msgStr);
             socketTrans.send(socketTrans.getParams());
             msg.dismiss();
         }catch(Exception e){
