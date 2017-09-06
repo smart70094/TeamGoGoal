@@ -40,7 +40,7 @@ import java.util.Map;
 public class TaskActivity extends AppCompatActivity {
 
     TaskDB db;
-    LinearLayout msgll,taskll;
+    LinearLayout taskll;
     TextView taskTitle;
     EditText taskNameTxt,taskContent,remindTimeTxt,cheerEt;
     Button submit,submitTaskBtn,clearTaskMessageBtn,cannelTaskBtn;
@@ -49,7 +49,7 @@ public class TaskActivity extends AppCompatActivity {
     String currTid="",nextID="",currID="";
     LoginActivity.User user;
     AlertDialog.Builder cheerDialog;
-    AlertDialog msg=null,dialog=null;   //dialog建興的
+    AlertDialog taskMsg=null,msg=null,dialog=null;   //dialog建興的
     AlertDialog.Builder msgDialog=null;
     View addTaskMsg;
     final String[] list = {"earth", "jupiter", "mars"};
@@ -63,9 +63,6 @@ public class TaskActivity extends AppCompatActivity {
             user=LoginActivity.getUser();
             currTid=bundle.getString("tid");
             String t_name=bundle.getString("t_name");
-
-
-
             db=new TaskDB(LoginActivity.getLocalHost()+"readmission.php");
 
             LayoutInflater factory = LayoutInflater.from(this);
@@ -99,6 +96,12 @@ public class TaskActivity extends AppCompatActivity {
             cheerEt=(EditText) cheerMsg.findViewById(R.id.cheerEt);
             cheerDialog = new AlertDialog.Builder(TaskActivity.this);
             cheerDialog.setView(cheerMsg);
+            cheerDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialogInterface) {
+                    msg.dismiss();
+                }
+            });
             taskTitle=(TextView)findViewById(R.id.taskTitle);
             taskTitle.setText(t_name);
         }catch(Exception e){
@@ -114,7 +117,18 @@ public class TaskActivity extends AppCompatActivity {
                 msg.show();
             }
         }catch(Exception e){
-            Log.v("jim",e.toString());
+            Log.v("jim_TaskActivity_showCheerMsg",e.toString());
+        }
+    }
+    protected void showAddTaskMsg(){
+        try{
+            if(taskMsg==null){
+                taskMsg=msgDialog.show();
+            }else{
+                taskMsg.show();
+            }
+        }catch(Exception e){
+            Log.v("jim_TaskActivity_showAddTaskMsg",e.toString());
         }
     }
 
@@ -148,7 +162,9 @@ public class TaskActivity extends AppCompatActivity {
                     // tempID=db.targetCount();
                     break;
                 case "updateTask":
+
                     db.update(params[1],params[2],params[3],params[4],params[5],params[6]);
+
                     break;
             }
             return null;
@@ -180,14 +196,12 @@ public class TaskActivity extends AppCompatActivity {
         taskUIS.td.missionName=param1;
         taskUIS.td.missionContent=param2;
         taskUIS.td.remindTime=param3;
-        taskUIS.td.mid=param4;
+        taskUIS.td.tid=param4;
         taskUIS.td.planet=param5;
-        taskUIS.txtName.setText(param1);
-        taskUIS.txtName.setText(param1);
-
+        taskUIS.txtName.setText(param2+"      執行者:"+taskUIS.td.auth);
         new DbOperationTask().execute("updateTask",currID,param1,param2,param3,param4,param5);
         currID="";
-        msgll.setVisibility(View.INVISIBLE);
+        taskMsg.dismiss();
     }
     protected  void addTask(){
         try{
@@ -203,9 +217,18 @@ public class TaskActivity extends AppCompatActivity {
                 tll.setOnLongClickListener(new View.OnLongClickListener(){
                     @Override
                     public boolean onLongClick(View view) {
-                        final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"read","update","delete","撰寫回顧"},view.getId());
-                        mutiItemDialog.show();
-                        return false;
+                        int id=view.getId();
+                        String auth=taskMap.get(id).td.auth.trim();
+                        if(auth==user.account.trim()) {
+                            final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"peek", "update", "delete", "撰寫回顧"}, view.getId());
+                            mutiItemDialog.show();
+                            return false;
+                        }else{
+                            submitTaskBtn.setEnabled(false);
+                            clearTaskMessageBtn.setEnabled(false);
+                            peek(id);
+                            return false;
+                        }
                     }
                 });
 
@@ -229,8 +252,8 @@ public class TaskActivity extends AppCompatActivity {
                 img.setLayoutParams(layoutParams);
 
                 TextView txt=new TextView(this);
-                EditText editTxt=(EditText) findViewById(R.id.taskNameTxt) ;
-                txt.setText(editTxt.getText());
+                EditText editTxt=(EditText) addTaskMsg.findViewById(R.id.taskNameTxt) ;
+                txt.setText(editTxt.getText().toString()+"      執行者:"+user.account);
 
                 ImageButton imgbtn = new ImageButton(this);
                 imgbtn.setImageResource(R.drawable.common_google_signin_btn_icon_dark);
@@ -240,7 +263,7 @@ public class TaskActivity extends AppCompatActivity {
                 tll.addView(txt);
                 tll.addView(imgbtn);
                 taskll.addView(tll);
-                msgll.setVisibility(View.INVISIBLE);
+                taskMsg.dismiss();
                 taskll.setEnabled(false);
 
                 String param1=taskNameTxt.getText().toString();
@@ -260,6 +283,7 @@ public class TaskActivity extends AppCompatActivity {
                 TaskUIStructure targetUIS=new TaskUIStructure(td,tll,img,txt);
                 taskMap.put(k,targetUIS);
                 Toast.makeText(this,"新增任務成功",Toast.LENGTH_SHORT).show();
+                taskMsg.dismiss();
             }
         }catch(Exception e){
             Log.v("jim1",e.toString());
@@ -284,9 +308,18 @@ public class TaskActivity extends AppCompatActivity {
                 tll.setOnLongClickListener(new View.OnLongClickListener(){
                     @Override
                     public boolean onLongClick(View view) {
-                        final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"peek","update","delete","撰寫回顧"},view.getId());
-                        mutiItemDialog.show();
-                        return false;
+                        int id=view.getId();
+                        String auth=taskMap.get(id).td.auth.trim();
+                        if(auth.equals(user.account.trim())) {
+                            final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"peek", "update", "delete", "撰寫回顧"}, view.getId());
+                            mutiItemDialog.show();
+                            return false;
+                        }else{
+                            submitTaskBtn.setEnabled(false);
+                            clearTaskMessageBtn.setEnabled(false);
+                            peek(id);
+                            return false;
+                        }
                     }
 
                 });
@@ -342,7 +375,6 @@ public class TaskActivity extends AppCompatActivity {
 
 
     public AlertDialog getMutiItemDialog(final String[] cmd,final int id) {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //設定對話框內的項目
         builder.setItems(cmd, new DialogInterface.OnClickListener(){
@@ -351,9 +383,14 @@ public class TaskActivity extends AppCompatActivity {
                 switch (cmd[index]){
                     case "peek":
                         peek(id);
+                        submitTaskBtn.setEnabled(false);
+                        clearTaskMessageBtn.setEnabled(false);
+                        cannelTaskBtn.setEnabled(false);
                         break;
                     case "update":
                         peek(id);
+                        submitTaskBtn.setText("更新資料");
+                        clearTaskMessageBtn.setEnabled(false);
                         currID=Integer.toString(id).trim();
                         break;
                     case "delete":
@@ -366,10 +403,8 @@ public class TaskActivity extends AppCompatActivity {
     }
 
     protected void peek(int id){
-        msgll.setVisibility(View.VISIBLE);
+        showAddTaskMsg();
         TaskUIStructure taskUIS=taskMap.get(id);
-
-
         taskNameTxt.setText(taskUIS.td.missionName);
         taskContent.setText(taskUIS.td.missionContent);
         remindTimeTxt.setText(taskUIS.td.remindTime);
@@ -388,7 +423,7 @@ public class TaskActivity extends AppCompatActivity {
         int id=view.getId();
         switch (id){
             case R.id.showAddTaskBtn:
-                showmsg();
+                showAddTaskMsg();
                 break;
             case R.id.selectRemindTime:
                 alarm();
@@ -411,18 +446,14 @@ public class TaskActivity extends AppCompatActivity {
             Integer key=Integer.parseInt(currID.trim());
             TaskUIStructure taskUIS=taskMap.get(key);
             Log.v("jim_cheerSubmit",taskUIS.td.auth);
-            socketTrans.setParams("register_cheer",user.account,"456",msgStr);
+            socketTrans.setParams("register_cheer",user.account,taskUIS.td.auth.trim(),msgStr);
             socketTrans.send(socketTrans.getParams());
             msg.dismiss();
         }catch(Exception e){
             Log.v("jim_cheerSubmit",e.toString());
         }
     }
-    protected void showmsg(){
-        if(msg==null) msg=msgDialog.show();
-        else msg.show();
 
-    }
     protected void alarm(){
         final EditText remindTime=remindTimeTxt;
         // Use the current time as the default values for the picker
@@ -446,10 +477,11 @@ public class TaskActivity extends AppCompatActivity {
         submitTaskBtn.setEnabled(true);
         clearTaskMessageBtn.setEnabled(true);
         cannelTaskBtn.setEnabled(true);
+        submitTaskBtn.setText("新增任務");
     }
     protected  void cancel(){
         initial();
-        msg.dismiss();
+        taskMsg.dismiss();
     }
     public class TaskUIStructure{
         TaskDB.TaskDetail td;

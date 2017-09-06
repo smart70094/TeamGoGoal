@@ -13,7 +13,11 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -65,22 +69,39 @@ public class TargetDB  {
         String ans=viaParams(params,php);
         return  ans;
     }
-    protected  void updateTarget(String param1,String param2,String param3,String param4,String param5,String param6,String param7,String param8,String param9){
+    protected  void updateTarget(String param1,String param2,String param3,String param4,String param5,String param6,String param7,String param8,String param9,String param10){
         String params="table=target"+" & tid="+param1 +" & targetName="+param2+" & targetContent="+param3+" & targetStartTime="+param4+" & targetEndTime="+param5+" & state="+param6+" & auth="+param7+" & planet="+param8;
         String php="updateTarget.php";
         String ans=viaParams(params,php);
 
-        String str[]=param9.split(",");
+       String str[]=param9.split(",");
+        String old_str[]=param10.split(",");
+        List new_list = new ArrayList(Arrays.asList(str));
+        List old_list = new ArrayList(Arrays.asList(old_str));
+        List list = new ArrayList(Arrays.asList(new Object[old_list.size()]));
+        list=diff(new_list,old_list);
 
-        String params2="table=participator & tid="+param1;
-        String php2="deleteParticipator";
-        String ss=viaParams(params2,php2);
 
-        for(int i=0;i<str.length;i++){
-            String params3="table=participator & tid="+param1 +" & account="+str[i];
-            String php3="createParticipator";
+        for(int i=0;i<list.size();i++){
+            String params3="table=registerrequest & originator="+user.account+" & cmd=request_ask & cmdContext="+param1.trim()+" & subject="+list.get(i).toString().trim();
+            String php3="createRegisterRequest.php";
             String s=viaParams(params3,php3);
         }
+        list.clear();
+        list=diff(old_list,new_list);
+        for(int i=0;i<list.size();i++){
+            String params2="table=participator & tid="+param1 +" & account="+list.get(i).toString().trim();
+            String php2="deleteParticipator.php";
+            String ss=viaParams(params2,php2);
+        }
+
+
+    }
+    public List diff(List ls, List ls2) {
+        List list = new ArrayList(Arrays.asList(new Object[ls.size()]));
+        Collections.copy(list, ls);
+        list.removeAll(ls2);
+        return list;
     }
     protected void createParticipator(String id,String param1){
         String str[]=param1.split(",");

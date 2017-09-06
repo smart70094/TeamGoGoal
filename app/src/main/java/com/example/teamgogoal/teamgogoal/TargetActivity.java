@@ -155,6 +155,7 @@ public class TargetActivity extends AppCompatActivity {
         switch (id){
             case R.id.showAddTargetBtn:
                 showTarget();
+                participatorTxt.setText(user.account);
                 break;
             case R.id.submitTargetBtn:
                 if(currID.equals("")) addTarget();
@@ -200,7 +201,7 @@ public class TargetActivity extends AppCompatActivity {
         try{
             if(msg==null){
                 msg=dialog.show();
-                participatorTxt.setText(user.account);
+
             }else{
                 msg.show();
             }
@@ -222,8 +223,16 @@ public class TargetActivity extends AppCompatActivity {
                 tll.setOnLongClickListener(new View.OnLongClickListener(){
                     @Override
                     public boolean onLongClick(View view) {
-                        final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"read","update","delete"},view.getId());
-                        mutiItemDialog.show();
+                        Integer id=view.getId();
+                        String auth=targetMap.get(id).td.auth.trim();
+                        if(auth.equals(user.account)){
+                            final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"read","update","delete"},view.getId());
+                            mutiItemDialog.show();
+                        }else{
+                            submitTargetBtn.setEnabled(false);
+                            clearTargetBtn.setEnabled(false);
+                            read(id);
+                        }
                         return false;
                     }
                 });
@@ -344,8 +353,16 @@ public class TargetActivity extends AppCompatActivity {
                     tll.setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View view) {
-                            final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"read", "update", "delete"}, view.getId());
-                            mutiItemDialog.show();
+                            Integer id=view.getId();
+                            String auth=targetMap.get(id).td.auth.trim();
+                            if(auth.equals(user.account)){
+                                final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"read","update","delete"},view.getId());
+                                mutiItemDialog.show();
+                            }else{
+                                submitTargetBtn.setEnabled(false);
+                                clearTargetBtn.setEnabled(false);
+                                read(id);
+                            }
                             return false;
                         }
 
@@ -472,6 +489,7 @@ public class TargetActivity extends AppCompatActivity {
 
         int key=Integer.parseInt(currID.trim());
         TargetUIStructure targetUIS= targetMap.get(key);
+        String param9=targetUIS.td.participator;
         targetUIS.td.targetName=param1;
         targetUIS.td.targetContent=param2;
         targetUIS.td.startTime=param3;
@@ -481,7 +499,7 @@ public class TargetActivity extends AppCompatActivity {
         targetUIS.txtName.setText(param1);
 
         //String param8=participatorTxt.getText().toString();
-        new DbOperationTask().execute("updateTarget",currID,param1,param2,param3,param4,param5,param6,param7,param8);
+        new DbOperationTask().execute("updateTarget",currID,param1,param2,param3,param4,param5,param6,param7,param8,param9);
         currID="";
         msg.dismiss();
     }
@@ -511,10 +529,11 @@ public class TargetActivity extends AppCompatActivity {
                 case "createTarget":
                     db.createTarget(params[1],params[2],params[3],params[4],params[5],params[6],params[7],params[8]);
                     db.createParticipator(params[1],params[9]);
+
                     nextID=db.targetIndex();
                     break;
                 case "updateTarget":
-                    db.updateTarget(params[1],params[2],params[3],params[4],params[5],params[6],params[7],params[8],params[9]);
+                    db.updateTarget(params[1],params[2],params[3],params[4],params[5],params[6],params[7],params[8],params[9],params[10]);
                     break;
                 case "deleteParticipator_all":
                     db.deleteTargetAll(params[1]);
