@@ -1,9 +1,6 @@
 package com.example.teamgogoal.teamgogoal;
 
 import android.app.DatePickerDialog;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,23 +17,34 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class TargetActivity extends AppCompatActivity {
@@ -53,6 +61,10 @@ public class TargetActivity extends AppCompatActivity {
     Spinner spinner;
     String nextID="",currID="";
     Intent intent;
+
+    //8/20:AutoCompleteTextView
+    MultiAutoCompleteTextView mactv;
+
     final String[] list = {"earth", "jupiter", "mars"};
     String request=null;
     SocketTrans socketTrans=LoginActivity.socketTrans;
@@ -70,7 +82,19 @@ public class TargetActivity extends AppCompatActivity {
             targeContentEt=(EditText) addTargetMsg.findViewById(R.id.targetContent);
             startTimeEt=(EditText) addTargetMsg.findViewById(R.id.startTimeTxt);
             endTimeEt=(EditText) addTargetMsg.findViewById(R.id.EndTimeTxt);
-            participatorTxt=(EditText) addTargetMsg.findViewById(R.id.participatorTxt);
+
+            // Date:8/20-監聽文字變更開始
+            mactv = (MultiAutoCompleteTextView)addTargetMsg.findViewById(R.id.multiAutoCompleteTextView);
+            mactv.setDropDownHeight(200); //設定高度
+            mactv.setThreshold(1);
+            mactv.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+            // 初始化搜尋資料
+            initmactv();
+
+            // Date:8/20-監聽文字變更結束
+
+
+            //participatorTxt=(EditText) addTargetMsg.findViewById(R.id.participatorTxt);
             submitTargetBtn=(Button)addTargetMsg.findViewById(R.id.submitTargetBtn);
             clearTargetBtn=(Button)addTargetMsg.findViewById(R.id.clearMessageBtn);
             cannelBtn=(Button)addTargetMsg.findViewById(R.id.cannelBtn);
@@ -155,7 +179,7 @@ public class TargetActivity extends AppCompatActivity {
         switch (id){
             case R.id.showAddTargetBtn:
                 showTarget();
-                participatorTxt.setText(user.account);
+                //participatorTxt.setText(user.account);
                 break;
             case R.id.submitTargetBtn:
                 if(currID.equals("")) addTarget();
@@ -281,6 +305,11 @@ public class TargetActivity extends AppCompatActivity {
                 Log.v("jim",nextID);
                 TargetUIStructure targetUIS=new TargetUIStructure(td,tll,img,txt);
                 targetMap.put(k,targetUIS);
+
+                //帥哥峻禾部分
+                socketTrans.setParams("initial_target",nextID,param4);
+                socketTrans.send(socketTrans.getParams());
+
                 msg.dismiss();
                 Toast.makeText(this,"新增成功",Toast.LENGTH_SHORT).show();
                 initial();
@@ -578,10 +607,74 @@ public class TargetActivity extends AppCompatActivity {
 
 
 
+
+
     //-----------------帥哥建興開始-----------------
     public void checkReview(View view) {
         Intent intent = new Intent();
         intent.setClass(this,Review.class);
         startActivity(intent);
     }
+
+    // Date:8/20 尋找帳號開始---------------------------
+    private void initmactv() {
+        String phpurl = localhost + "searchID.php";
+        new TransTask().execute(phpurl);
+    }
+
+    class TransTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            StringBuilder sb = new StringBuilder();
+            try {
+                URL url = new URL(params[0]);
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(url.openStream()));
+                String line = in.readLine();
+                while (line != null) {
+                    Log.d("HTTP", line);
+                    sb.append(line);
+                    line = in.readLine();
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return sb.toString();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            List list = parseJSON(s);
+            initListView(list);
+        }
+
+        private List parseJSON(String s) {
+            List list = new ArrayList();
+            try {
+                JSONArray array = new JSONArray(s);
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject obj = array.getJSONObject(i);
+                    list.add(obj.getString("account"));
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Log.d("FFFF",Integer.toString(list.size()));
+            return list;
+        }
+    }
+
+    public  void initListView(List list){
+        ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,list);
+        mactv.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
+
+
+    // Date:8/20 尋找帳號結束---------------------------
 }

@@ -1,7 +1,5 @@
 package com.example.teamgogoal.teamgogoal;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,19 +20,16 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
     //public static final String localhost="http://169.254.68.146/DB/";
     //public static final String ip="106.107.161.179";
     //public static final String ip="192.168.0.100";
-    public static final String ip="192.168.0.102";
+    public static final String ip="169.254.68.146";
     public static final String localhost="http://"+ip+"/TeamGoGoal/";
     Intent intent;
     public static  User user=null;

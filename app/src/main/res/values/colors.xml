@@ -6,4 +6,10 @@
 
     <color name="textColor">#ffffff</color>
     <color name="black">#ffffff</color>
+
+    <!--進度條顏色-->
+    <color name="bg">#333357</color>>
+    <color name="processbar_bg">#252642</color>
+    <color name="processbar">#ffffff</color>
+    <!--進度條顏色-->
 </resources>

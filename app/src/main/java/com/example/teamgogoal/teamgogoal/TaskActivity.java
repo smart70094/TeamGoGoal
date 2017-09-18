@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
@@ -25,6 +26,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.mikhaellopez.circularprogressbar.CircularProgressBar;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -54,6 +61,10 @@ public class TaskActivity extends AppCompatActivity {
     View addTaskMsg;
     final String[] list = {"earth", "jupiter", "mars"};
     SocketTrans socketTrans=LoginActivity.socketTrans;
+    //進度條-建興
+    CircularProgressBar circularProgressBar;
+    int percentage;
+    //進度條結束
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +115,11 @@ public class TaskActivity extends AppCompatActivity {
             });
             taskTitle=(TextView)findViewById(R.id.taskTitle);
             taskTitle.setText(t_name);
+            //進度條-建興
+            circularProgressBar = (CircularProgressBar)findViewById(R.id.yourCircularProgressbar);
+            percentage = 0;
+            intiDataBase();
+            //進度條結束
         }catch(Exception e){
             Log.v("jim_Task_onCreate",e.toString());
         }
@@ -519,7 +535,8 @@ public class TaskActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String mid = Integer.toString(key);
                 Log.d("hhhhhhhhhhh",mid);
-                String phpurl = LoginActivity.getLocalHost() + "updateTaskState.php?mid=" + mid;
+                //String phpurl = LoginActivity.getLocalHost() + "updateTaskState.php?mid=" + mid;
+                String phpurl = LoginActivity.getLocalHost() + "updateTaskState.php?mid=" + mid + "&tid=" + currTid + "&uid=" + LoginActivity.getUser().uid + "&partnerid=" + "2";
                 new TransTask().execute(phpurl);
             }
         });
@@ -572,9 +589,77 @@ public class TaskActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Log.d("JSON", s);
+            dialog.dismiss();
         }
     }
 
     //--------------資料庫連接 Code---------------------//
+
+    private void intiDataBase() {
+        String phpurl = LoginActivity.getLocalHost() + "searchPercent.php?tid=" + currTid;
+        new TransTask_searchPercent().execute(phpurl);
+    }
+
+    private class TransTask_searchPercent extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            StringBuilder sb = new StringBuilder();
+            try {
+                URL url = new URL(params[0]);
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(url.openStream()));
+                String line = in.readLine();
+                while (line != null) {
+                    Log.d("HTTP", line);
+                    sb.append(line);
+                    line = in.readLine();
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return sb.toString();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            parseJSON(s);
+            initView();
+        }
+
+
+
+        private void parseJSON(String s) {
+            try {
+                JSONArray array = new JSONArray(s);
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject obj = array.getJSONObject(i);
+                    double all_mission = obj.getDouble("all_mission");
+                    double complete_mission = obj.getDouble("complete_mission");
+                    double _percentage = (complete_mission /all_mission) * 100;
+
+                    percentage = (int)(_percentage + 0.5);
+                    Log.d("dd",Double.toString(percentage));
+                    //percentage = (complete_mission / all_mission) * 100;
+                    //Log.d("ddddddddddddddddp",Integer.toString(percentage));
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void initView() {
+        circularProgressBar.setColor(ContextCompat.getColor(this, R.color.processbar));
+        circularProgressBar.setBackgroundColor(ContextCompat.getColor(this, R.color.processbar_bg));
+        circularProgressBar.setProgressBarWidth(18);
+        circularProgressBar.setBackgroundProgressBarWidth(circularProgressBar.getProgressBarWidth());
+        int animationDuration = 2500; // 2500ms = 2,5s
+        circularProgressBar.setProgressWithAnimation(percentage, animationDuration); // Default duration = 1500ms
+    }
 
 }
