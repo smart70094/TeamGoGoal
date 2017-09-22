@@ -1,6 +1,9 @@
 package com.example.teamgogoal.teamgogoal;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -54,7 +57,7 @@ public class TargetActivity extends AppCompatActivity {
     LoginActivity.User user;
     TargetDB db;
     LinearLayout targetll;
-    EditText targetNameEt,targeContentEt,startTimeEt,endTimeEt,participatorTxt;
+    EditText targetNameEt,targeContentEt,startTimeEt,endTimeEt;
     Button submitTargetBtn,clearTargetBtn,cannelBtn;
     ImageView targetProfilePicture;
     View addTargetMsg;
@@ -63,7 +66,7 @@ public class TargetActivity extends AppCompatActivity {
     Intent intent;
 
     //8/20:AutoCompleteTextView
-    MultiAutoCompleteTextView mactv;
+    MultiAutoCompleteTextView participatorTxt;
 
     final String[] list = {"earth", "jupiter", "mars"};
     String request=null;
@@ -84,10 +87,10 @@ public class TargetActivity extends AppCompatActivity {
             endTimeEt=(EditText) addTargetMsg.findViewById(R.id.EndTimeTxt);
 
             // Date:8/20-監聽文字變更開始
-            mactv = (MultiAutoCompleteTextView)addTargetMsg.findViewById(R.id.multiAutoCompleteTextView);
-            mactv.setDropDownHeight(200); //設定高度
-            mactv.setThreshold(1);
-            mactv.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+            participatorTxt = (MultiAutoCompleteTextView)addTargetMsg.findViewById(R.id.multiAutoCompleteTextView);
+            participatorTxt.setDropDownHeight(200); //設定高度
+            participatorTxt.setThreshold(1);
+            participatorTxt.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
             // 初始化搜尋資料
             initmactv();
 
@@ -114,6 +117,30 @@ public class TargetActivity extends AppCompatActivity {
         }catch(Exception e){
             Log.v("jim",e.toString());
         }
+    }
+    public void registerAlarm(){
+        /*Thread thread=new Thread(new Runnable(){
+            @Override
+            public void run() {
+                final Intent notificationIntent = new Intent(this, AlarmReceiver.class);
+                String NOTIFICATION_ID="";
+                String NOTIFICATION="";
+                notificationIntent.putExtra(NOTIFICATION_ID, 1);
+                notificationIntent.putExtra(NOTIFICATION, notification);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+                //set time
+                android.icu.util.Calendar calendar = android.icu.util.Calendar.getInstance();
+                calendar.setTimeInMillis(System.currentTimeMillis());
+                calendar.set(android.icu.util.Calendar.HOUR_OF_DAY, 12);
+                calendar.set(android.icu.util.Calendar.MINUTE, 03);
+
+
+                alarmManager.set(AlarmManager.RTC_WAKEUP,  calendar.getTimeInMillis(), pendingIntent);
+            }
+        });
+        thread.start();*/
     }
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // TODO Auto-generated method stub
@@ -337,10 +364,11 @@ public class TargetActivity extends AppCompatActivity {
         submitTargetBtn.setText("新增任務");
         clearTargetBtn.setEnabled(true);
         cannelBtn.setEnabled(true);
-        msg.dismiss();
+
     }
     protected void cancel(){
         initial();
+        msg.dismiss();
     }
 
     protected  void selectDate(final int txtID){
@@ -670,11 +698,9 @@ public class TargetActivity extends AppCompatActivity {
 
     public  void initListView(List list){
         ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,list);
-        mactv.setAdapter(adapter);
+        participatorTxt.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
-
-
 
     // Date:8/20 尋找帳號結束---------------------------
 }

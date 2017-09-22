@@ -110,11 +110,11 @@ public class TargetDB  {
         for(int i=0;i<str.length;i++){
             if(str[i].equals(user.account)) {
                 php="createParticipator.php";
-                params="table=participator & tid="+id.trim()+" & account="+str[i];
+                params="table=participator & tid="+id.trim()+" & account="+str[i].trim();
                 viaParams(params,php);
             }else{
                 php="createRegisterRequest.php";
-                params="table=registerrequest & originator="+user.account+" & cmd=request_ask & cmdContext="+id.trim()+" & subject="+str[i];
+                params="table=registerrequest & originator="+user.account+" & cmd=request_ask & cmdContext="+id.trim()+" & subject="+str[i].trim();
                 String result=viaParams(params,php);
                 Log.v("jim_TargetDB_createParticipator",result);
                 /*socketTrans.setParams("register_request", user.account.trim(), str[i].trim(), id.trim());

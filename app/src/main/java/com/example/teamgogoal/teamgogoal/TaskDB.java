@@ -42,7 +42,8 @@ public class TaskDB {
                 String planet=obj.getString("planet");
                 String state=obj.getString("state");
                 String auth=obj.getString("auth");
-                TaskDB.TaskDetail taskDetail=new TaskDB.TaskDetail(mid,missionName,missionContent,remindTime,tid,planet,state,auth);
+                String collaborator=obj.getString("collaborator");
+                TaskDB.TaskDetail taskDetail=new TaskDB.TaskDetail(mid,missionName,missionContent,remindTime,tid,planet,state,auth,collaborator);
                 map.put(mid,taskDetail);
             }
         } catch(JSONException e){
@@ -73,8 +74,8 @@ public class TaskDB {
         String ans=viaParams(params,php);
     }
     public static class TaskDetail  implements Serializable {
-        String mid,missionName,missionContent,tid,state,auth,remindTime,planet;
-        TaskDetail(String param1,String param2,String param3,String param4,String param5,String param6,String param7,String param8){
+        String mid,missionName,missionContent,tid,state,auth,remindTime,planet,collaborator;
+        TaskDetail(String param1,String param2,String param3,String param4,String param5,String param6,String param7,String param8,String param9){
             this.mid=param1;
             this.missionName=param2;
             this.missionContent=param3;
@@ -83,6 +84,7 @@ public class TaskDB {
             this.planet=param6;
             this.state=param7;
             this.auth=param8;
+            this.collaborator=param9;
         }
     }
     public String viaParams(String urlParameters,String php){
