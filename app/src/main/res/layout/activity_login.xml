@@ -67,6 +67,13 @@
 
             </LinearLayout>
 
+            <CheckBox
+                android:id="@+id/chkRemeberUser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="記住帳號密碼" />
+
         </LinearLayout>
     </RelativeLayout>
 

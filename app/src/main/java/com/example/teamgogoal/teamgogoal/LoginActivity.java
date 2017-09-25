@@ -3,6 +3,7 @@ package com.example.teamgogoal.teamgogoal;
 import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -26,18 +28,31 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class LoginActivity extends AppCompatActivity {
-    //public static final String localhost="http://169.254.68.146/DB/";
-    //public static final String ip="106.107.161.179";
-    //public static final String ip="192.168.0.100";
-    public static final String ip="1.170.93.198";
+
     public static final String localhost="http://"+ip+"/TeamGoGoal/";
+    EditText accountTxt,passwordTxt;
+    CheckBox chkRemeberAccount;
+
     Intent intent;
     public static  User user=null;
     public static SocketTrans socketTrans;
+    private SharedPreferences settings;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        accountTxt=(EditText) findViewById(R.id.accountTxt);
+        passwordTxt=(EditText) findViewById(R.id.passwordTxt);
+        chkRemeberAccount=(CheckBox) findViewById(R.id.chkRemeberUser);
+        settings=getSharedPreferences("account",0);
+        accountTxt.setText(settings.getString("account",""));
+        passwordTxt.setText(settings.getString("password",""));
+        if(!(accountTxt.getText().toString().equals("") && passwordTxt.getText().toString().equals("")))
+            chkRemeberAccount.setChecked(true);
+        else
+            chkRemeberAccount.setChecked(false);
+
         socketTrans=new SocketTrans();
         socketTrans.setActivity(LoginActivity.this);
         socketTrans.setNotification((NotificationManager)getSystemService(NOTIFICATION_SERVICE));
@@ -198,6 +213,20 @@ public class LoginActivity extends AppCompatActivity {
                     intent.setClass(LoginActivity.this, TargetActivity.class);
                     startActivity(intent);
                     Toast.makeText(LoginActivity.this, "登入成功", Toast.LENGTH_SHORT).show();
+                    if(chkRemeberAccount.isChecked()){
+                        settings=getSharedPreferences("account",0);
+                        settings.edit()
+                                .putString("account",accountTxt.getText().toString())
+                                .putString("password",passwordTxt.getText().toString())
+                                .commit();
+                    }else{
+                        settings=getSharedPreferences("account",0);
+                        settings.edit()
+                                .putString("account","")
+                                .putString("password","")
+                                .commit();
+                    }
+
                     break;
                 case "ConnectFailure":
                     Toast.makeText(LoginActivity.this, "網路出現問題", Toast.LENGTH_SHORT).show();
@@ -242,8 +271,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
     public void login(View view) {
-        EditText accountTxt=(EditText) findViewById(R.id.accountTxt);
-        EditText passwordTxt=(EditText) findViewById(R.id.passwordTxt);
+
         String account=accountTxt.getText().toString();
         String password=passwordTxt.getText().toString();
         new TransTask().execute(account,password);
