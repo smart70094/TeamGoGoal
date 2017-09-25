@@ -57,19 +57,17 @@ public class TargetActivity extends AppCompatActivity {
     LoginActivity.User user;
     TargetDB db;
     LinearLayout targetll;
-    EditText targetNameEt,targeContentEt,startTimeEt,endTimeEt;
+    EditText targetNameEt,targeContentEt,startTimeEt,endTimeEt,dreamEt;
     Button submitTargetBtn,clearTargetBtn,cannelBtn;
     ImageView targetProfilePicture;
     View addTargetMsg;
-    Spinner spinner;
+
     String nextID="",currID="";
     Intent intent;
 
     //8/20:AutoCompleteTextView
     MultiAutoCompleteTextView participatorTxt;
 
-    final String[] list = {"earth", "jupiter", "mars"};
-    String request=null;
     SocketTrans socketTrans=LoginActivity.socketTrans;
     static Map<Integer,TargetUIStructure> targetMap =new HashMap<Integer,TargetUIStructure>();
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +100,7 @@ public class TargetActivity extends AppCompatActivity {
             clearTargetBtn=(Button)addTargetMsg.findViewById(R.id.clearMessageBtn);
             cannelBtn=(Button)addTargetMsg.findViewById(R.id.cannelBtn);
             targetProfilePicture=(ImageView)findViewById(R.id.targetProfilePicture);
-            spinner=(Spinner) addTargetMsg.findViewById(R.id.spinner);
+            dreamEt=(EditText) addTargetMsg.findViewById(R.id.dreamET);
             dialog.setView(addTargetMsg);
             dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 @Override
@@ -143,8 +141,6 @@ public class TargetActivity extends AppCompatActivity {
         thread.start();*/
     }
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // TODO Auto-generated method stub
-
         if (keyCode == KeyEvent.KEYCODE_BACK) { // 攔截返回鍵
             targetMap.clear();
             finish();
@@ -319,7 +315,7 @@ public class TargetActivity extends AppCompatActivity {
                 String param4=endTimeEt.getText().toString();
                 String param5="no";
                 String param6=LoginActivity.user.account;
-                String param7=spinner.getSelectedItem().toString();
+                String param7=dreamEt.getText().toString();
                 String param8=participatorTxt.getText().toString();
 
 
@@ -519,16 +515,7 @@ public class TargetActivity extends AppCompatActivity {
         startTimeEt.setText(td.startTime);
         endTimeEt.setText(td.endTime);
         participatorTxt.setText(td.participator);
-        int pos=-1;
-        for(int i=0;i<list.length;i++){
-            if(list[i].equals(td.planet)) {
-                pos=i;
-
-                break;
-            }
-        }
-        pos-=1;
-        spinner.setSelection(pos);
+        dreamEt.setText(td.dream);
         currID=Integer.toString(id).trim();
 
         showTarget();
@@ -541,7 +528,7 @@ public class TargetActivity extends AppCompatActivity {
         String param4=endTimeEt.getText().toString();
         String param5="no";
         String param6=LoginActivity.user.account;
-        String param7=spinner.getSelectedItem().toString();
+        String param7=dreamEt.getText().toString();
         String param8=participatorTxt.getText().toString();
 
         int key=Integer.parseInt(currID.trim());
@@ -551,7 +538,7 @@ public class TargetActivity extends AppCompatActivity {
         targetUIS.td.targetContent=param2;
         targetUIS.td.startTime=param3;
         targetUIS.td.endTime=param4;
-        targetUIS.td.planet=param7;
+        targetUIS.td.dream=param7;
         targetUIS.td.participator=param8;
         targetUIS.txtName.setText(param1);
 
