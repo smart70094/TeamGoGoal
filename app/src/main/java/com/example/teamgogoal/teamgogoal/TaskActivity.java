@@ -461,7 +461,7 @@ public class TaskActivity extends AppCompatActivity {
             String msgStr=cheerEt.getText().toString();
             Integer key=Integer.parseInt(currID.trim());
             TaskUIStructure taskUIS=taskMap.get(key);
-            Log.v("jim_cheerSubmit",taskUIS.td.auth);
+
             socketTrans.setParams("register_cheer",user.account,taskUIS.td.auth.trim(),msgStr);
             socketTrans.send(socketTrans.getParams());
             msg.dismiss();
