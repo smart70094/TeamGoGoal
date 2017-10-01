@@ -7,6 +7,8 @@
     <color name="textColor">#ffffff</color>
     <color name="black">#ffffff</color>
 
+    <color name="empty">#00000000</color>
+
     <!--進度條顏色-->
     <color name="bg">#333357</color>>
     <color name="processbar_bg">#252642</color>

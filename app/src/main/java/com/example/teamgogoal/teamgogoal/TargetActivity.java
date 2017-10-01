@@ -1,6 +1,9 @@
 package com.example.teamgogoal.teamgogoal;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -54,19 +57,17 @@ public class TargetActivity extends AppCompatActivity {
     LoginActivity.User user;
     TargetDB db;
     LinearLayout targetll;
-    EditText targetNameEt,targeContentEt,startTimeEt,endTimeEt,participatorTxt;
+    EditText targetNameEt,targeContentEt,startTimeEt,endTimeEt,dreamEt;
     Button submitTargetBtn,clearTargetBtn,cannelBtn;
     ImageView targetProfilePicture;
     View addTargetMsg;
-    Spinner spinner;
+
     String nextID="",currID="";
     Intent intent;
 
     //8/20:AutoCompleteTextView
-    MultiAutoCompleteTextView mactv;
+    MultiAutoCompleteTextView participatorTxt;
 
-    final String[] list = {"earth", "jupiter", "mars"};
-    String request=null;
     SocketTrans socketTrans=LoginActivity.socketTrans;
     static Map<Integer,TargetUIStructure> targetMap =new HashMap<Integer,TargetUIStructure>();
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,10 +85,10 @@ public class TargetActivity extends AppCompatActivity {
             endTimeEt=(EditText) addTargetMsg.findViewById(R.id.EndTimeTxt);
 
             // Date:8/20-監聽文字變更開始
-            mactv = (MultiAutoCompleteTextView)addTargetMsg.findViewById(R.id.multiAutoCompleteTextView);
-            mactv.setDropDownHeight(200); //設定高度
-            mactv.setThreshold(1);
-            mactv.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+            participatorTxt = (MultiAutoCompleteTextView)addTargetMsg.findViewById(R.id.multiAutoCompleteTextView);
+            participatorTxt.setDropDownHeight(200); //設定高度
+            participatorTxt.setThreshold(1);
+            participatorTxt.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
             // 初始化搜尋資料
             initmactv();
 
@@ -99,7 +100,7 @@ public class TargetActivity extends AppCompatActivity {
             clearTargetBtn=(Button)addTargetMsg.findViewById(R.id.clearMessageBtn);
             cannelBtn=(Button)addTargetMsg.findViewById(R.id.cannelBtn);
             targetProfilePicture=(ImageView)findViewById(R.id.targetProfilePicture);
-            spinner=(Spinner) addTargetMsg.findViewById(R.id.spinner);
+            dreamEt=(EditText) addTargetMsg.findViewById(R.id.dreamET);
             dialog.setView(addTargetMsg);
             dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 @Override
@@ -115,9 +116,31 @@ public class TargetActivity extends AppCompatActivity {
             Log.v("jim",e.toString());
         }
     }
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // TODO Auto-generated method stub
+    public void registerAlarm(){
+        /*Thread thread=new Thread(new Runnable(){
+            @Override
+            public void run() {
+                final Intent notificationIntent = new Intent(this, AlarmReceiver.class);
+                String NOTIFICATION_ID="";
+                String NOTIFICATION="";
+                notificationIntent.putExtra(NOTIFICATION_ID, 1);
+                notificationIntent.putExtra(NOTIFICATION, notification);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+                AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+                //set time
+                android.icu.util.Calendar calendar = android.icu.util.Calendar.getInstance();
+                calendar.setTimeInMillis(System.currentTimeMillis());
+                calendar.set(android.icu.util.Calendar.HOUR_OF_DAY, 12);
+                calendar.set(android.icu.util.Calendar.MINUTE, 03);
+
+
+                alarmManager.set(AlarmManager.RTC_WAKEUP,  calendar.getTimeInMillis(), pendingIntent);
+            }
+        });
+        thread.start();*/
+    }
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) { // 攔截返回鍵
             targetMap.clear();
             finish();
@@ -292,9 +315,9 @@ public class TargetActivity extends AppCompatActivity {
                 String param4=endTimeEt.getText().toString();
                 String param5="no";
                 String param6=LoginActivity.user.account;
-                String param7=spinner.getSelectedItem().toString();
+                String param7=dreamEt.getText().toString();
                 String param8=participatorTxt.getText().toString();
-
+                param8+=user.account+",";
 
                 nextID=nextID.trim();
                 TargetDB.TargetDetail td=new TargetDB.TargetDetail(nextID,param1,param2,param3,param4,param5,param6,param7,param8);
@@ -302,7 +325,6 @@ public class TargetActivity extends AppCompatActivity {
 
                 int k=Integer.parseInt(nextID);
                 tll.setId(k);
-                Log.v("jim",nextID);
                 TargetUIStructure targetUIS=new TargetUIStructure(td,tll,img,txt);
                 targetMap.put(k,targetUIS);
 
@@ -337,10 +359,11 @@ public class TargetActivity extends AppCompatActivity {
         submitTargetBtn.setText("新增任務");
         clearTargetBtn.setEnabled(true);
         cannelBtn.setEnabled(true);
-        msg.dismiss();
+
     }
     protected void cancel(){
         initial();
+        msg.dismiss();
     }
 
     protected  void selectDate(final int txtID){
@@ -491,16 +514,7 @@ public class TargetActivity extends AppCompatActivity {
         startTimeEt.setText(td.startTime);
         endTimeEt.setText(td.endTime);
         participatorTxt.setText(td.participator);
-        int pos=-1;
-        for(int i=0;i<list.length;i++){
-            if(list[i].equals(td.planet)) {
-                pos=i;
-
-                break;
-            }
-        }
-        pos-=1;
-        spinner.setSelection(pos);
+        dreamEt.setText(td.dream);
         currID=Integer.toString(id).trim();
 
         showTarget();
@@ -513,7 +527,7 @@ public class TargetActivity extends AppCompatActivity {
         String param4=endTimeEt.getText().toString();
         String param5="no";
         String param6=LoginActivity.user.account;
-        String param7=spinner.getSelectedItem().toString();
+        String param7=dreamEt.getText().toString();
         String param8=participatorTxt.getText().toString();
 
         int key=Integer.parseInt(currID.trim());
@@ -523,7 +537,7 @@ public class TargetActivity extends AppCompatActivity {
         targetUIS.td.targetContent=param2;
         targetUIS.td.startTime=param3;
         targetUIS.td.endTime=param4;
-        targetUIS.td.planet=param7;
+        targetUIS.td.dream=param7;
         targetUIS.td.participator=param8;
         targetUIS.txtName.setText(param1);
 
@@ -670,11 +684,9 @@ public class TargetActivity extends AppCompatActivity {
 
     public  void initListView(List list){
         ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,list);
-        mactv.setAdapter(adapter);
+        participatorTxt.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
-
-
 
     // Date:8/20 尋找帳號結束---------------------------
 }

@@ -10,10 +10,13 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
+        android:weightSum="1"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -22,6 +25,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
+            android:layout_weight="0.94"
             android:orientation="vertical"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp">
@@ -40,7 +44,6 @@
                 android:id="@+id/taskTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
                 android:forceHasOverlappingRendering="false"
                 android:gravity="center_horizontal"
                 android:textSize="36sp" />
@@ -50,7 +53,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="0dp"
                 android:layout_marginTop="0dp"
-                android:layout_weight="1">
+                android:layout_weight="0.10">
 
                 <LinearLayout
                     android:id="@+id/taskll"
@@ -81,10 +84,11 @@
                 android:id="@+id/showAddTaskBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_weight="1"
+                android:layout_alignLeft="@+id/showAddTaskBtn"
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/showAddTaskBtn"
                 android:onClick="onClick"
-                android:text="+" />
+                android:text="+ 新目標" />
         </LinearLayout>
     </LinearLayout>
 

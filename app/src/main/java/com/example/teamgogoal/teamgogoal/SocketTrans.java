@@ -38,6 +38,7 @@ public  class SocketTrans {     //執行緒
     static String result=null;
     public Context context;
     public NotificationManager notificationManager;
+    public MySimpleReceiver receiverForSimple;
     protected void setActivity(Context context){
         this.context=context;
     }
@@ -93,6 +94,22 @@ public  class SocketTrans {     //執行緒
         });
         t.start();
     }
+    protected  void send(){
+        Thread t=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    out = clientSocket.getOutputStream();
+                    byte b[] = param.getBytes();
+                    out.write(b);
+                    out.flush();
+                }catch(Exception e){
+                    Log.v("jim_send",e.toString());
+                }
+            }
+        });
+        t.start();
+    }
     protected void receiver() {
         Thread  t=new Thread(new Runnable() {
             @Override
@@ -103,8 +120,15 @@ public  class SocketTrans {     //執行緒
                        if(br.ready()){
                             s = br.readLine().trim();
                             setResult(s);
-                            if(!s.equals(""))
-                                showNotification(s);
+                            if(!s.equals("")) {
+                                //showNotification(s);
+                                Intent i = new Intent(context,NofyService.class);
+                                // Add extras to the bundle
+                                i.putExtra("foo", s);
+                                i.putExtra("receiver", receiverForSimple);
+                                // Start the service
+                                context.startService(i);
+                            }
                        }
                     }
                 }catch(Exception e){
@@ -127,7 +151,7 @@ public  class SocketTrans {     //執行緒
         }
         return null;
     }
-    public void showNotification(String contentText){
+   /* public void showNotification(String contentText){
         NotificationChannel channelMsg = new NotificationChannel(
                 "msg",
                 "Channel msg",
@@ -145,7 +169,7 @@ public  class SocketTrans {     //執行緒
                         .setContentText(contentText)
                         .setChannelId("msg");
         notificationManager.notify(1, builder.build());
-    }
+    }*/
     public void close(){
         try {
             br.close();

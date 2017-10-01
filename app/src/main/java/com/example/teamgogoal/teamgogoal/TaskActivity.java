@@ -291,7 +291,7 @@ public class TaskActivity extends AppCompatActivity {
                 String param7=user.account;
 
                 nextID=nextID.trim();
-                TaskDB.TaskDetail td=new TaskDB.TaskDetail(nextID,param1,param2,param3,param4,param5,param6,param7);
+                TaskDB.TaskDetail td=new TaskDB.TaskDetail(nextID,param1,param2,param3,param4,param5,param6,param7,"null");
 
                 new TaskActivity.DbOperationTask().execute("createTask",nextID,param1,param2,param3,param4,param5,param6,param7);
                 int k=Integer.parseInt(nextID.trim());
@@ -461,7 +461,7 @@ public class TaskActivity extends AppCompatActivity {
             String msgStr=cheerEt.getText().toString();
             Integer key=Integer.parseInt(currID.trim());
             TaskUIStructure taskUIS=taskMap.get(key);
-            Log.v("jim_cheerSubmit",taskUIS.td.auth);
+
             socketTrans.setParams("register_cheer",user.account,taskUIS.td.auth.trim(),msgStr);
             socketTrans.send(socketTrans.getParams());
             msg.dismiss();
@@ -536,7 +536,7 @@ public class TaskActivity extends AppCompatActivity {
                 String mid = Integer.toString(key);
                 Log.d("hhhhhhhhhhh",mid);
                 //String phpurl = LoginActivity.getLocalHost() + "updateTaskState.php?mid=" + mid;
-                String phpurl = LoginActivity.getLocalHost() + "updateTaskState.php?mid=" + mid + "&tid=" + currTid + "&uid=" + LoginActivity.getUser().uid + "&partnerid=" + "2";
+                String phpurl = LoginActivity.getLocalHost() + "updateTaskState.php?mid=" + mid + "&tid=" + currTid + "&uid=" + LoginActivity.getUser().uid + "&partnerid=" + taskMap.get(key).td.collaborator;
                 new TransTask().execute(phpurl);
             }
         });

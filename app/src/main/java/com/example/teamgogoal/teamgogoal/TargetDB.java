@@ -44,10 +44,10 @@ public class TargetDB  {
                 String endTime=obj.getString("targetEndTime");
                 String state=obj.getString("state");
                 String auth=obj.getString("auth");
-                String planet=obj.getString("planet");
+                String dream=obj.getString("dream");
                 String participator=readParticipator(tid);
-                TargetDetail TargetDetail=new TargetDetail(tid,targetName,targetContent,startTime,endTime,state,auth,planet,participator);
-                //Log.v("jim",TargetDetail.tid +","+TargetDetail.targetName+","+TargetDetail.targetContent+","+TargetDetail.startTime+","+TargetDetail.endTime+","+TargetDetail.state+","+TargetDetail.auth+","+TargetDetail.planet);
+                TargetDetail TargetDetail=new TargetDetail(tid,targetName,targetContent,startTime,endTime,state,auth,dream,participator);
+                //Log.v("jim",TargetDetail.tid +","+TargetDetail.targetName+","+TargetDetail.targetContent+","+TargetDetail.startTime+","+TargetDetail.endTime+","+TargetDetail.state+","+TargetDetail.auth+","+TargetDetail.dream);
                 map.put(obj.getString("tid"),TargetDetail);
             }
         } catch(JSONException e){
@@ -64,13 +64,13 @@ public class TargetDB  {
         return ans.trim();
     }
     protected String createTarget(String param1,String param2,String param3,String param4,String param5,String param6,String param7,String param8){
-        String params="table=target"+" & tid="+param1 +" & targetName="+param2+" & targetContent="+param3+" & targetStartTime="+param4+" & targetEndTime="+param5+" & state="+param6+" & auth="+param7+" & planet="+param8;
+        String params="table=target"+" & tid="+param1 +" & targetName="+param2+" & targetContent="+param3+" & targetStartTime="+param4+" & targetEndTime="+param5+" & state="+param6+" & auth="+param7+" & dream="+param8;
         String php="createTarget.php";
         String ans=viaParams(params,php);
         return  ans;
     }
     protected  void updateTarget(String param1,String param2,String param3,String param4,String param5,String param6,String param7,String param8,String param9,String param10){
-        String params="table=target"+" & tid="+param1 +" & targetName="+param2+" & targetContent="+param3+" & targetStartTime="+param4+" & targetEndTime="+param5+" & state="+param6+" & auth="+param7+" & planet="+param8;
+        String params="table=target"+" & tid="+param1 +" & targetName="+param2+" & targetContent="+param3+" & targetStartTime="+param4+" & targetEndTime="+param5+" & state="+param6+" & auth="+param7+" & dream="+param8;
         String php="updateTarget.php";
         String ans=viaParams(params,php);
 
@@ -83,19 +83,23 @@ public class TargetDB  {
 
 
         for(int i=0;i<list.size();i++){
-            String params3="table=registerrequest & originator="+user.account+" & cmd=request_ask & cmdContext="+param1.trim()+" & subject="+list.get(i).toString().trim();
-            String php3="createRegisterRequest.php";
-            String s=viaParams(params3,php3);
+            if(!list.get(i).equals("")){
+                String params3="table=registerrequest & originator="+user.account+" & cmd=request_ask & cmdContext="+param1.trim()+" & subject="+list.get(i).toString().trim();
+                String php3="createRegisterRequest.php";
+                String s=viaParams(params3,php3);
+                socketTrans.setParams("register_request", user.account.trim(), list.get(i).toString().trim(), param1.trim());
+                socketTrans.send();
+            }
         }
         list.clear();
         list=diff(old_list,new_list);
         for(int i=0;i<list.size();i++){
-            String params2="table=participator & tid="+param1 +" & account="+list.get(i).toString().trim();
-            String php2="deleteParticipator.php";
-            String ss=viaParams(params2,php2);
+            if(!list.get(i).equals("")){
+                String params2="table=participator & tid="+param1 +" & account="+list.get(i).toString().trim();
+                String php2="deleteParticipator.php";
+                String ss=viaParams(params2,php2);
+            }
         }
-
-
     }
     public List diff(List ls, List ls2) {
         List list = new ArrayList(Arrays.asList(new Object[ls.size()]));
@@ -108,19 +112,20 @@ public class TargetDB  {
         String php,params;
 
         for(int i=0;i<str.length;i++){
-            if(str[i].equals(user.account)) {
-                php="createParticipator.php";
-                params="table=participator & tid="+id.trim()+" & account="+str[i];
-                viaParams(params,php);
-            }else{
-                php="createRegisterRequest.php";
-                params="table=registerrequest & originator="+user.account+" & cmd=request_ask & cmdContext="+id.trim()+" & subject="+str[i];
-                String result=viaParams(params,php);
-                Log.v("jim_TargetDB_createParticipator",result);
-                /*socketTrans.setParams("register_request", user.account.trim(), str[i].trim(), id.trim());
-                socketTrans.send(socketTrans.getParams());
-                String result = socketTrans.getResult();
-                Log.v("jim_createParticipator", result);*/
+            if(!str[i].equals("")){
+                if(str[i].equals(user.account)) {
+                    php="createParticipator.php";
+                    params="table=participator & tid="+id.trim()+" & account="+str[i].trim();
+                    viaParams(params,php);
+                }else{
+                    php="createRegisterRequest.php";
+                    params="table=registerrequest & originator="+user.account+" & cmd=request_ask & cmdContext="+id.trim()+" & subject="+str[i].trim();
+                    String result=viaParams(params,php);
+                    Log.v("jim_TargetDB_createParticipator",result);
+                    socketTrans.setParams("register_request", user.account.trim(), str[i].trim(), id.trim());
+                    socketTrans.send(socketTrans.getParams());
+                    Log.v("jim_createParticipator", result);
+                }
             }
         }
     }
@@ -152,7 +157,7 @@ public class TargetDB  {
 
     //Data
     public static class TargetDetail{
-            String tid,targetName,targetContent,state,auth,startTime,endTime,planet,participator;
+            String tid,targetName,targetContent,state,auth,startTime,endTime,dream,participator;
         TargetDetail(String param1,String param2,String param3,String param4,String param5,String param6,String param7,String param8,String param9){
             //Log.v("jim",param1+","+param2+","+param3+","+param4+","+param5+","+param6+","+param7+","+param8);
             this.tid=param1;
@@ -162,7 +167,7 @@ public class TargetDB  {
             this.endTime=param5;
             this.state=param6;
             this.auth=param7;
-            this.planet=param8;
+            this.dream=param8;
             this.participator=param9;
         }
     }
