@@ -28,8 +28,8 @@ import java.net.URL;
 public class LoginActivity extends AppCompatActivity {
     //public static final String localhost="http://169.254.68.146/DB/";
     //public static final String ip="106.107.161.179";
-    //public static final String ip="192.168.0.100";
-    public static final String ip="169.254.68.146";
+    public static final String ip="192.168.0.101";
+    //public static final String ip="169.254.68.146";
     public static final String localhost="http://"+ip+"/TeamGoGoal/";
     Intent intent;
     public static  User user=null;
