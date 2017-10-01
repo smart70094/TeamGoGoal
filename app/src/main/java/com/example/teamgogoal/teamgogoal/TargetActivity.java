@@ -317,7 +317,7 @@ public class TargetActivity extends AppCompatActivity {
                 String param6=LoginActivity.user.account;
                 String param7=dreamEt.getText().toString();
                 String param8=participatorTxt.getText().toString();
-
+                param8+=user.account+",";
 
                 nextID=nextID.trim();
                 TargetDB.TargetDetail td=new TargetDB.TargetDetail(nextID,param1,param2,param3,param4,param5,param6,param7,param8);
@@ -325,7 +325,6 @@ public class TargetActivity extends AppCompatActivity {
 
                 int k=Integer.parseInt(nextID);
                 tll.setId(k);
-                Log.v("jim",nextID);
                 TargetUIStructure targetUIS=new TargetUIStructure(td,tll,img,txt);
                 targetMap.put(k,targetUIS);
 

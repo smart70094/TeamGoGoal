@@ -1,21 +1,12 @@
 package com.example.teamgogoal.teamgogoal;
 
-import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
-
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -85,6 +76,22 @@ public  class SocketTrans {     //執行緒
                 try{
                     out = clientSocket.getOutputStream();
                     byte b[] = s.getBytes();
+                    out.write(b);
+                    out.flush();
+                }catch(Exception e){
+                    Log.v("jim_send",e.toString());
+                }
+            }
+        });
+        t.start();
+    }
+    protected  void send(){
+        Thread t=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    out = clientSocket.getOutputStream();
+                    byte b[] = param.getBytes();
                     out.write(b);
                     out.flush();
                 }catch(Exception e){
