@@ -226,7 +226,7 @@ public class TaskActivity extends AppCompatActivity {
             }else{
                 LinearLayout tll=new LinearLayout(this);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(30, 20, 30, 0);
                 tll.setOrientation(LinearLayout.HORIZONTAL);
                 tll.setLayoutParams(layoutParams);
@@ -317,8 +317,9 @@ public class TaskActivity extends AppCompatActivity {
 
                 LinearLayout tll=new LinearLayout(this);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(30, 20, 30, 0);
+                tll.setGravity(Gravity.CENTER_HORIZONTAL);
                 tll.setOrientation(LinearLayout.HORIZONTAL);
                 tll.setLayoutParams(layoutParams);
                 tll.setOnLongClickListener(new View.OnLongClickListener(){
@@ -361,12 +362,19 @@ public class TaskActivity extends AppCompatActivity {
                 img.setLayoutParams(layoutParams);
 
                 TextView txt=new TextView(this);
+                txt.setTextSize(28);
                 txt.setGravity(Gravity.BOTTOM);
-                txt.setText(set.getValue().missionName+"      執行者:"+set.getValue().auth);
+                txt.setText(set.getValue().missionName);
+                //txt.setText(set.getValue().missionName+"      執行者:"+set.getValue().auth);
                 Integer key=Integer.parseInt(set.getValue().mid);
                 //--------------帥哥建興的------------
+                // Image Button part
                 ImageButton imgbtn = new ImageButton(this);
-                imgbtn.setImageResource(R.drawable.common_google_signin_btn_icon_dark);
+                imgbtn.setBackgroundColor(getResources().getColor(R.color.empty));
+                imgbtn.setImageResource(R.drawable.item_check);
+                imgbtn.setLayoutParams(new ViewGroup.LayoutParams(50, 50));
+                imgbtn.setScaleType(ImageButton.ScaleType.FIT_CENTER);
+
                 final Integer _key = key;
                 imgbtn.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {

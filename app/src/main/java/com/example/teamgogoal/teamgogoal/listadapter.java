@@ -45,12 +45,14 @@ public class listadapter extends BaseAdapter {
         ViewHolder holder;
 
         if (convertView == null) {
-            if (LeftOrRight) {
+
+            /*if (LeftOrRight) {
                 convertView = myInflater.inflate(R.layout.left, null);
             } else {
                 convertView = myInflater.inflate(R.layout.right, null);
             }
-            LeftOrRight = !LeftOrRight;
+            LeftOrRight = !LeftOrRight;*/
+            convertView = myInflater.inflate(R.layout.left, null);
             holder = new ViewHolder();
             holder.message = (TextView) convertView.findViewById(R.id.message);
             holder.dateAndTime = (TextView) convertView.findViewById(R.id.dataAndTime);

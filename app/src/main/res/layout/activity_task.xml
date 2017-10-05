@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,21 +7,22 @@
     tools:context="com.example.teamgogoal.teamgogoal.TaskActivity">
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_empty"
+        android:gravity="center_vertical|center_horizontal"
         android:orientation="vertical"
         android:weightSum="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
@@ -44,6 +45,7 @@
                 android:id="@+id/taskTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:forceHasOverlappingRendering="false"
                 android:gravity="center_horizontal"
                 android:textSize="36sp" />
@@ -51,14 +53,14 @@
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="0dp"
-                android:layout_marginTop="0dp"
+                android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_weight="0.10">
 
                 <LinearLayout
                     android:id="@+id/taskll"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical|center_horizontal"
                     android:orientation="vertical">
 
                 </LinearLayout>
@@ -76,7 +78,10 @@
             android:layout_alignParentStart="false"
             android:layout_alignParentTop="false"
             android:layout_centerVertical="false"
+            android:background="@drawable/bg_new_task_btn"
             android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp">
 
@@ -87,9 +92,12 @@
                 android:layout_alignLeft="@+id/showAddTaskBtn"
                 android:layout_alignParentTop="true"
                 android:layout_alignStart="@+id/showAddTaskBtn"
+                android:background="@color/black"
                 android:onClick="onClick"
-                android:text="+ 新目標" />
+                android:text="+ 新目標"
+                android:textColor="@android:color/black"
+                android:textSize="24sp" />
         </LinearLayout>
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

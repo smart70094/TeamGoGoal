@@ -94,6 +94,22 @@ public  class SocketTrans {     //執行緒
         });
         t.start();
     }
+    protected  void send(){
+        Thread t=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    out = clientSocket.getOutputStream();
+                    byte b[] = param.getBytes();
+                    out.write(b);
+                    out.flush();
+                }catch(Exception e){
+                    Log.v("jim_send",e.toString());
+                }
+            }
+        });
+        t.start();
+    }
     protected void receiver() {
         Thread  t=new Thread(new Runnable() {
             @Override

@@ -83,19 +83,23 @@ public class TargetDB  {
 
 
         for(int i=0;i<list.size();i++){
-            String params3="table=registerrequest & originator="+user.account+" & cmd=request_ask & cmdContext="+param1.trim()+" & subject="+list.get(i).toString().trim();
-            String php3="createRegisterRequest.php";
-            String s=viaParams(params3,php3);
+            if(!list.get(i).equals("")){
+                String params3="table=registerrequest & originator="+user.account+" & cmd=request_ask & cmdContext="+param1.trim()+" & subject="+list.get(i).toString().trim();
+                String php3="createRegisterRequest.php";
+                String s=viaParams(params3,php3);
+                socketTrans.setParams("register_request", user.account.trim(), list.get(i).toString().trim(), param1.trim());
+                socketTrans.send();
+            }
         }
         list.clear();
         list=diff(old_list,new_list);
         for(int i=0;i<list.size();i++){
-            String params2="table=participator & tid="+param1 +" & account="+list.get(i).toString().trim();
-            String php2="deleteParticipator.php";
-            String ss=viaParams(params2,php2);
+            if(!list.get(i).equals("")){
+                String params2="table=participator & tid="+param1 +" & account="+list.get(i).toString().trim();
+                String php2="deleteParticipator.php";
+                String ss=viaParams(params2,php2);
+            }
         }
-
-
     }
     public List diff(List ls, List ls2) {
         List list = new ArrayList(Arrays.asList(new Object[ls.size()]));
@@ -108,19 +112,20 @@ public class TargetDB  {
         String php,params;
 
         for(int i=0;i<str.length;i++){
-            if(str[i].equals(user.account)) {
-                php="createParticipator.php";
-                params="table=participator & tid="+id.trim()+" & account="+str[i].trim();
-                viaParams(params,php);
-            }else{
-                php="createRegisterRequest.php";
-                params="table=registerrequest & originator="+user.account+" & cmd=request_ask & cmdContext="+id.trim()+" & subject="+str[i].trim();
-                String result=viaParams(params,php);
-                Log.v("jim_TargetDB_createParticipator",result);
-                /*socketTrans.setParams("register_request", user.account.trim(), str[i].trim(), id.trim());
-                socketTrans.send(socketTrans.getParams());
-                String result = socketTrans.getResult();
-                Log.v("jim_createParticipator", result);*/
+            if(!str[i].equals("")){
+                if(str[i].equals(user.account)) {
+                    php="createParticipator.php";
+                    params="table=participator & tid="+id.trim()+" & account="+str[i].trim();
+                    viaParams(params,php);
+                }else{
+                    php="createRegisterRequest.php";
+                    params="table=registerrequest & originator="+user.account+" & cmd=request_ask & cmdContext="+id.trim()+" & subject="+str[i].trim();
+                    String result=viaParams(params,php);
+                    Log.v("jim_TargetDB_createParticipator",result);
+                    socketTrans.setParams("register_request", user.account.trim(), str[i].trim(), id.trim());
+                    socketTrans.send(socketTrans.getParams());
+                    Log.v("jim_createParticipator", result);
+                }
             }
         }
     }

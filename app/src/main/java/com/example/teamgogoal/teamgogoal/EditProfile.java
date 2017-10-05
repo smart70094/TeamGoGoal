@@ -63,7 +63,7 @@ public class EditProfile extends Activity implements OnClickListener {
         setContentView(R.layout.activity_edit_profile);
 
         user = LoginActivity.getUser();
-        account = (TextView) findViewById(R.id.textView9);
+        //account = (TextView) findViewById(R.id.textView9);
         name = (EditText) findViewById(R.id.editText);
         uploadButton = (Button)findViewById(R.id.uploadButton);
         btnselectpic = (Button)findViewById(R.id.button_selectpic);
@@ -77,7 +77,7 @@ public class EditProfile extends Activity implements OnClickListener {
         upLoadServerUri = localhost + "UploadToServer.php?uid=" + user.uid;
         //upLoadServerUri = "http://along.event2007.com/m/UploadToServer.php";
 
-        account.setText("帳號：" + user.account);
+        //account.setText("帳號：" + user.account);
         name.setText(user.name);
 
         new AsyncTask<String, Void, Bitmap>()
