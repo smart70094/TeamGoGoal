@@ -1,9 +1,6 @@
 package com.example.teamgogoal.teamgogoal;
 
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -27,7 +24,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MultiAutoCompleteTextView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -627,6 +623,7 @@ public class TargetActivity extends AppCompatActivity {
     public void checkReview(View view) {
         Intent intent = new Intent();
         intent.setClass(this,Review.class);
+
         startActivity(intent);
     }
 

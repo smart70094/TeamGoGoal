@@ -7,7 +7,7 @@
     android:gravity="bottom|center_horizontal"
     android:orientation="vertical"
     android:weightSum="1"
-    tools:context="com.example.gary.anothertest.gallery_item">
+    tools:context="com.example.teamgogoal.teamgogoal.gallery_item">
 
     <ImageView
         android:id="@+id/imageview"

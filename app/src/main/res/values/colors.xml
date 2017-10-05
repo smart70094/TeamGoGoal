@@ -7,7 +7,18 @@
     <color name="textColor">#ffffff</color>
     <color name="black">#ffffff</color>
 
+    <!--基本色彩-->
+    <color name="basicColor">#313254</color>
+    <color name="basicColor2">#ecebe9</color>
+    <color name="item_bg_color">#e3e3e9</color>
+
+    <!--基本色彩-->
+
     <color name="empty">#00000000</color>
+
+    <!--彈出式窗透明底-->
+    <color name="bg_alert">#F2ffffff</color>
+    <!--彈出式窗透明底-->
 
     <!--進度條顏色-->
     <color name="bg">#333357</color>>
