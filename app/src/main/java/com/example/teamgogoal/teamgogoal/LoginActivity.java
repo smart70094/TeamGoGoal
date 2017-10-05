@@ -30,7 +30,7 @@ import java.net.URL;
 public class LoginActivity extends AppCompatActivity {
     //public static final String localhost="http://169.254.68.146/DB/";
     //public static final String ip="106.107.161.179";
-    public static final String ip="192.168.0.100";
+    public static final String ip="111.253.228.128";
     //public static final String ip="1.165.110.246";
     public static final String localhost="http://"+ip+"/TeamGoGoal/";
     EditText accountTxt,passwordTxt;
