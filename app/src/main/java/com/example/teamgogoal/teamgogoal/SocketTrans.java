@@ -1,5 +1,7 @@
 package com.example.teamgogoal.teamgogoal;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -112,7 +114,6 @@ public  class SocketTrans {     //執行緒
                             s = br.readLine().trim();
                             setResult(s);
                             if(!s.equals("")) {
-                                //showNotification(s);
                                 Intent i = new Intent(context,NofyService.class);
                                 // Add extras to the bundle
                                 i.putExtra("foo", s);
@@ -142,33 +143,28 @@ public  class SocketTrans {     //執行緒
         }
         return null;
     }
-   /* public void showNotification(String contentText){
-        NotificationChannel channelMsg = new NotificationChannel(
-                "msg",
-                "Channel msg",
-                NotificationManager.IMPORTANCE_HIGH);
-        channelMsg.setDescription("socketMsg");
-        channelMsg.enableLights(true);
-        channelMsg.enableVibration(true);
-        //NotificationManager notificationManager=(NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.createNotificationChannel(channelMsg);
+    public void showNotification(String contentText){
+       try{
+           NotificationChannel channelMsg = new NotificationChannel(
+                   "msg",
+                   "Channel msg",
+                   NotificationManager.IMPORTANCE_HIGH);
+           channelMsg.setDescription("socketMsg");
+           channelMsg.enableLights(true);
+           channelMsg.enableVibration(true);
+           //NotificationManager notificationManager=(NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+           notificationManager.createNotificationChannel(channelMsg);
 
-        Notification.Builder builder =
-                new Notification.Builder(context)
-                        .setSmallIcon(android.R.drawable.ic_notification_clear_all)
-                        .setContentTitle("TeamGoGoal")
-                        .setContentText(contentText)
-                        .setChannelId("msg");
-        notificationManager.notify(1, builder.build());
-    }*/
-    public void close(){
-        try {
-            br.close();
-            out.close();
-            clientSocket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+           Notification.Builder builder =
+                   new Notification.Builder(context)
+                           .setSmallIcon(android.R.drawable.ic_notification_clear_all)
+                           .setContentTitle("TeamGoGoal")
+                           .setContentText(contentText)
+                           .setChannelId("msg");
+           notificationManager.notify(1, builder.build());
+       }catch(Exception e){
+           Log.v("jim_showNotification",e.toString());
+       }
     }
+
 }

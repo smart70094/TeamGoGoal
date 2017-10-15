@@ -10,7 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-
+import android.support.v4.app.NotificationManagerCompat;
 
 
 public class NofyService extends IntentService {
@@ -36,7 +36,13 @@ public class NofyService extends IntentService {
         // Send result to activity
         //sendResultValue(rec, val);
         // Let's also create notification
-        createNotification(val);
+
+        int version=android.os.Build.VERSION.SDK_INT;
+        if(version>25)
+            createNotification_v8(val);
+        else
+            createNotification_v7(val);
+
     }
 
     // Send result to activity using ResultReceiver
@@ -49,7 +55,7 @@ public class NofyService extends IntentService {
     }
 
     // Construct compatible notification
-    private void createNotification(String val) {
+    private void createNotification_v8(String val) {
         // Construct pending intent to serve as action for notification item
         Intent intent = new Intent(this, TargetActivity.class);
         intent.putExtra("message", "Launched via notification with message: " + val + " and timestamp " + timestamp);
@@ -78,6 +84,24 @@ public class NofyService extends IntentService {
 
         // mId allows you to update the notification later on.
         mNotificationManager.notify(NOTIF_ID, builder.build());
+    }
+    private void createNotification_v7(String val) {
+        int notificationId = 001;
+        String id = "my_channel_01";
+        Intent viewIntent = new Intent();
+        viewIntent.putExtra("notificationID",123);
+        PendingIntent viewPendingIntent =
+                PendingIntent.getActivity(this, 0, viewIntent, 0);
+        Notification.Builder notificationBuilder =
+                new Notification.Builder(this)
+                        .setSmallIcon(android.R.drawable.ic_notification_clear_all)
+                        .setContentTitle("123")
+                        .setContentText(val)
+                        .setPriority(Notification.PRIORITY_MAX)
+                        .setContentIntent(viewPendingIntent);
+        NotificationManagerCompat notificationManager =
+                NotificationManagerCompat.from(this);
+        notificationManager.notify(notificationId, notificationBuilder.build());
     }
 
     private void sleep(long millis) {

@@ -1,5 +1,7 @@
 package com.example.teamgogoal.teamgogoal;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,7 +32,7 @@ import java.net.URL;
 public class LoginActivity extends AppCompatActivity {
     //public static final String localhost="http://169.254.68.146/DB/";
     //public static final String ip="106.107.161.179";
-    public static final String ip="111.253.228.128";
+    public static final String ip="114.26.229.5";
     //public static final String ip="1.165.110.246";
     public static final String localhost="http://"+ip+"/TeamGoGoal/";
     EditText accountTxt,passwordTxt;
@@ -41,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     public static SocketTrans socketTrans;
     private SharedPreferences settings;
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -60,6 +63,29 @@ public class LoginActivity extends AppCompatActivity {
         socketTrans.setActivity(LoginActivity.this);
         socketTrans.setNotification((NotificationManager)getSystemService(NOTIFICATION_SERVICE));
 
+    }
+    public void showNotification(String contentText){
+        try{
+            NotificationChannel channelMsg = new NotificationChannel(
+                    "msg",
+                    "Channel msg",
+                    NotificationManager.IMPORTANCE_HIGH);
+            channelMsg.setDescription("socketMsg");
+            channelMsg.enableLights(true);
+            channelMsg.enableVibration(true);
+            NotificationManager notificationManager=(NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(channelMsg);
+
+            Notification.Builder builder =
+                    new Notification.Builder(this)
+                            .setSmallIcon(android.R.drawable.ic_notification_clear_all)
+                            .setContentTitle("TeamGoGoal")
+                            .setContentText(contentText)
+                            .setChannelId("msg");
+            notificationManager.notify(1, builder.build());
+        }catch(Exception e){
+            Log.v("jim_showNotification",e.toString());
+        }
     }
     public static User getUser(){return user;}
     public static String getLocalHost(){return localhost;}
