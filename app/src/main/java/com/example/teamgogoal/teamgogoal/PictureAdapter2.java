@@ -3,9 +3,7 @@ package com.example.teamgogoal.teamgogoal;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
-import android.util.Log;
 
-import com.example.teamgogoal.teamgogoal.GalleryModel;
 import com.lukedeighton.wheelview.adapter.WheelArrayAdapter;
 
 import java.util.List;
@@ -18,7 +16,6 @@ public class PictureAdapter2 extends WheelArrayAdapter {
 
     public PictureAdapter2(List<GalleryModel> list, Context context) {
         super(list);
-        Log.d("gggggg", Integer.toString(list.size()));
     }
 
 
@@ -27,7 +24,6 @@ public class PictureAdapter2 extends WheelArrayAdapter {
         GalleryModel gm = (GalleryModel) getItem(position);
 
         Drawable b = gm.getDrawable();
-        Log.d("CCCCC", b.toString());
         Drawable[] drawable = new Drawable[]{
                 b,
                 new TextDrawable(gm.getText())

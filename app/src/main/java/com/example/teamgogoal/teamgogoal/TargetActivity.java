@@ -1,9 +1,6 @@
 package com.example.teamgogoal.teamgogoal;
 
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -77,7 +74,7 @@ public class TargetActivity extends AppCompatActivity {
             db= new TargetDB();
             LayoutInflater factory = LayoutInflater.from(this);
             addTargetMsg = factory.inflate(R.layout.activity_target_add_msg, null);
-            dialog = new AlertDialog.Builder(TargetActivity.this);
+            dialog = new AlertDialog.Builder(TargetActivity.this,R.style.Translucent_NoTitle);
             targetNameEt=(EditText) addTargetMsg.findViewById(R.id.targetNameTxt);
             targeContentEt=(EditText) addTargetMsg.findViewById(R.id.targetContent);
             startTimeEt=(EditText) addTargetMsg.findViewById(R.id.startTimeTxt);
@@ -101,6 +98,7 @@ public class TargetActivity extends AppCompatActivity {
             targetProfilePicture=(ImageView)findViewById(R.id.targetProfilePicture);
             dreamEt=(EditText) addTargetMsg.findViewById(R.id.dreamET);
             dialog.setView(addTargetMsg);
+
             dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialogInterface) {

@@ -11,9 +11,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -59,6 +65,30 @@ public class LoginActivity extends AppCompatActivity {
         socketTrans=new SocketTrans();
         socketTrans.setActivity(LoginActivity.this);
         socketTrans.setNotification((NotificationManager)getSystemService(NOTIFICATION_SERVICE));
+
+
+
+        /*星球旋轉動畫*/
+        ImageView iv = (ImageView)this.findViewById(R.id.imageView3);
+
+        Animation am = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        am.setDuration( 10000 );
+        am.setRepeatCount(Animation.INFINITE);
+        am.setInterpolator(new LinearInterpolator());
+        am.setStartOffset(0);
+        iv.setAnimation(am);
+        am.startNow();
+
+        ScrollView scrollView = (ScrollView)this.findViewById(R.id.scrollView1);
+
+
+        scrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return true;
+            }
+        });
+
 
     }
     public static User getUser(){return user;}

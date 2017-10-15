@@ -97,6 +97,25 @@ public class Review extends AppCompatActivity {
     }
 
 
+    private void initData() {
+        list = new ArrayList<GalleryModel>();
+        Log.d("DDDD", Integer.toString(completetarget.size()));
+        for (CompleteTarget cTarget : completetarget) {
+            switch (cTarget.getPlanet()) {
+                case "earth":
+                    list.add(new GalleryModel(R.drawable.earth_item, cTarget.getTarget(), ResourcesCompat.getDrawable(getResources(), R.drawable.planet_earth, null)));
+                    break;
+                case "mars":
+                    list.add(new GalleryModel(R.drawable.mars_item, cTarget.getTarget(),ResourcesCompat.getDrawable(getResources(), R.drawable.mars,null)));
+                    break;
+                case "jupiter":
+                    list.add(new GalleryModel(R.drawable.jupiter_item, cTarget.getTarget(),ResourcesCompat.getDrawable(getResources(), R.drawable.jupiter,null)));
+                    break;
+            }
+        }
+
+    }
+
     private void initView() {
         final WheelView wheelView = (WheelView) findViewById(R.id.wheelview);
 
@@ -122,22 +141,4 @@ public class Review extends AppCompatActivity {
         });
     }
 
-    private void initData() {
-        list = new ArrayList<GalleryModel>();
-        Log.d("DDDD", Integer.toString(completetarget.size()));
-        for (CompleteTarget cTarget : completetarget) {
-            switch (cTarget.getPlanet()) {
-                case "earth":
-                    list.add(new GalleryModel(R.drawable.earth_item, cTarget.getTarget(), ResourcesCompat.getDrawable(getResources(), R.drawable.planet_earth, null)));
-                    break;
-                case "mars":
-                    list.add(new GalleryModel(R.drawable.mars_item, cTarget.getTarget(),ResourcesCompat.getDrawable(getResources(), R.drawable.mars,null)));
-                    break;
-                case "jupiter":
-                    list.add(new GalleryModel(R.drawable.jupiter_item, cTarget.getTarget(),ResourcesCompat.getDrawable(getResources(), R.drawable.jupiter,null)));
-                    break;
-            }
-        }
-
-    }
 }

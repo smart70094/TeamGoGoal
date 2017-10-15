@@ -3,17 +3,17 @@
     package="com.example.teamgogoal.teamgogoal">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
+        android:background="@color/basicColor"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:background="@color/basicColor"
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity android:name=".LoginActivity">
             <intent-filter>
@@ -24,20 +24,21 @@
         </activity>
         <activity android:name=".TaskActivity" />
         <activity android:name=".TargetActivity" />
-        <activity android:name=".RequestActivity"></activity>
-        <activity android:name=".Review"></activity>
-        <activity android:name=".Record"></activity>
-        <activity android:name=".EditProfile"></activity>
-        <receiver android:name=".AlarmReceiver"></receiver>
+        <activity android:name=".RequestActivity" />
+        <activity android:name=".Review" />
+        <activity android:name=".Record" />
+        <activity android:name=".EditProfile" />
 
-        <receiver android:name="AlarmInitReceiver">
+        <receiver android:name=".AlarmReceiver" />
+        <receiver android:name=".AlarmInitReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
-        <service android:name="NofyService"/>
+        <service android:name=".NofyService" />
 
+        <activity android:name=".round_animate"></activity>
     </application>
 
 </manifest>

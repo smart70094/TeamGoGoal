@@ -17,7 +17,7 @@
     <color name="empty">#00000000</color>
 
     <!--彈出式窗透明底-->
-    <color name="bg_alert">#F2ffffff</color>
+    <color name="bg_alert">#f9ffffff</color>
     <!--彈出式窗透明底-->
 
     <!--進度條顏色-->
