@@ -55,11 +55,22 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <ScrollView
+                <ListView
+                    android:id="@+id/listview_task"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:divider="@null"
+                    android:dividerHeight="10dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:scrollbars="none" />
+
+                <ScrollView
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical|center_horizontal"
-                    android:layout_weight="0.10">
+                    android:layout_weight="0">
 
                     <LinearLayout
                         android:id="@+id/taskll"
@@ -73,25 +84,25 @@
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.10"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
                     android:orientation="vertical">
 
                     <Button
                         android:id="@+id/button9"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Button" />
 
                     <Button
                         android:id="@+id/button4"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Button" />
 
                     <Button
                         android:id="@+id/button3"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Button" />
                 </LinearLayout>

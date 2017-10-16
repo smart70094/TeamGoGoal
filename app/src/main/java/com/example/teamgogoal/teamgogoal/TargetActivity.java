@@ -12,17 +12,17 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,40 +48,48 @@ import java.util.Map;
 
 public class TargetActivity extends AppCompatActivity {
     AlertDialog.Builder dialog;
-    AlertDialog msg=null;
-    String localhost=LoginActivity.getLocalHost();
+    AlertDialog msg = null;
+    String localhost = LoginActivity.getLocalHost();
     LoginActivity.User user;
     TargetDB db;
     LinearLayout targetll;
-    EditText targetNameEt,targeContentEt,startTimeEt,endTimeEt,dreamEt;
-    Button submitTargetBtn,clearTargetBtn,cannelBtn;
+    EditText targetNameEt, targeContentEt, startTimeEt, endTimeEt, dreamEt;
+    Button submitTargetBtn, clearTargetBtn, cannelBtn;
     ImageView targetProfilePicture;
     View addTargetMsg;
 
-    String nextID="",currID="";
+    String nextID = "", currID = "";
     Intent intent;
+
+
+    /*---Date:1015 rebuild----*/
+    List<HashMap<String, String>> TargetData = new ArrayList<>();
+    private target_listadapter target_listAdapter;
+    ListView target_listview;
+    /*---Date:1015 rebuild----*/
 
     //8/20:AutoCompleteTextView
     MultiAutoCompleteTextView participatorTxt;
 
-    SocketTrans socketTrans=LoginActivity.socketTrans;
-    static Map<Integer,TargetUIStructure> targetMap =new HashMap<Integer,TargetUIStructure>();
+    SocketTrans socketTrans = LoginActivity.socketTrans;
+    static Map<Integer, TargetUIStructure> targetMap = new HashMap<Integer, TargetUIStructure>();
+
     protected void onCreate(Bundle savedInstanceState) {
-        try{
+        try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_target);
-            targetll=(LinearLayout) findViewById(R.id.taskLinearLayout);
-            db= new TargetDB();
+            targetll = (LinearLayout) findViewById(R.id.taskLinearLayout);
+            db = new TargetDB();
             LayoutInflater factory = LayoutInflater.from(this);
             addTargetMsg = factory.inflate(R.layout.activity_target_add_msg, null);
-            dialog = new AlertDialog.Builder(TargetActivity.this,R.style.Translucent_NoTitle);
-            targetNameEt=(EditText) addTargetMsg.findViewById(R.id.targetNameTxt);
-            targeContentEt=(EditText) addTargetMsg.findViewById(R.id.targetContent);
-            startTimeEt=(EditText) addTargetMsg.findViewById(R.id.startTimeTxt);
-            endTimeEt=(EditText) addTargetMsg.findViewById(R.id.EndTimeTxt);
+            dialog = new AlertDialog.Builder(TargetActivity.this, R.style.Translucent_NoTitle);
+            targetNameEt = (EditText) addTargetMsg.findViewById(R.id.targetNameTxt);
+            targeContentEt = (EditText) addTargetMsg.findViewById(R.id.targetContent);
+            startTimeEt = (EditText) addTargetMsg.findViewById(R.id.startTimeTxt);
+            endTimeEt = (EditText) addTargetMsg.findViewById(R.id.EndTimeTxt);
 
             // Date:8/20-監聽文字變更開始
-            participatorTxt = (MultiAutoCompleteTextView)addTargetMsg.findViewById(R.id.multiAutoCompleteTextView);
+            participatorTxt = (MultiAutoCompleteTextView) addTargetMsg.findViewById(R.id.multiAutoCompleteTextView);
             participatorTxt.setDropDownHeight(200); //設定高度
             participatorTxt.setThreshold(1);
             participatorTxt.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
@@ -92,11 +100,11 @@ public class TargetActivity extends AppCompatActivity {
 
 
             //participatorTxt=(EditText) addTargetMsg.findViewById(R.id.participatorTxt);
-            submitTargetBtn=(Button)addTargetMsg.findViewById(R.id.submitTargetBtn);
-            clearTargetBtn=(Button)addTargetMsg.findViewById(R.id.clearMessageBtn);
-            cannelBtn=(Button)addTargetMsg.findViewById(R.id.cannelBtn);
-            targetProfilePicture=(ImageView)findViewById(R.id.targetProfilePicture);
-            dreamEt=(EditText) addTargetMsg.findViewById(R.id.dreamET);
+            submitTargetBtn = (Button) addTargetMsg.findViewById(R.id.submitTargetBtn);
+            clearTargetBtn = (Button) addTargetMsg.findViewById(R.id.clearMessageBtn);
+            cannelBtn = (Button) addTargetMsg.findViewById(R.id.cannelBtn);
+            targetProfilePicture = (ImageView) findViewById(R.id.targetProfilePicture);
+            dreamEt = (EditText) addTargetMsg.findViewById(R.id.dreamET);
             dialog.setView(addTargetMsg);
 
             dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -105,15 +113,15 @@ public class TargetActivity extends AppCompatActivity {
                     initial();
                 }
             });
-            user=LoginActivity.getUser();
+            user = LoginActivity.getUser();
 
 
-
-        }catch(Exception e){
-            Log.v("jim",e.toString());
+        } catch (Exception e) {
+            Log.v("jim", e.toString());
         }
     }
-    public void registerAlarm(){
+
+    public void registerAlarm() {
         /*Thread thread=new Thread(new Runnable(){
             @Override
             public void run() {
@@ -137,6 +145,7 @@ public class TargetActivity extends AppCompatActivity {
         });
         thread.start();*/
     }
+
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) { // 攔截返回鍵
             targetMap.clear();
@@ -150,25 +159,23 @@ public class TargetActivity extends AppCompatActivity {
         super.onResume();
         loading();
     }
-    protected  void loading(){
-        synchronized(this) {
+
+    protected void loading() {
+        synchronized (this) {
             new DbOperationTask().execute("readTarget");
 
             //帥哥峻禾部分
             String imageUrl = localhost + "profile picture/" + user.uid;
-            new AsyncTask<String, Void, Bitmap>()
-            {
+            new AsyncTask<String, Void, Bitmap>() {
                 @Override
-                protected Bitmap doInBackground(String... params)
-                {
+                protected Bitmap doInBackground(String... params) {
                     String url = params[0];
                     return getBitmapFromURL(url);
                 }
 
                 @Override
-                protected void onPostExecute(Bitmap result)
-                {
-                    targetProfilePicture.setImageBitmap (result);
+                protected void onPostExecute(Bitmap result) {
+                    targetProfilePicture.setImageBitmap(result);
                     super.onPostExecute(result);
                 }
             }.execute(imageUrl);
@@ -176,9 +183,8 @@ public class TargetActivity extends AppCompatActivity {
     }
 
     //帥哥峻禾部分
-    public Bitmap getBitmapFromURL(String imageUrl){
-        try
-        {
+    public Bitmap getBitmapFromURL(String imageUrl) {
+        try {
             URL url = new URL(imageUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setDoInput(true);
@@ -186,23 +192,21 @@ public class TargetActivity extends AppCompatActivity {
             InputStream input = connection.getInputStream();
             Bitmap bitmap = BitmapFactory.decodeStream(input);
             return bitmap;
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public void onClick(View view){
-        int id=view.getId();
-        switch (id){
+    public void onClick(View view) {
+        int id = view.getId();
+        switch (id) {
             case R.id.showAddTargetBtn:
                 showTarget();
                 //participatorTxt.setText(user.account);
                 break;
             case R.id.submitTargetBtn:
-                if(currID.equals("")) addTarget();
+                if (currID.equals("")) addTarget();
                 else update();
                 break;
             case R.id.clearMessageBtn:
@@ -229,50 +233,60 @@ public class TargetActivity extends AppCompatActivity {
                 break;
         }
     }
+
     //帥哥峻禾部分
     private void toEditProfile() {
-        intent=new Intent();
+        intent = new Intent();
         intent.setClass(TargetActivity.this, EditProfile.class);
         startActivity(intent);
     }
-    protected  void toRequest(){
-        intent=new Intent();
+
+    protected void toRequest() {
+        intent = new Intent();
         intent.setClass(TargetActivity.this, RequestActivity.class);
         startActivity(intent);
     }
 
-    protected void showTarget(){
-        try{
-            if(msg==null){
-                msg=dialog.show();
+    protected void showTarget() {
+        try {
+            if (msg == null) {
+                msg = dialog.show();
 
-            }else{
+            } else {
                 msg.show();
             }
-        }catch(Exception e){
-            Log.v("jim",e.toString());
+        } catch (Exception e) {
+            Log.v("jim", e.toString());
         }
     }
-    protected  void addTarget(){
-        try{
-            if((targetNameEt.getText().toString().equals("") || targeContentEt.getText().toString().equals("") || startTimeEt.getText().toString().equals("") || endTimeEt.getText().toString().equals("") || participatorTxt.getText().toString().equals(""))){
-                Toast.makeText(this,"請輸入完整資訊",Toast.LENGTH_SHORT).show();
-            }else{
-                LinearLayout tll=new LinearLayout(this);
+
+    protected void addTarget() {
+        try {
+            if ((targetNameEt.getText().toString().equals("") || targeContentEt.getText().toString().equals("") || startTimeEt.getText().toString().equals("") || endTimeEt.getText().toString().equals("") || participatorTxt.getText().toString().equals(""))) {
+                Toast.makeText(this, "請輸入完整資訊", Toast.LENGTH_SHORT).show();
+            } else {
+
+
+
+
+
+
+
+               /* LinearLayout tll = new LinearLayout(this);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(30, 20, 30, 0);
                 tll.setOrientation(LinearLayout.HORIZONTAL);
                 tll.setLayoutParams(layoutParams);
-                tll.setOnLongClickListener(new View.OnLongClickListener(){
+                tll.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View view) {
-                        Integer id=view.getId();
-                        String auth=targetMap.get(id).td.auth.trim();
-                        if(auth.equals(user.account)){
-                            final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"read","update","delete"},view.getId());
+                        Integer id = view.getId();
+                        String auth = targetMap.get(id).td.auth.trim();
+                        if (auth.equals(user.account)) {
+                            final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"read", "update", "delete"}, view.getId());
                             mutiItemDialog.show();
-                        }else{
+                        } else {
                             submitTargetBtn.setEnabled(false);
                             clearTargetBtn.setEnabled(false);
                             read(id);
@@ -281,72 +295,84 @@ public class TargetActivity extends AppCompatActivity {
                     }
                 });
 
-                tll.setOnClickListener(new View.OnClickListener(){
+                tll.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        enterTaskActivity(view.getId());
+                        //enterTaskActivity(view.getId());
                     }
                 });
 
-                ImageView img=new ImageView(this);
-                img=toCircleImage(R.drawable.images,img);
+                ImageView img = new ImageView(this);
+                img = toCircleImage(R.drawable.images, img);
                 img.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
                 img.setAdjustViewBounds(true);
                 layoutParams = new LinearLayout.LayoutParams(250, 250);
-                layoutParams.setMargins(0,0,20,0);
+                layoutParams.setMargins(0, 0, 20, 0);
                 img.setLayoutParams(layoutParams);
 
 
-                TextView txt=new TextView(this);
-                String targetName=targetNameEt.getText().toString();
+                TextView txt = new TextView(this);
+                String targetName = targetNameEt.getText().toString();
                 txt.setText(targetName);
 
                 tll.addView(img);
                 tll.addView(txt);
                 targetll.addView(tll);
-                targetll.setEnabled(false);
+                targetll.setEnabled(false);*/
 
-                String param1=targetNameEt.getText().toString();
-                String param2=targeContentEt.getText().toString();
-                String param3=startTimeEt.getText().toString();
-                String param4=endTimeEt.getText().toString();
-                String param5="no";
-                String param6=LoginActivity.user.account;
-                String param7=dreamEt.getText().toString();
-                String param8=participatorTxt.getText().toString();
-                param8+=user.account+",";
+                String param1 = targetNameEt.getText().toString();
+                String param2 = targeContentEt.getText().toString();
+                String param3 = startTimeEt.getText().toString();
+                String param4 = endTimeEt.getText().toString();
+                String param5 = "no";
+                String param6 = LoginActivity.user.account;
+                String param7 = dreamEt.getText().toString();
+                String param8 = participatorTxt.getText().toString();
+                param8 += user.account + ",";
 
-                nextID=nextID.trim();
-                TargetDB.TargetDetail td=new TargetDB.TargetDetail(nextID,param1,param2,param3,param4,param5,param6,param7,param8);
-                new DbOperationTask().execute("createTarget",nextID,param1,param2,param3,param4,param5,param6,param7,param8);
+                nextID = nextID.trim();
+                TargetDB.TargetDetail td = new TargetDB.TargetDetail(nextID, param1, param2, param3, param4, param5, param6, param7, param8);
+                new DbOperationTask().execute("createTarget", nextID, param1, param2, param3, param4, param5, param6, param7, param8);
 
-                int k=Integer.parseInt(nextID);
-                tll.setId(k);
-                TargetUIStructure targetUIS=new TargetUIStructure(td,tll,img,txt);
-                targetMap.put(k,targetUIS);
+
+                HashMap<String, String> tg_hashmap = new HashMap<>();
+                tg_hashmap.put("tid", nextID);
+                tg_hashmap.put("planet_imv", "null");
+                tg_hashmap.put("targetName", param1);
+
+                TargetData.add(tg_hashmap);
+                target_listAdapter.notifyDataSetChanged();
+
+
+
+                int k = Integer.parseInt(nextID);
+                //tll.setId(k);
+                TargetUIStructure targetUIS = new TargetUIStructure(td, new LinearLayout(this), null, new TextView(this));
+                targetMap.put(k, targetUIS);
 
                 //帥哥峻禾部分
-                socketTrans.setParams("initial_target",nextID,param4);
+                socketTrans.setParams("initial_target", nextID, param4);
                 socketTrans.send(socketTrans.getParams());
 
                 msg.dismiss();
-                Toast.makeText(this,"新增成功",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "新增成功", Toast.LENGTH_SHORT).show();
                 initial();
             }
 
-        }catch(Exception e){
-            Log.v("jim1",e.toString());
+        } catch (Exception e) {
+            Log.v("jim1", e.toString());
         }
     }
-    protected ImageView  toCircleImage(int imgId,ImageView img){
-        Bitmap bitmap= BitmapFactory.decodeResource(getResources(),imgId);
-        RoundedBitmapDrawable roundedBitmapDrawable= RoundedBitmapDrawableFactory.create(getResources(),bitmap);
+
+    protected ImageView toCircleImage(int imgId, ImageView img) {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imgId);
+        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
         roundedBitmapDrawable.setCircular(true);
         img.setImageDrawable(roundedBitmapDrawable);
         return img;
     }
 
-    protected  void initial( ){
+    protected void initial() {
         targetNameEt.setText("");
         targeContentEt.setText("");
         startTimeEt.setText("");
@@ -358,228 +384,227 @@ public class TargetActivity extends AppCompatActivity {
         cannelBtn.setEnabled(true);
 
     }
-    protected void cancel(){
+
+    protected void cancel() {
         initial();
         msg.dismiss();
     }
 
-    protected  void selectDate(final int txtID){
+    protected void selectDate(final int txtID) {
         final Calendar c = Calendar.getInstance();
         int mYear = c.get(Calendar.YEAR);
         int mMonth = c.get(Calendar.MONTH);
         int mDay = c.get(Calendar.DAY_OF_MONTH);
         new DatePickerDialog(TargetActivity.this, new DatePickerDialog.OnDateSetListener() {
-            int id=txtID;
+            int id = txtID;
+
             public void onDateSet(DatePicker view, int year, int month, int day) {
-                String format = setDateFormat(year,month,day);
-                EditText txt=(EditText) addTargetMsg.findViewById(id);
+                String format = setDateFormat(year, month, day);
+                EditText txt = (EditText) addTargetMsg.findViewById(id);
                 txt.setText(format);
             }
-        }, mYear,mMonth, mDay).show();
+        }, mYear, mMonth, mDay).show();
 
     }
-    private String setDateFormat(int year,int monthOfYear,int dayOfMonth){
+
+    private String setDateFormat(int year, int monthOfYear, int dayOfMonth) {
         return String.valueOf(year) + "-"
                 + String.valueOf(monthOfYear + 1) + "-"
                 + String.valueOf(dayOfMonth);
     }
 
-    protected void fresh(Map<String,TargetDB.TargetDetail> map) {
-            Iterator it = map.entrySet().iterator();
+    protected void fresh(Map<String, TargetDB.TargetDetail> map) {
+        Iterator it = map.entrySet().iterator();
 
-            while (it.hasNext()) {
+        while (it.hasNext()) {
 
-                Map.Entry<String, TargetDB.TargetDetail> set = (Map.Entry) it.next();
-                String s = set.getValue().tid.trim();
-                Integer key = Integer.parseInt(s);
-                if(!targetMap.containsKey(key)) {
-                    LinearLayout tll = new LinearLayout(this);
-                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    layoutParams.setMargins(30, 20, 30, 0);
-                    tll.setOrientation(LinearLayout.HORIZONTAL);
-                    tll.setLayoutParams(layoutParams);
-                    tll.setOnLongClickListener(new View.OnLongClickListener() {
-                        @Override
-                        public boolean onLongClick(View view) {
-                            Integer id=view.getId();
-                            String auth=targetMap.get(id).td.auth.trim();
-                            if(auth.equals(user.account)){
-                                final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"read","update","delete"},view.getId());
-                                mutiItemDialog.show();
-                            }else{
-                                submitTargetBtn.setEnabled(false);
-                                clearTargetBtn.setEnabled(false);
-                                read(id);
-                            }
-                            return false;
-                        }
 
-                    });
+            /*------Date:1015 rebuild-----*/
+            Map.Entry<String, TargetDB.TargetDetail> set = (Map.Entry) it.next();
 
-                    tll.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            enterTaskActivity(view.getId());
-                        }
-                    });
+            String s = set.getValue().tid.trim();
+            Integer key = Integer.parseInt(s);
 
-                    ImageView img = new ImageView(this);
-                    img = toCircleImage(R.drawable.images, img);
-                    //等比例放大縮小
-                    img.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                    //允許img可以改變大小
-                    img.setAdjustViewBounds(true);
-                    //建立layout，並且設定大小
-                    layoutParams = new LinearLayout.LayoutParams(250, 250);
-                    layoutParams.setMargins(0, 0, 20, 0);
-                    //設定好的layout丟給imageview
-                    img.setLayoutParams(layoutParams);
 
-                    TextView txt = new TextView(this);
-                    txt.setGravity(Gravity.BOTTOM);
+            if (!targetMap.containsKey(key)) {
+                HashMap<String, String> tg_hashmap = new HashMap<>();
+                tg_hashmap.put("tid", s);
+                tg_hashmap.put("planet_imv", "null");
+                tg_hashmap.put("targetName", set.getValue().targetName);
 
-                    txt.setText(set.getValue().targetName);
+                TargetData.add(tg_hashmap);
 
-                    tll.addView(img);
-                    tll.addView(txt);
+                TargetUIStructure targetUIS = new TargetUIStructure(set.getValue(), new LinearLayout(this), null, new TextView(this));
+                targetMap.put(key, targetUIS);
+            }
+            /*------Date:1015 rebuild-----*/
+        }
 
-                    tll.setId(key);
+        target_listview = (ListView) findViewById(R.id.listview_target);
 
-                    TargetUIStructure targetUIS = new TargetUIStructure(set.getValue(), tll, img, txt);
-                    targetMap.put(key, targetUIS);
-                    try {
-                        targetll.addView(tll);
-                    } catch (Exception e) {
-                        Log.v("jim12", e.toString());
-                    }
+        target_listAdapter = new target_listadapter(this);
+        target_listAdapter.setData(TargetData);
+        target_listAdapter.notifyDataSetChanged();
+        target_listview.setAdapter(target_listAdapter);
+
+        target_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                enterTaskActivity(Integer.valueOf(TargetData.get(i).get("tid")), TargetData.get(i).get("targetName"));
+            }
+        });
+
+        target_listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Integer id = Integer.valueOf(TargetData.get(i).get("tid"));
+
+                String auth = targetMap.get(id).td.auth.trim();
+
+                if (auth.equals(user.account)) {
+                    final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"詳細", "修改", "刪除"}, id, i);
+                    mutiItemDialog.show();
+                } else {
+                    submitTargetBtn.setEnabled(false);
+                    clearTargetBtn.setEnabled(false);
+                    read(id);
                 }
+                return true;
             }
 
+        });
+
     }
-    public AlertDialog getMutiItemDialog(final String[] cmd,final int id) {
+
+
+    public AlertDialog getMutiItemDialog(final String[] cmd, final int id, final int map_id) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //設定對話框內的項目
-        builder.setItems(cmd, new DialogInterface.OnClickListener(){
+        builder.setItems(cmd, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog,int index){
-                switch (cmd[index]){
-                    case "read":
+            public void onClick(DialogInterface dialog, int index) {
+                switch (cmd[index]) {
+                    case "詳細":
                         read(id);
                         submitTargetBtn.setEnabled(false);
                         clearTargetBtn.setEnabled(false);
-                    break;
-                    case "update":
+                        break;
+                    case "修改":
                         read(id);
                         submitTargetBtn.setText("更新資料");
                         clearTargetBtn.setEnabled(false);
-                        currID=Integer.toString(id).trim();
+                        currID = Integer.toString(id).trim();
                         break;
-                    case "delete":
-                        delete(id);
+                    case "刪除":
+                        delete(id,map_id);
+
                         break;
                 }
             }
         });
         return builder.create();
     }
-    protected  void delete(int id){
-        try{
-            TargetUIStructure targetUIS= targetMap.get(id);
-            TargetDB.TargetDetail td=targetUIS.td;
-            LinearLayout ll=targetUIS.ll;
-            ((ViewGroup) ll.getParent()).removeView(ll);
+
+    protected void delete(int id,int map_id) {
+        try {
+            TargetUIStructure targetUIS = targetMap.get(id);
+            TargetDB.TargetDetail td = targetUIS.td;
+            /*LinearLayout ll = targetUIS.ll;
+            ((ViewGroup) ll.getParent()).removeView(ll);*/
             targetMap.remove(id);
+            TargetData.remove(map_id);
+            target_listAdapter.notifyDataSetChanged();
 
-            if(user.account.equals(td.auth.trim()))
-                new DbOperationTask().execute("deleteParticipator_all",td.tid);
+
+            if (user.account.equals(td.auth.trim()))
+                new DbOperationTask().execute("deleteParticipator_all", td.tid);
             else
-                new DbOperationTask().execute("deleteParticipator",td.tid,user.account);
+                new DbOperationTask().execute("deleteParticipator", td.tid, user.account);
 
-        }catch(Exception e){
-            Log.v("jim1",e.toString());
+        } catch (Exception e) {
+            Log.v("jim1", e.toString());
         }
 
 
     }
-    protected  void read(int id){
-        TargetUIStructure targetUIS= targetMap.get(id);
-        TargetDB.TargetDetail td=targetUIS.td;
+
+    protected void read(int id) {
+        TargetUIStructure targetUIS = targetMap.get(id);
+        TargetDB.TargetDetail td = targetUIS.td;
         targetNameEt.setText(td.targetName);
         targeContentEt.setText(td.targetContent);
         startTimeEt.setText(td.startTime);
         endTimeEt.setText(td.endTime);
         participatorTxt.setText(td.participator);
         dreamEt.setText(td.dream);
-        currID=Integer.toString(id).trim();
+        currID = Integer.toString(id).trim();
 
         showTarget();
     }
 
-    protected  void update(){
-        String param1=targetNameEt.getText().toString();
-        String param2=targeContentEt.getText().toString();
-        String param3=startTimeEt.getText().toString();
-        String param4=endTimeEt.getText().toString();
-        String param5="no";
-        String param6=LoginActivity.user.account;
-        String param7=dreamEt.getText().toString();
-        String param8=participatorTxt.getText().toString();
+    protected void update() {
+        String param1 = targetNameEt.getText().toString();
+        String param2 = targeContentEt.getText().toString();
+        String param3 = startTimeEt.getText().toString();
+        String param4 = endTimeEt.getText().toString();
+        String param5 = "no";
+        String param6 = LoginActivity.user.account;
+        String param7 = dreamEt.getText().toString();
+        String param8 = participatorTxt.getText().toString();
 
-        int key=Integer.parseInt(currID.trim());
-        TargetUIStructure targetUIS= targetMap.get(key);
-        String param9=targetUIS.td.participator;
-        targetUIS.td.targetName=param1;
-        targetUIS.td.targetContent=param2;
-        targetUIS.td.startTime=param3;
-        targetUIS.td.endTime=param4;
-        targetUIS.td.dream=param7;
-        targetUIS.td.participator=param8;
+        int key = Integer.parseInt(currID.trim());
+        TargetUIStructure targetUIS = targetMap.get(key);
+        String param9 = targetUIS.td.participator;
+        targetUIS.td.targetName = param1;
+        targetUIS.td.targetContent = param2;
+        targetUIS.td.startTime = param3;
+        targetUIS.td.endTime = param4;
+        targetUIS.td.dream = param7;
+        targetUIS.td.participator = param8;
         targetUIS.txtName.setText(param1);
 
         //String param8=participatorTxt.getText().toString();
-        new DbOperationTask().execute("updateTarget",currID,param1,param2,param3,param4,param5,param6,param7,param8,param9);
-        currID="";
+        new DbOperationTask().execute("updateTarget", currID, param1, param2, param3, param4, param5, param6, param7, param8, param9);
+        currID = "";
         msg.dismiss();
     }
 
 
-
     //background run
-    private class DbOperationTask  extends AsyncTask<String, Void, Void> {
+    private class DbOperationTask extends AsyncTask<String, Void, Void> {
         protected Void doInBackground(String... params) {
             String cmd = params[0];
             switch (cmd) {
                 case "readTarget":
-                    final Map<String,TargetDB.TargetDetail> t;
-                     t=db.readTarget();
+                    final Map<String, TargetDB.TargetDetail> t;
+                    t = db.readTarget();
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            try{
+                            try {
                                 fresh(t);
-                            }catch(Exception e) {
+                            } catch (Exception e) {
                                 Log.v("jim11", e.toString());
                             }
                         }
                     });
 
-                    nextID=db.targetIndex();
+                    nextID = db.targetIndex();
                     break;
                 case "createTarget":
-                    db.createTarget(params[1],params[2],params[3],params[4],params[5],params[6],params[7],params[8]);
-                    db.createParticipator(params[1],params[9]);
+                    db.createTarget(params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8]);
+                    db.createParticipator(params[1], params[9]);
 
-                    nextID=db.targetIndex();
+                    nextID = db.targetIndex();
                     break;
                 case "updateTarget":
-                    db.updateTarget(params[1],params[2],params[3],params[4],params[5],params[6],params[7],params[8],params[9],params[10]);
+                    db.updateTarget(params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], params[9], params[10]);
                     break;
                 case "deleteParticipator_all":
                     db.deleteTargetAll(params[1]);
                     break;
                 case "deleteParticipator":
-                    db.deleteParticipator(params[1],params[2]);
+                    db.deleteParticipator(params[1], params[2]);
                     break;
 
 
@@ -587,43 +612,46 @@ public class TargetActivity extends AppCompatActivity {
             return null;
         }
     }
-    public void enterTaskActivity(int id){
-        try{
-            String tid=Integer.toString(id).trim();
-            TargetUIStructure targetUIS=targetMap.get(id);
+
+    public void enterTaskActivity(int tid, String targetName) {
+        try {
+
+            //TargetUIStructure targetUIS = targetMap.get(id);
 
             Intent intent = new Intent();
-            intent.putExtra("tid",targetUIS.td.tid.trim());
-            intent.putExtra("t_name",targetUIS.td.targetName.trim());
-
+            /*
+            intent.putExtra("tid", targetUIS.td.tid.trim());
+            intent.putExtra("t_name", targetUIS.td.targetName.trim());
+                    */
+            intent.putExtra("tid", Integer.toString(tid));
+            intent.putExtra("t_name", targetName);
             //intent.putExtras(bundle);
             intent.setClass(TargetActivity.this, TaskActivity.class);
             startActivity(intent);
-        }catch(Exception e){
-            Log.v("jim_enterTaskActivity",e.toString());
+        } catch (Exception e) {
+            Log.v("jim_enterTaskActivity", e.toString());
         }
     }
+
     public class TargetUIStructure implements Serializable {
         TargetDB.TargetDetail td;
         LinearLayout ll;
         ImageView img;
         TextView txtName;
-        TargetUIStructure(TargetDB.TargetDetail td,LinearLayout ll,ImageView img,TextView txtNam){
-            this.td=td;
-            this.ll=ll;
-            this.img=img;
-            this.txtName=txtNam;
+
+        TargetUIStructure(TargetDB.TargetDetail td, LinearLayout ll, ImageView img, TextView txtNam) {
+            this.td = td;
+            this.ll = ll;
+            this.img = img;
+            this.txtName = txtNam;
         }
     }
-
-
-
 
 
     //-----------------帥哥建興開始-----------------
     public void checkReview(View view) {
         Intent intent = new Intent();
-        intent.setClass(this,Review.class);
+        intent.setClass(this, Review.class);
 
         startActivity(intent);
     }
@@ -675,13 +703,13 @@ public class TargetActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            Log.d("FFFF",Integer.toString(list.size()));
+            Log.d("FFFF", Integer.toString(list.size()));
             return list;
         }
     }
 
-    public  void initListView(List list){
-        ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,list);
+    public void initListView(List list) {
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
         participatorTxt.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }

@@ -5,18 +5,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class listadapter extends BaseAdapter {
+public class task_listadapter extends BaseAdapter {
     private LayoutInflater myInflater;
     List<HashMap<String, String>> list = new ArrayList<>();
-    boolean LeftOrRight = true; //true mesans left
 
-    public listadapter(Context context) {
+    public task_listadapter(Context context) {
         myInflater = LayoutInflater.from(context);
 
     }
@@ -32,7 +32,7 @@ public class listadapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return list;
     }
 
     @Override
@@ -40,37 +40,36 @@ public class listadapter extends BaseAdapter {
         return 0;
     }
 
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 
         if (convertView == null) {
 
-            /*if (LeftOrRight) {
-                convertView = myInflater.inflate(R.layout.left, null);
-            } else {
-                convertView = myInflater.inflate(R.layout.right, null);
-            }
-            LeftOrRight = !LeftOrRight;*/
-            convertView = myInflater.inflate(R.layout.left, null);
+            convertView = myInflater.inflate(R.layout.task_list, null);
             holder = new ViewHolder();
-            holder.message = (TextView) convertView.findViewById(R.id.message);
-            holder.dateAndTime = (TextView) convertView.findViewById(R.id.dataAndTime);
+            holder.missionName = (TextView) convertView.findViewById(R.id.missionName);
+
+            //圖片區
+            //holder.dateAndTime = (TextView) convertView.findViewById(R.id.dataAndTime);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.message.setText(list.get(position).get("recordText"));
-        holder.dateAndTime.setText(list.get(position).get("date"));
+        holder.missionName.setText(list.get(position).get("missionName"));
+
+        //圖片
+        //holder.dateAndTime.setText(list.get(position).get("date"));
 
 
         return convertView;
     }
 
     static class ViewHolder {
-        TextView message;
-        TextView dateAndTime;
+        ImageView personal_photo;
+        TextView missionName;
     }
 
 }

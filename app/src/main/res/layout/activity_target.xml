@@ -87,6 +87,16 @@
 
         </LinearLayout>
 
+        <ListView
+            android:id="@+id/listview_target"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:divider="@null"
+            android:dividerHeight="10dp"
+            android:paddingLeft="20dp" />
+
         <ScrollView
             android:id="@+id/taskScrollView"
             android:layout_width="match_parent"
@@ -133,6 +143,7 @@
                 android:text="+ 新目標"
                 android:textColor="@android:color/black"
                 android:textSize="24sp" />
+
         </LinearLayout>
 
     </LinearLayout>

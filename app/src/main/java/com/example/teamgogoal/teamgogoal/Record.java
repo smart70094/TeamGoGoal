@@ -25,7 +25,7 @@ import java.util.List;
 public class Record extends AppCompatActivity {
     ListView listview;
     private List<String> RecordData = new ArrayList<String>();
-    private listadapter listAdapter;
+    private record_listadapter listAdapter;
     private String userID, tid, target;
     private int planet_imv;
     private ImageView imageview;
@@ -54,7 +54,7 @@ public class Record extends AppCompatActivity {
 
         listview = (ListView) findViewById(R.id.listview1);
 
-        listAdapter = new listadapter(this);
+        listAdapter = new record_listadapter(this);
         listAdapter.setData(list);
 
         listview.setAdapter(listAdapter);
