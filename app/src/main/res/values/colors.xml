@@ -13,7 +13,9 @@
     <color name="item_bg_color">#e3e3e9</color>
 
     <!--基本色彩-->
-
+    <!--Top bg color-->
+    <color name="top_bg_color">#262843</color>
+    <!--Top bg color-->
     <color name="empty">#00000000</color>
 
     <!--彈出式窗透明底-->

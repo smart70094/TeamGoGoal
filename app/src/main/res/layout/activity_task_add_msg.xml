@@ -2,106 +2,125 @@
 
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/TaskMessageLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerHorizontal="true"
     android:layout_centerVertical="true"
+    android:background="@color/bg_alert"
     android:orientation="vertical"
     android:visibility="visible">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="任務"
-        android:textSize="24sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/taskName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="任務名稱：" />
+            android:text="任務名稱"
+            android:textColor="@color/basicColor"
+            android:textSize="24sp" />
 
         <EditText
             android:id="@+id/taskNameTxt"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:ems="10"
-            android:inputType="textPersonName" />
+            android:ems="1"
+            android:inputType="textPersonName"
+            android:textSize="24sp"
+            tools:background="@color/item_bg_color" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="任務內容：" />
+            android:text="任務內容"
+            android:textColor="@color/basicColor"
+            android:textSize="24sp" />
 
         <EditText
             android:id="@+id/taskContent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textMultiLine" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/item_bg_color"
+            android:inputType="textMultiLine"
+            android:textSize="24sp" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="星       球：" />
+            android:text="星       球"
+            android:textColor="@color/basicColor"
+            android:textSize="24sp" />
 
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@color/item_bg_color" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="提醒時間：" />
+            android:text="提醒時間"
+            android:textColor="@color/basicColor"
+            android:textSize="24sp" />
 
-        <EditText
-            android:id="@+id/remindTimeTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="textPersonName|date" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/selectRemindTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="onClick"
-            android:text="+" />
+            <EditText
+                android:id="@+id/remindTimeTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".9"
+                android:background="@color/item_bg_color"
+                android:inputType="textPersonName|date"
+                android:textSize="24sp" />
+
+            <Button
+                android:id="@+id/selectRemindTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".1"
+                android:onClick="onClick"
+                android:text="+" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

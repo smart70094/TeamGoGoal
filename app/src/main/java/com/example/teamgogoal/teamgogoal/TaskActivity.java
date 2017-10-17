@@ -49,7 +49,7 @@ import java.util.Map;
 public class TaskActivity extends AppCompatActivity {
 
     TaskDB db;
-    LinearLayout taskll;
+    //LinearLayout taskll;
     TextView taskTitle;
     EditText taskNameTxt, taskContent, remindTimeTxt, cheerEt;
     Button submit, submitTaskBtn, clearTaskMessageBtn, cannelTaskBtn;
@@ -90,7 +90,7 @@ public class TaskActivity extends AppCompatActivity {
 
             LayoutInflater factory = LayoutInflater.from(this);
             addTaskMsg = factory.inflate(R.layout.activity_task_add_msg, null);
-            taskll = (LinearLayout) findViewById(R.id.taskll);
+            //taskll = (LinearLayout) findViewById(R.id.taskll);
 
             taskNameTxt = (EditText) addTaskMsg.findViewById(R.id.taskNameTxt);
 
@@ -291,12 +291,12 @@ public class TaskActivity extends AppCompatActivity {
                 imgbtn.setImageResource(R.drawable.common_google_signin_btn_icon_dark);
 
 
-                tll.addView(img);
+                /*tll.addView(img);
                 tll.addView(txt);
                 tll.addView(imgbtn);
                 taskll.addView(tll);
                 taskMsg.dismiss();
-                taskll.setEnabled(false);
+                taskll.setEnabled(false);*/
 
                 String param1 = taskNameTxt.getText().toString();
                 String param2 = taskContent.getText().toString();

@@ -52,7 +52,6 @@ public class TargetActivity extends AppCompatActivity {
     String localhost = LoginActivity.getLocalHost();
     LoginActivity.User user;
     TargetDB db;
-    LinearLayout targetll;
     EditText targetNameEt, targeContentEt, startTimeEt, endTimeEt, dreamEt;
     Button submitTargetBtn, clearTargetBtn, cannelBtn;
     ImageView targetProfilePicture;
@@ -78,7 +77,6 @@ public class TargetActivity extends AppCompatActivity {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_target);
-            targetll = (LinearLayout) findViewById(R.id.taskLinearLayout);
             db = new TargetDB();
             LayoutInflater factory = LayoutInflater.from(this);
             addTargetMsg = factory.inflate(R.layout.activity_target_add_msg, null);
@@ -223,9 +221,6 @@ public class TargetActivity extends AppCompatActivity {
                 break;
             case R.id.button2:
                 toRequest();
-                break;
-            case R.id.loadBtn:
-                loading();
                 break;
             //帥哥峻禾部分
             case R.id.editProfile:
