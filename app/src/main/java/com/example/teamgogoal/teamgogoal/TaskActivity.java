@@ -14,11 +14,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -73,6 +73,7 @@ public class TaskActivity extends AppCompatActivity {
     List<HashMap<String, String>> taskDate = new ArrayList<>();
     private task_listadapter task_listAdapter;
     ListView task_listview;
+    int map_id;
     /*---Date:1015 rebuild----*/
 
 
@@ -132,6 +133,28 @@ public class TaskActivity extends AppCompatActivity {
             percentage = 0;
             intiDataBase();
             //進度條結束
+
+            // ListView 滾動監聽事件
+            task_listview = (ListView) findViewById(R.id.listview_task);
+
+            task_listview.setOnScrollListener(new ListView.OnScrollListener() {
+                ImageView more_botton = (ImageView) findViewById(R.id.more_arrow);
+
+                @Override
+                public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+                }
+
+                @Override
+                public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totallItemCout) {
+                    if (task_listview.getLastVisiblePosition() == (totallItemCout - 1)) {
+                        more_botton.setVisibility(View.INVISIBLE);
+                    } else {
+                        more_botton.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+
+
         } catch (Exception e) {
             Log.v("jim_Task_onCreate", e.toString());
         }
@@ -206,10 +229,11 @@ public class TaskActivity extends AppCompatActivity {
 
             TaskActivity.TaskUIStructure taskUIS = taskMap.get(id);
             TaskDB.TaskDetail td = taskUIS.td;
-            LinearLayout ll = taskUIS.ll;
-            ((ViewGroup) ll.getParent()).removeView(ll);
             new TaskActivity.DbOperationTask().execute("delete", td.mid);
             taskMap.remove(id);
+            taskDate.remove(map_id);
+            task_listAdapter.notifyDataSetChanged();
+
         } catch (Exception e) {
             Log.v("jim1", e.toString());
         }
@@ -232,93 +256,47 @@ public class TaskActivity extends AppCompatActivity {
         taskUIS.txtName.setText(param2 + "      執行者:" + taskUIS.td.auth);
         new DbOperationTask().execute("updateTask", currID, param1, param2, param3, param4, param5);
         currID = "";
+
+        taskDate.get(map_id).put("missionName",param1);
+        task_listAdapter.notifyDataSetChanged();
+
         taskMsg.dismiss();
     }
 
     protected void addTask() {
-        try {
-            if (taskNameTxt.getText().toString().equals("") || taskContent.getText().toString().equals("") || remindTimeTxt.getText().toString().equals("")) {
-                Toast.makeText(this, "請輸入完整資料", Toast.LENGTH_SHORT).show();
-            } else {
-                LinearLayout tll = new LinearLayout(this);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(30, 20, 30, 0);
-                tll.setOrientation(LinearLayout.HORIZONTAL);
-                tll.setLayoutParams(layoutParams);
-                tll.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View view) {
-                        int id = view.getId();
-                        String auth = taskMap.get(id).td.auth.trim();
-                        if (auth == user.account.trim()) {
-                            final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"peek", "update", "delete", "撰寫回顧"}, view.getId());
-                            mutiItemDialog.show();
-                            return false;
-                        } else {
-                            submitTaskBtn.setEnabled(false);
-                            clearTaskMessageBtn.setEnabled(false);
-                            peek(id);
-                            return false;
-                        }
-                    }
-                });
 
-                tll.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        int key = view.getId();
-                        TaskUIStructure taskUIS = taskMap.get(key);
-                        socketTrans.setParams("registerCheer", user.account, taskUIS.td.auth);
-                        socketTrans.send(socketTrans.getParams());
-                        showCheerMsg();
-                    }
-                });
+        if (taskNameTxt.getText().toString().equals("") || taskContent.getText().toString().equals("") || remindTimeTxt.getText().toString().equals("")) {
+            Toast.makeText(this, "請輸入完整資料", Toast.LENGTH_SHORT).show();
+        } else {
 
-                ImageView img = new ImageView(this);
-                img.setBackgroundResource(R.drawable.images);
-                img.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                img.setAdjustViewBounds(true);
-                layoutParams = new LinearLayout.LayoutParams(50, 50);
-                layoutParams.setMargins(0, 0, 20, 0);
-                img.setLayoutParams(layoutParams);
+            String param1 = taskNameTxt.getText().toString();
+            String param2 = taskContent.getText().toString();
+            String param3 = remindTimeTxt.getText().toString();
+            String param4 = currTid;
+            String param5 = spinner.getSelectedItem().toString();
+            String param6 = "no";
+            String param7 = user.account;
 
-                TextView txt = new TextView(this);
-                EditText editTxt = (EditText) addTaskMsg.findViewById(R.id.taskNameTxt);
-                txt.setText(editTxt.getText().toString() + "      執行者:" + user.account);
+            nextID = nextID.trim();
+            TaskDB.TaskDetail td = new TaskDB.TaskDetail(nextID, param1, param2, param3, param4, param5, param6, param7, "null");
 
-                ImageButton imgbtn = new ImageButton(this);
-                imgbtn.setImageResource(R.drawable.common_google_signin_btn_icon_dark);
+            new TaskActivity.DbOperationTask().execute("createTask", nextID, param1, param2, param3, param4, param5, param6, param7);
 
 
-                /*tll.addView(img);
-                tll.addView(txt);
-                tll.addView(imgbtn);
-                taskll.addView(tll);
-                taskMsg.dismiss();
-                taskll.setEnabled(false);*/
+            HashMap<String, String> tk_hashmap = new HashMap<>();
+            tk_hashmap.put("mid", nextID);
+            tk_hashmap.put("personal_photo", "null");
+            tk_hashmap.put("missionName", param1);
 
-                String param1 = taskNameTxt.getText().toString();
-                String param2 = taskContent.getText().toString();
-                String param3 = remindTimeTxt.getText().toString();
-                String param4 = currTid;
-                String param5 = spinner.getSelectedItem().toString();
-                String param6 = "no";
-                String param7 = user.account;
+            taskDate.add(tk_hashmap);
+            task_listAdapter.notifyDataSetChanged();
 
-                nextID = nextID.trim();
-                TaskDB.TaskDetail td = new TaskDB.TaskDetail(nextID, param1, param2, param3, param4, param5, param6, param7, "null");
 
-                new TaskActivity.DbOperationTask().execute("createTask", nextID, param1, param2, param3, param4, param5, param6, param7);
-                int k = Integer.parseInt(nextID.trim());
-                tll.setId(k);
-                TaskUIStructure targetUIS = new TaskUIStructure(td, tll, img, txt);
-                taskMap.put(k, targetUIS);
-                Toast.makeText(this, "新增任務成功", Toast.LENGTH_SHORT).show();
-                taskMsg.dismiss();
-            }
-        } catch (Exception e) {
-            Log.v("jim1", e.toString());
+            int k = Integer.parseInt(nextID.trim());
+            TaskUIStructure targetUIS = new TaskUIStructure(td, new LinearLayout(this), null, new TextView(this));
+            taskMap.put(k, targetUIS);
+            Toast.makeText(this, "新增任務成功", Toast.LENGTH_SHORT).show();
+            taskMsg.dismiss();
         }
     }
 
@@ -342,101 +320,47 @@ public class TaskActivity extends AppCompatActivity {
                 tk_hashmap.put("mid", s);
                 tk_hashmap.put("personal_photo", "null");
                 tk_hashmap.put("missionName", set.getValue().missionName);
-                Log.d("SSSSSSSSSSSSSSSSSS",set.getValue().missionName);
                 taskDate.add(tk_hashmap);
+
+                TaskUIStructure taskUIS = new TaskUIStructure(set.getValue(), new LinearLayout(this), null, new TextView(this));
+                taskMap.put(key, taskUIS);
             }
 
             /*------Date:1015 rebuild-----*/
 
-
-            //Map.Entry<String,TaskDB.TaskDetail> set=(Map.Entry) it.next();
-
-                /*LinearLayout tll = new LinearLayout(this);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(30, 20, 30, 0);
-                tll.setGravity(Gravity.CENTER_HORIZONTAL);
-                tll.setOrientation(LinearLayout.HORIZONTAL);
-                tll.setLayoutParams(layoutParams);
-                tll.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View view) {
-                        int id = view.getId();
-                        String auth = taskMap.get(id).td.auth.trim();
-                        if (auth.equals(user.account.trim())) {
-                            final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"peek", "update", "delete", "撰寫回顧"}, view.getId());
-                            mutiItemDialog.show();
-                            return false;
-                        } else {
-                            submitTaskBtn.setEnabled(false);
-                            clearTaskMessageBtn.setEnabled(false);
-                            peek(id);
-                            return false;
-                        }
-                    }
-
-                });
-                tll.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View view) {
-
-                        currID = Integer.toString(view.getId());
-                        showCheerMsg();
-                    }
-                });*/
-
-                /*ImageView img=new ImageView(this);
-                //img.setBackgroundResource(R.drawable.images);
-                img=toCircleImage(R.drawable.images,img);
-                //等比例放大縮小
-                img.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                //允許img可以改變大小
-                img.setAdjustViewBounds(true);
-                //建立layout，並且設定大小
-                layoutParams = new LinearLayout.LayoutParams(50, 50);
-                layoutParams.setMargins(0,0,20,0);
-                //設定好的layout丟給imageview
-                img.setLayoutParams(layoutParams);
-
-                TextView txt=new TextView(this);
-                txt.setTextSize(28);
-                txt.setGravity(Gravity.BOTTOM);
-                txt.setText(set.getValue().missionName);
-                //txt.setText(set.getValue().missionName+"      執行者:"+set.getValue().auth);
-                Integer key=Integer.parseInt(set.getValue().mid);
-                //--------------帥哥建興的------------
-                // Image Button part
-                ImageButton imgbtn = new ImageButton(this);
-                imgbtn.setBackgroundColor(getResources().getColor(R.color.empty));
-                imgbtn.setImageResource(R.drawable.item_check);
-                imgbtn.setLayoutParams(new ViewGroup.LayoutParams(50, 50));
-                imgbtn.setScaleType(ImageButton.ScaleType.FIT_CENTER);
-
-                final Integer _key = key;
-                imgbtn.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        completeTask(_key);
-                    }
-                });
-                tll.addView(img);
-                tll.addView(txt);
-                tll.addView(imgbtn);
-
-                tll.setId(key);
-                TaskUIStructure taskUIS=new TaskUIStructure(set.getValue(),tll,img,txt);
-                taskMap.put(key,taskUIS);
-                taskll.addView(tll);
-            }
-        }catch(Exception e){
-            Log.v("jim",e.toString());
-        }*/
-
         }
-        task_listview = (ListView) findViewById(R.id.listview_task);
 
         task_listAdapter = new task_listadapter(this);
         task_listAdapter.setData(taskDate);
 
         task_listview.setAdapter(task_listAdapter);
+
+        task_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                currID = taskDate.get(i).get("mid");
+                showCheerMsg();
+            }
+        });
+
+        task_listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                map_id = i;
+                int id = Integer.valueOf(taskDate.get(i).get("mid"));
+                String auth = taskMap.get(id).td.auth.trim();
+                if (auth.equals(user.account.trim())) {
+                    final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"詳細", "修改", "刪除", "撰寫回顧"}, id);
+                    mutiItemDialog.show();
+                } else {
+                    submitTaskBtn.setEnabled(false);
+                    clearTaskMessageBtn.setEnabled(false);
+                    peek(id);
+                }
+                return true;
+            }
+        });
+
     }
 
 
@@ -447,19 +371,19 @@ public class TaskActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int index) {
                 switch (cmd[index]) {
-                    case "peek":
+                    case "詳細":
                         peek(id);
                         submitTaskBtn.setEnabled(false);
                         clearTaskMessageBtn.setEnabled(false);
                         cannelTaskBtn.setEnabled(false);
                         break;
-                    case "update":
+                    case "修改":
                         peek(id);
                         submitTaskBtn.setText("更新資料");
                         clearTaskMessageBtn.setEnabled(false);
                         currID = Integer.toString(id).trim();
                         break;
-                    case "delete":
+                    case "刪除":
                         delete(id);
                         break;
                 }
@@ -553,19 +477,19 @@ public class TaskActivity extends AppCompatActivity {
         taskMsg.dismiss();
     }
 
-public class TaskUIStructure {
-    TaskDB.TaskDetail td;
-    LinearLayout ll;
-    ImageView img;
-    TextView txtName;
+    public class TaskUIStructure {
+        TaskDB.TaskDetail td;
+        LinearLayout ll;
+        ImageView img;
+        TextView txtName;
 
-    TaskUIStructure(TaskDB.TaskDetail td, LinearLayout ll, ImageView img, TextView txtNam) {
-        this.td = td;
-        this.ll = ll;
-        this.img = img;
-        this.txtName = txtNam;
+        TaskUIStructure(TaskDB.TaskDetail td, LinearLayout ll, ImageView img, TextView txtNam) {
+            this.td = td;
+            this.ll = ll;
+            this.img = img;
+            this.txtName = txtNam;
+        }
     }
-}
 
     protected ImageView toCircleImage(int imgId, ImageView img) {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imgId);
@@ -607,47 +531,47 @@ public class TaskUIStructure {
                 .show();
     }
 
-static class Complete_Task_DialogHolder {
-    Button confirm;
-    Button cancel;
-}
+    static class Complete_Task_DialogHolder {
+        Button confirm;
+        Button cancel;
+    }
 
 //--------------資料庫連接 Code---------------------//
 
-private class TransTask extends AsyncTask<String, Void, String> {
-    @Override
-    protected String doInBackground(String... params) {
-        String wholeDocument = null;
-        URL url = null;
-        try {
-            url = new URL(params[0]);
-            Log.d("CC", url.toString());
-            URLConnection conn = url.openConnection();
-            conn.setRequestProperty("Accept-Charset", "utf8");
-            InputStreamReader isr = new InputStreamReader(conn.getInputStream(), "utf8");
-            BufferedReader in = new BufferedReader(isr);
+    private class TransTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            String wholeDocument = null;
+            URL url = null;
+            try {
+                url = new URL(params[0]);
+                Log.d("CC", url.toString());
+                URLConnection conn = url.openConnection();
+                conn.setRequestProperty("Accept-Charset", "utf8");
+                InputStreamReader isr = new InputStreamReader(conn.getInputStream(), "utf8");
+                BufferedReader in = new BufferedReader(isr);
 
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                wholeDocument += inputLine;
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    wholeDocument += inputLine;
+                }
+                isr.close();
+                in.close();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            isr.close();
-            in.close();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            return wholeDocument;
         }
-        return wholeDocument;
-    }
 
-    @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
-        Log.d("JSON", s);
-        dialog.dismiss();
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.d("JSON", s);
+            dialog.dismiss();
+        }
     }
-}
 
     //--------------資料庫連接 Code---------------------//
 
@@ -656,58 +580,58 @@ private class TransTask extends AsyncTask<String, Void, String> {
         new TransTask_searchPercent().execute(phpurl);
     }
 
-private class TransTask_searchPercent extends AsyncTask<String, Void, String> {
+    private class TransTask_searchPercent extends AsyncTask<String, Void, String> {
 
-    @Override
-    protected String doInBackground(String... params) {
-        StringBuilder sb = new StringBuilder();
-        try {
-            URL url = new URL(params[0]);
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(url.openStream()));
-            String line = in.readLine();
-            while (line != null) {
-                Log.d("HTTP", line);
-                sb.append(line);
-                line = in.readLine();
+        @Override
+        protected String doInBackground(String... params) {
+            StringBuilder sb = new StringBuilder();
+            try {
+                URL url = new URL(params[0]);
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(url.openStream()));
+                String line = in.readLine();
+                while (line != null) {
+                    Log.d("HTTP", line);
+                    sb.append(line);
+                    line = in.readLine();
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            return sb.toString();
         }
-        return sb.toString();
-    }
 
-    @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
-        parseJSON(s);
-        initView();
-    }
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            parseJSON(s);
+            initView();
+        }
 
 
-    private void parseJSON(String s) {
-        try {
-            JSONArray array = new JSONArray(s);
-            for (int i = 0; i < array.length(); i++) {
-                JSONObject obj = array.getJSONObject(i);
-                double all_mission = obj.getDouble("all_mission");
-                double complete_mission = obj.getDouble("complete_mission");
-                double _percentage = (complete_mission / all_mission) * 100;
+        private void parseJSON(String s) {
+            try {
+                JSONArray array = new JSONArray(s);
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject obj = array.getJSONObject(i);
+                    double all_mission = obj.getDouble("all_mission");
+                    double complete_mission = obj.getDouble("complete_mission");
+                    double _percentage = (complete_mission / all_mission) * 100;
 
-                percentage = (int) (_percentage + 0.5);
-                Log.d("dd", Double.toString(percentage));
-                //percentage = (complete_mission / all_mission) * 100;
-                //Log.d("ddddddddddddddddp",Integer.toString(percentage));
+                    percentage = (int) (_percentage + 0.5);
+                    Log.d("dd", Double.toString(percentage));
+                    //percentage = (complete_mission / all_mission) * 100;
+                    //Log.d("ddddddddddddddddp",Integer.toString(percentage));
 
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
-    }
 
-}
+    }
 
     private void initView() {
         circularProgressBar.setColor(ContextCompat.getColor(this, R.color.processbar));

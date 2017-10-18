@@ -11,8 +11,12 @@
     <color name="basicColor">#313254</color>
     <color name="basicColor2">#ecebe9</color>
     <color name="item_bg_color">#e3e3e9</color>
-
     <!--基本色彩-->
+
+    <!--dialog分隔線-->
+    <color name="spearate_line">#cbcbcb</color>>
+
+
     <!--Top bg color-->
     <color name="top_bg_color">#262843</color>
     <!--Top bg color-->

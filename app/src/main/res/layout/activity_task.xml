@@ -43,42 +43,69 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight=".12"
                 android:gravity="center_vertical|center_horizontal"
                 android:orientation="vertical">
 
-                <com.mikhaellopez.circularprogressbar.CircularProgressBar
-                    android:id="@+id/yourCircularProgressbar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="200dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.3"
-                    app:cpb_background_progressbar_color="#FFCDD2"
-                    app:cpb_background_progressbar_width="5dp"
-                    app:cpb_progressbar_color="#F44336"
-                    app:cpb_progressbar_width="10dp" />
-
-                <TextView
-                    android:id="@+id/taskTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_weight="0.2"
-                    android:forceHasOverlappingRendering="false"
-                    android:gravity="center_horizontal"
-                    android:textSize="36sp" />
-
-                <ListView
-                    android:id="@+id/listview_task"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="0.5"
-                    android:divider="@null"
-                    android:dividerHeight="10dp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:scrollbars="none" />
+                    android:gravity="center_vertical|center_horizontal"
+                    android:orientation="vertical">
+
+                    <com.mikhaellopez.circularprogressbar.CircularProgressBar
+                        android:id="@+id/yourCircularProgressbar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="150dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="0.8"
+                        app:cpb_background_progressbar_color="#FFCDD2"
+                        app:cpb_background_progressbar_width="5dp"
+                        app:cpb_progressbar_color="#F44336"
+                        app:cpb_progressbar_width="10dp" />
+
+                    <TextView
+                        android:id="@+id/taskTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="0.2"
+                        android:forceHasOverlappingRendering="false"
+                        android:gravity="center_horizontal"
+                        android:textSize="36sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:orientation="vertical">
+
+                    <ListView
+                        android:id="@+id/listview_task"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.1"
+                        android:divider="@null"
+                        android:dividerHeight="10dp"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:scrollbars="none" />
+
+                    <ImageView
+                        android:id="@+id/more_arrow"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.9"
+                        android:adjustViewBounds="true"
+                        android:padding="5dp"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/item_down_arrow" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -109,7 +136,6 @@
                     android:padding="5dp"
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/item_bag" />
-
             </LinearLayout>
 
         </LinearLayout>
@@ -133,7 +159,7 @@
             <Button
                 android:id="@+id/showAddTaskBtn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignLeft="@+id/showAddTaskBtn"
                 android:layout_alignParentTop="true"
                 android:layout_alignStart="@+id/showAddTaskBtn"

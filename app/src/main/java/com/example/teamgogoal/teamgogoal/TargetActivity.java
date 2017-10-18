@@ -65,6 +65,7 @@ public class TargetActivity extends AppCompatActivity {
     List<HashMap<String, String>> TargetData = new ArrayList<>();
     private target_listadapter target_listAdapter;
     ListView target_listview;
+    int map_id;
     /*---Date:1015 rebuild----*/
 
     //8/20:AutoCompleteTextView
@@ -452,12 +453,14 @@ public class TargetActivity extends AppCompatActivity {
         target_listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                map_id=i;
+
                 Integer id = Integer.valueOf(TargetData.get(i).get("tid"));
 
                 String auth = targetMap.get(id).td.auth.trim();
 
                 if (auth.equals(user.account)) {
-                    final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"詳細", "修改", "刪除"}, id, i);
+                    final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"詳細", "修改", "刪除"}, id);
                     mutiItemDialog.show();
                 } else {
                     submitTargetBtn.setEnabled(false);
@@ -472,7 +475,7 @@ public class TargetActivity extends AppCompatActivity {
     }
 
 
-    public AlertDialog getMutiItemDialog(final String[] cmd, final int id, final int map_id) {
+    public AlertDialog getMutiItemDialog(final String[] cmd, final int id) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //設定對話框內的項目
@@ -492,7 +495,7 @@ public class TargetActivity extends AppCompatActivity {
                         currID = Integer.toString(id).trim();
                         break;
                     case "刪除":
-                        delete(id,map_id);
+                        delete(id);
 
                         break;
                 }
@@ -501,12 +504,10 @@ public class TargetActivity extends AppCompatActivity {
         return builder.create();
     }
 
-    protected void delete(int id,int map_id) {
+    protected void delete(int id) {
         try {
             TargetUIStructure targetUIS = targetMap.get(id);
             TargetDB.TargetDetail td = targetUIS.td;
-            /*LinearLayout ll = targetUIS.ll;
-            ((ViewGroup) ll.getParent()).removeView(ll);*/
             targetMap.remove(id);
             TargetData.remove(map_id);
             target_listAdapter.notifyDataSetChanged();
@@ -562,6 +563,11 @@ public class TargetActivity extends AppCompatActivity {
         //String param8=participatorTxt.getText().toString();
         new DbOperationTask().execute("updateTarget", currID, param1, param2, param3, param4, param5, param6, param7, param8, param9);
         currID = "";
+
+        TargetData.get(map_id).put("targetName",param1);
+        target_listAdapter.notifyDataSetChanged();
+
+
         msg.dismiss();
     }
 

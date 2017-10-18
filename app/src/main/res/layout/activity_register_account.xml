@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_login"
-    android:gravity="bottom|center_vertical|center_horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg_empty"
+    android:gravity="bottom|center_horizontal"
     android:orientation="vertical"
-    tools:context="com.example.teamgogoal.teamgogoal.LoginActivity"
-    android:weightSum="1">
+    >
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:gravity="center_vertical|center_horizontal"
+        android:gravity="center_vertical|center_horizontal|center"
         android:orientation="vertical"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp">
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp">
 
         <LinearLayout
             android:layout_width="200dp"
@@ -44,119 +40,134 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:gravity="center_vertical|center_horizontal"
+            android:layout_weight="1"
+            android:gravity="center_vertical|center_horizontal|center"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView14"
+                android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight=".2"
-                android:gravity="center_vertical|center_horizontal"
+                android:layout_weight=".1"
+                android:gravity="center"
                 android:text="帳號"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
             <EditText
-                android:id="@+id/accountTxt"
+                android:id="@+id/Account"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight=".8"
+                android:layout_weight=".9"
                 android:background="@color/black"
                 android:ems="1"
-                android:inputType="textPersonName"
+                android:inputType="textVisiblePassword"
                 android:padding="5dp"
-                android:text="123"
                 android:textColor="@android:color/black"
-                android:textSize="18sp" />
+                android:textSize="18sp">
 
+                <requestFocus />
+            </EditText>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="5dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
             android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView15"
+                android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight=".2"
+                android:layout_weight=".1"
                 android:gravity="center"
                 android:text="密碼"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
             <EditText
-                android:id="@+id/passwordTxt"
+                android:id="@+id/Password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight=".8"
+                android:layout_weight=".9"
                 android:background="@color/black"
                 android:ems="1"
                 android:inputType="textPassword"
                 android:padding="5dp"
-                android:text="456"
                 android:textColor="@android:color/black"
-                android:textSize="18sp" />
+                android:textSize="18sp">
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <CheckBox
-                android:id="@+id/chkRemeberUser"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_vertical|center_horizontal"
-                android:text="記住帳號密碼"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
+            </EditText>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
+            android:layout_marginBottom="15dp"
             android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".1"
+                android:gravity="center"
+                android:text="暱稱"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/Name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".9"
+                android:background="@color/black"
+                android:ems="1"
+                android:inputType="textPersonName"
+                android:padding="5dp"
+                android:textColor="@android:color/black"
+                android:textSize="18sp">
+
+            </EditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/button3"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_login_btn"
-                android:onClick="login"
-                android:text="登入"
+                android:onClick="creat"
+                android:text="確認"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
             <Button
-                android:id="@+id/button5"
+                android:id="@+id/button4"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical|center"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_login_btn"
-                android:onClick="creat"
-                android:text="註冊"
+                android:onClick="cancel"
+                android:text="取消"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
-
         </LinearLayout>
 
     </LinearLayout>
@@ -165,7 +176,6 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginTop="20dp"
-        android:layout_weight="0.05"
         android:orientation="horizontal">
 
         <ScrollView
