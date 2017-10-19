@@ -1,6 +1,7 @@
 package com.example.teamgogoal.teamgogoal;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -33,10 +34,8 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -54,7 +53,6 @@ public class TargetActivity extends AppCompatActivity {
     TargetDB db;
     EditText targetNameEt, targeContentEt, startTimeEt, endTimeEt, dreamEt;
     Button submitTargetBtn, clearTargetBtn, cannelBtn;
-    ImageView targetProfilePicture;
     View addTargetMsg;
 
     String nextID = "", currID = "";
@@ -67,6 +65,11 @@ public class TargetActivity extends AppCompatActivity {
     ListView target_listview;
     int map_id;
     /*---Date:1015 rebuild----*/
+
+    /*---Date:1019 處理中*/
+    private ProgressDialog pd;
+    /*---Date:1019 處理中*/
+
 
     //8/20:AutoCompleteTextView
     MultiAutoCompleteTextView participatorTxt;
@@ -102,7 +105,6 @@ public class TargetActivity extends AppCompatActivity {
             submitTargetBtn = (Button) addTargetMsg.findViewById(R.id.submitTargetBtn);
             clearTargetBtn = (Button) addTargetMsg.findViewById(R.id.clearMessageBtn);
             cannelBtn = (Button) addTargetMsg.findViewById(R.id.cannelBtn);
-            targetProfilePicture = (ImageView) findViewById(R.id.targetProfilePicture);
             dreamEt = (EditText) addTargetMsg.findViewById(R.id.dreamET);
             dialog.setView(addTargetMsg);
 
@@ -162,38 +164,6 @@ public class TargetActivity extends AppCompatActivity {
     protected void loading() {
         synchronized (this) {
             new DbOperationTask().execute("readTarget");
-
-            //帥哥峻禾部分
-            String imageUrl = localhost + "profile picture/" + user.uid;
-            new AsyncTask<String, Void, Bitmap>() {
-                @Override
-                protected Bitmap doInBackground(String... params) {
-                    String url = params[0];
-                    return getBitmapFromURL(url);
-                }
-
-                @Override
-                protected void onPostExecute(Bitmap result) {
-                    targetProfilePicture.setImageBitmap(result);
-                    super.onPostExecute(result);
-                }
-            }.execute(imageUrl);
-        }
-    }
-
-    //帥哥峻禾部分
-    public Bitmap getBitmapFromURL(String imageUrl) {
-        try {
-            URL url = new URL(imageUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap bitmap = BitmapFactory.decodeStream(input);
-            return bitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
         }
     }
 
@@ -220,24 +190,17 @@ public class TargetActivity extends AppCompatActivity {
             case R.id.cannelBtn:
                 cancel();
                 break;
-            case R.id.button2:
-                toRequest();
-                break;
-            //帥哥峻禾部分
-            case R.id.editProfile:
-                toEditProfile();
-                break;
         }
     }
 
     //帥哥峻禾部分
-    private void toEditProfile() {
+    public void toEditProfile(View view) {
         intent = new Intent();
         intent.setClass(TargetActivity.this, EditProfile.class);
         startActivity(intent);
     }
 
-    protected void toRequest() {
+    public void toRequest(View view) {
         intent = new Intent();
         intent.setClass(TargetActivity.this, RequestActivity.class);
         startActivity(intent);
@@ -338,7 +301,6 @@ public class TargetActivity extends AppCompatActivity {
 
                 TargetData.add(tg_hashmap);
                 target_listAdapter.notifyDataSetChanged();
-
 
 
                 int k = Integer.parseInt(nextID);
@@ -453,7 +415,7 @@ public class TargetActivity extends AppCompatActivity {
         target_listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                map_id=i;
+                map_id = i;
 
                 Integer id = Integer.valueOf(TargetData.get(i).get("tid"));
 
@@ -564,7 +526,7 @@ public class TargetActivity extends AppCompatActivity {
         new DbOperationTask().execute("updateTarget", currID, param1, param2, param3, param4, param5, param6, param7, param8, param9);
         currID = "";
 
-        TargetData.get(map_id).put("targetName",param1);
+        TargetData.get(map_id).put("targetName", param1);
         target_listAdapter.notifyDataSetChanged();
 
 
@@ -664,6 +626,17 @@ public class TargetActivity extends AppCompatActivity {
     }
 
     class TransTask extends AsyncTask<String, Void, String> {
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(TargetActivity.this);
+            pd.setMessage("Processing...");
+            pd.show();
+        }
+
+
         @Override
         protected String doInBackground(String... params) {
             StringBuilder sb = new StringBuilder();
@@ -685,6 +658,7 @@ public class TargetActivity extends AppCompatActivity {
             return sb.toString();
         }
 
+
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
@@ -704,7 +678,7 @@ public class TargetActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            Log.d("FFFF", Integer.toString(list.size()));
+            pd.dismiss();
             return list;
         }
     }

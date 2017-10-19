@@ -1,14 +1,21 @@
 package com.example.teamgogoal.teamgogoal;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,17 +52,18 @@ public class EditProfile extends Activity implements OnClickListener {
     private int serverResponseCode = 0;
     private ProgressDialog dialog = null;
     private String upLoadServerUri = null;
-    private String imagepath=null;
+    private String imagepath = null;
     private int clickCount;
 
-    public static final int EXTERNAL_STORAGE_REQ_CODE = 10 ;
+    public static final int EXTERNAL_STORAGE_REQ_CODE = 10;
 
-    private TextView account;
     private EditText name;
     private ImageView imageview;
+    private TextView account;
+    private Dialog changePwdDialog;
+    private Dialog hit_dialog;
 
     private tempFileManager tempImgFile = new tempFileManager();
-
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +71,11 @@ public class EditProfile extends Activity implements OnClickListener {
         setContentView(R.layout.activity_edit_profile);
 
         user = LoginActivity.getUser();
-        //account = (TextView) findViewById(R.id.textView9);
-        name = (EditText) findViewById(R.id.editText);
-        uploadButton = (Button)findViewById(R.id.uploadButton);
-        btnselectpic = (Button)findViewById(R.id.button_selectpic);
-        imageview = (ImageView)findViewById(R.id.imageView_pic);
+        name = (EditText) findViewById(R.id.nickName);
+        account = (TextView) findViewById(R.id.account);
+        uploadButton = (Button) findViewById(R.id.uploadButton);
+        btnselectpic = (Button) findViewById(R.id.button_selectpic);
+        imageview = (ImageView) findViewById(R.id.imageView_pic);
 
         clickCount = 0;
         String imageUrl = localhost + "profile picture/" + user.uid;
@@ -79,28 +87,24 @@ public class EditProfile extends Activity implements OnClickListener {
 
         //account.setText("帳號：" + user.account);
         name.setText(user.name);
-
-        new AsyncTask<String, Void, Bitmap>()
-        {
+        account.setText(user.account);
+        new AsyncTask<String, Void, Bitmap>() {
             @Override
-            protected Bitmap doInBackground(String... params)
-            {
+            protected Bitmap doInBackground(String... params) {
                 String url = params[0];
                 return getBitmapFromURL(url);
             }
 
             @Override
-            protected void onPostExecute(Bitmap result)
-            {
-                imageview.setImageBitmap (result);
+            protected void onPostExecute(Bitmap result) {
+                imageview.setImageDrawable(toCircleImage(result));
                 super.onPostExecute(result);
             }
         }.execute(imageUrl);
     }
 
-    public Bitmap getBitmapFromURL(String imageUrl){
-        try
-        {
+    public Bitmap getBitmapFromURL(String imageUrl) {
+        try {
             URL url = new URL(imageUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setDoInput(true);
@@ -108,9 +112,7 @@ public class EditProfile extends Activity implements OnClickListener {
             InputStream input = connection.getInputStream();
             Bitmap bitmap = BitmapFactory.decodeStream(input);
             return bitmap;
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
@@ -122,45 +124,79 @@ public class EditProfile extends Activity implements OnClickListener {
     }
 
     public void ChangePassword(View view) {
+
+        View dialog_view;
+        dialog_view = LayoutInflater.from(this).inflate(R.layout.hit_dialog, null);
+        Hit hit = new Hit();
+        hit.setHitTitle((TextView) dialog_view.findViewById(R.id.hitTitle));
+        hit.setHtiContent((TextView) dialog_view.findViewById(R.id.hitContent));
+        hit.setConfirm((Button) dialog_view.findViewById(R.id.hitComfirm));
+
         LayoutInflater inflater = LayoutInflater.from(EditProfile.this);
         final View v = inflater.inflate(R.layout.change_password, null);
-        new AlertDialog.Builder(EditProfile.this)
-                .setTitle("請輸入舊密碼與新密碼")
-                .setView(v)
-                .setPositiveButton("確定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        EditText oldPassword = (EditText) (v.findViewById(R.id.oldPassword));
-                        EditText newPassword = (EditText) (v.findViewById(R.id.newPassword));
-                        EditText newPasswordConfirm = (EditText) (v.findViewById(R.id.newPasswordConfirm));
-                        //viaParams("account=" + acc.getText().toString() + "&password=" + pass.getText().toString() + "&role=user");
 
-                        if (!oldPassword.getText().toString().equals(user.password)) {
-                            Toast.makeText(getApplicationContext(), "舊密碼輸入錯誤，請重新輸入", Toast.LENGTH_SHORT).show();
-                        } else if (!newPassword.getText().toString().equals(newPasswordConfirm.getText().toString())) {
-                            Toast.makeText(getApplicationContext(), "新密碼與新密碼確認不同，請重新輸入", Toast.LENGTH_SHORT).show();
-                        } else {
-                            new EditProfile.ChangePasswordTask().execute("uid=" + user.uid + "&password=" + newPassword.getText().toString());
-                            user.password = newPassword.getText().toString();
-                            Toast.makeText(getApplicationContext(), "密碼變更成功", Toast.LENGTH_SHORT).show();
-                        }
+        Button changePwdConfirm = (Button) v.findViewById(R.id.changePwdConfirm);
+        Button changePwdCancel = (Button) v.findViewById(R.id.changePwdCancel);
 
-                    }
-                })
-                .setNeutralButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        // TODO Auto-generated method stub
-                        Toast.makeText(EditProfile.this, "取消", Toast.LENGTH_SHORT).show();
-                    }
 
-                })
-                .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialogInterface) {
-                    }
-                })
-                .show();
+        changePwdConfirm.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText oldPassword = (EditText) (v.findViewById(R.id.oldPassword));
+                EditText newPassword = (EditText) (v.findViewById(R.id.newPassword));
+                EditText newPasswordConfirm = (EditText) (v.findViewById(R.id.newPasswordConfirm));
+
+                if (!oldPassword.getText().toString().equals(user.password)) {
+                    showCompleteMsg("修改失敗", "舊密碼輸入錯誤\n請重新輸入",false);
+                } else if (!newPassword.getText().toString().equals(newPasswordConfirm.getText().toString())) {
+                    showCompleteMsg("修改失敗", "新密碼與新密碼確認不同\n請重新輸入",false);
+                } else {
+                    new EditProfile.ChangePasswordTask().execute("uid=" + user.uid + "&password=" + newPassword.getText().toString());
+                    user.password = newPassword.getText().toString();
+                    showCompleteMsg("修改成功", "密碼變更成功",true);
+                }
+            }
+        });
+
+
+        changePwdCancel.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changePwdDialog.dismiss();
+            }
+        });
+
+        changePwdDialog = new AlertDialog.Builder(this).setView(v).create();
+        changePwdDialog.show();
+    }
+
+    private void showCompleteMsg(String title, String content,final boolean success) {
+
+        View dialog_view;
+
+        dialog_view = LayoutInflater.from(this).inflate(R.layout.hit_dialog, null);
+
+        Hit hit = new Hit();
+        hit.setHitTitle((TextView) dialog_view.findViewById(R.id.hitTitle));
+        hit.setHtiContent((TextView) dialog_view.findViewById(R.id.hitContent));
+        hit.setConfirm((Button) dialog_view.findViewById(R.id.hitComfirm));
+
+        hit.getHitTitle().setText(title);
+        hit.gethtiContent().setText(content);
+
+        hit.getConfirm().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hit_dialog.dismiss();
+                if(success){
+                    changePwdDialog.dismiss();
+                }
+
+
+            }});
+
+        hit_dialog = new AlertDialog.Builder(this).setView(dialog_view).create();
+        hit_dialog.show();
     }
 
 
@@ -269,7 +305,7 @@ public class EditProfile extends Activity implements OnClickListener {
     }
 
     //上傳照片部分---------------------------------------------------------------------------------------------------------------------------
-    public void getPic(){
+    public void getPic() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -278,18 +314,17 @@ public class EditProfile extends Activity implements OnClickListener {
 
     @Override
     public void onClick(View arg0) {
-        if(arg0==btnselectpic)
-        {
+        if (arg0 == btnselectpic) {
             if (android.support.v4.content.ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
                 android.support.v4.app.ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, EXTERNAL_STORAGE_REQ_CODE);
-            }else {
+            } else {
                 getPic();
             }
-            if(clickCount>0){
+            if (clickCount > 0) {
                 tempImgFile.destory();
             }
             clickCount++;
-        }else if (arg0==uploadButton) {
+        } else if (arg0 == uploadButton) {
             dialog = ProgressDialog.show(EditProfile.this, "", "檔案上傳中...", true);
             new Thread(new Runnable() {
                 public void run() {
@@ -331,16 +366,14 @@ public class EditProfile extends Activity implements OnClickListener {
 
         if (!sourceFile.isFile()) {
             dialog.dismiss();
-            Log.e("uploadFile", "Source File not exist :"+imagepath);
+            Log.e("uploadFile", "Source File not exist :" + imagepath);
             runOnUiThread(new Runnable() {
                 public void run() {
-                    Toast.makeText(EditProfile.this,"Source File not exist :"+ imagepath, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditProfile.this, "Source File not exist :" + imagepath, Toast.LENGTH_SHORT).show();
                 }
             });
             return 0;
-        }
-        else
-        {
+        } else {
             try {
 
                 // open a URL connection to the Servlet
@@ -394,7 +427,7 @@ public class EditProfile extends Activity implements OnClickListener {
                 Log.i("uploadFile", "HTTP Response is : "
                         + serverResponseMessage + ": " + serverResponseCode);
 
-                if(serverResponseCode == 200){
+                if (serverResponseCode == 200) {
                     runOnUiThread(new Runnable() {
                         public void run() {
                             String msg = "File Upload Completed.\n\n See uploaded file your server. \n\n";
@@ -427,7 +460,7 @@ public class EditProfile extends Activity implements OnClickListener {
                         Toast.makeText(EditProfile.this, "Got Exception : see logcat ", Toast.LENGTH_SHORT).show();
                     }
                 });
-                Log.e("Upload file Exception", "Exception : "  + e.getMessage(), e);
+                Log.e("Upload file Exception", "Exception : " + e.getMessage(), e);
             }
             dialog.dismiss();
             //tempImgFile.destory();
@@ -435,5 +468,46 @@ public class EditProfile extends Activity implements OnClickListener {
             return serverResponseCode;
 
         }
+    }
+
+    protected Drawable toCircleImage(Bitmap bp) {
+        // 邊框, 影子寬度
+        int borderWidth = 1;
+        int shadowWidth = 25;
+
+        // 邊框, 影子顏色
+        int borderColor= Color.BLACK;
+        int shadowColor=Color.BLUE;
+
+        // 取得圖片
+        Resources mResources = getResources();
+        Bitmap srcBitmap = bp;
+
+        // 以圖片大小為尺寸, 建立一塊畫布
+        int srcBitmapWidth = srcBitmap.getWidth();
+        int srcBitmapHeight = srcBitmap.getHeight();
+        int dstBitmapWidth = Math.min(srcBitmapWidth,srcBitmapHeight)+borderWidth*2;
+        Bitmap dstBitmap = Bitmap.createBitmap(dstBitmapWidth,dstBitmapWidth, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(dstBitmap);
+        canvas.drawColor(Color.YELLOW);
+        canvas.drawBitmap(srcBitmap, (dstBitmapWidth - srcBitmapWidth) / 2, (dstBitmapWidth - srcBitmapHeight) / 2, null);
+
+        // 在畫布上畫邊線
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(borderWidth * 2);
+        paint.setColor(borderColor);
+        canvas.drawCircle(canvas.getWidth() / 2, canvas.getHeight() / 2, canvas.getWidth() / 2, paint);
+
+        // 在畫布上畫影子
+        paint.setColor(shadowColor);
+        paint.setStrokeWidth(shadowWidth);
+        canvas.drawCircle(canvas.getWidth()/2,canvas.getHeight()/2,canvas.getWidth()/2,paint);
+
+        // 將圖片切圓角
+        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(mResources, dstBitmap);
+        roundedBitmapDrawable.setCircular(true);
+
+        return roundedBitmapDrawable;
     }
 }

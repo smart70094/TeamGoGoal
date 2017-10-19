@@ -26,24 +26,18 @@
             android:background="@color/top_bg_color"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/targetProfilePicture"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/googleg_standard_color_18" />
-
             <ImageButton
-                android:id="@+id/imageButton5"
+                android:id="@+id/Profile"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
                 android:background="@color/empty"
+                android:onClick="toEditProfile"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/item_person" />
 
             <ImageButton
-                android:id="@+id/imageButton2"
+                android:id="@+id/Review"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
@@ -53,28 +47,27 @@
                 app:srcCompat="@drawable/item_memory" />
 
             <ImageButton
-                android:id="@+id/button2"
+                android:id="@+id/Notice"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
                 android:background="@color/empty"
-                android:onClick="onClick"
+                android:onClick="toRequest"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/item_message" />
 
             <ImageButton
-                android:id="@+id/editProfile"
+                android:id="@+id/Target"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="false"
                 android:background="@color/empty"
-                android:onClick="onClick"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/item_edit_light" />
 
             <ImageButton
-                android:id="@+id/imageButton4"
+                android:id="@+id/Quest"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"

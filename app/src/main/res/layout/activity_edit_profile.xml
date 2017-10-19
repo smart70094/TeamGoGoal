@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_empty"
-    android:gravity="center_horizontal"
+    android:gravity="center"
     android:orientation="vertical"
     android:weightSum="1">
 
@@ -15,8 +15,8 @@
 
         <ImageView
             android:id="@+id/imageView_pic"
-            android:layout_width="259dp"
-            android:layout_height="244dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@mipmap/ic_launcher" />
 
@@ -26,7 +26,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_weight="0.15"
         android:orientation="horizontal">
 
         <Button
@@ -56,19 +55,24 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <EditText
-            android:id="@+id/editText"
-            android:layout_width="match_parent"
+            android:id="@+id/nickName"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@color/top_bg_color"
             android:ems="10"
-            android:inputType="textPersonName" />
+            android:gravity="center"
+            android:inputType="textPersonName"
+            android:textColor="@color/basicColor2"
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/button7"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:onClick="ChangeName"
@@ -76,11 +80,41 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/button8"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="0.15"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="帳號"
+            android:textColor="@color/basicColor2"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="TextView"
+            android:textColor="@color/basicColor2"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_login_btn"
         android:onClick="ChangePassword"
-        android:text="變更密碼" />
+        android:padding="5dp"
+        android:text="更改密碼"
+        android:textColor="@color/basicColor2"
+        android:textSize="24sp" />
 
 </LinearLayout>

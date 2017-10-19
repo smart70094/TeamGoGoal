@@ -235,7 +235,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public class User implements  Cloneable{
         String uid,account,password,name,state;
-        public User(String uid,String account,String password,String mame,String state){
+        public User(String uid,String account,String password,String name,String state){
             this.uid = uid;
             this.account = account;
             this.password = password;
