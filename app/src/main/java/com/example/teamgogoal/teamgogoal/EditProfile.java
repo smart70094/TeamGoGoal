@@ -1,6 +1,5 @@
 package com.example.teamgogoal.teamgogoal;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -17,6 +16,7 @@ import android.os.Bundle;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +44,7 @@ import java.net.URL;
  * Created by -HaRuNa- on 2017/8/21.
  */
 
-public class EditProfile extends Activity implements OnClickListener {
+public class EditProfile extends AppCompatActivity implements OnClickListener {
     String localhost = LoginActivity.getLocalHost();
     LoginActivity.User user;
 
@@ -166,7 +166,7 @@ public class EditProfile extends Activity implements OnClickListener {
             }
         });
 
-        changePwdDialog = new AlertDialog.Builder(this).setView(v).create();
+        changePwdDialog = new AlertDialog.Builder(this, R.style.Translucent_NoTitle).setView(v).create();
         changePwdDialog.show();
     }
 
@@ -195,7 +195,7 @@ public class EditProfile extends Activity implements OnClickListener {
 
             }});
 
-        hit_dialog = new AlertDialog.Builder(this).setView(dialog_view).create();
+        hit_dialog = new AlertDialog.Builder(this,R.style.Translucent_NoTitle).setView(dialog_view).create();
         hit_dialog.show();
     }
 
@@ -509,5 +509,17 @@ public class EditProfile extends Activity implements OnClickListener {
         roundedBitmapDrawable.setCircular(true);
 
         return roundedBitmapDrawable;
+    }
+
+    public void checkReview(View view) {
+        Intent intent = new Intent();
+        intent.setClass(this, Review.class);
+        startActivity(intent);
+    }
+
+    public void toRequest(View view) {
+        Intent intent = new Intent();
+        intent.setClass(this, RequestActivity.class);
+        startActivity(intent);
     }
 }

@@ -2,119 +2,186 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg_empty"
     android:gravity="center"
     android:orientation="vertical"
     android:weightSum="1">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.15"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.91"
+        android:background="@color/top_bg_color"
+        android:gravity="center"
         android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/imageView_pic"
+        <ImageButton
+            android:id="@+id/Profile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@color/empty"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/item_person_light" />
+
+        <ImageButton
+            android:id="@+id/Review"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@color/empty"
+            android:onClick="checkReview"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/item_memory" />
+
+        <ImageButton
+            android:id="@+id/Notice"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@color/empty"
+            android:onClick="toRequest"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/item_message" />
+
+        <ImageButton
+            android:id="@+id/Target"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="false"
+            android:background="@color/empty"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/item_edit" />
+
+        <ImageButton
+            android:id="@+id/Quest"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@color/empty"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/item_q" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.09"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView_pic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@mipmap/ic_launcher" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@mipmap/ic_launcher" />
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/button_selectpic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="選擇照片" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
+            <Button
+                android:id="@+id/uploadButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="確定上傳" />
 
-        <Button
-            android:id="@+id/button_selectpic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="選擇照片" />
-
-        <Button
-            android:id="@+id/uploadButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="確定上傳" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="暱稱"
-        android:textColor="@color/basicColor2"
-        android:textSize="24sp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <EditText
-            android:id="@+id/nickName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/top_bg_color"
-            android:ems="10"
-            android:gravity="center"
-            android:inputType="textPersonName"
-            android:textColor="@color/basicColor2"
-            android:textSize="24sp" />
-
-        <Button
-            android:id="@+id/button7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:onClick="ChangeName"
-            android:text="變更暱稱" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.15"
-        android:gravity="center"
-        android:orientation="vertical">
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/textView9"
-            android:layout_width="match_parent"
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="帳號"
+            android:text="暱稱"
             android:textColor="@color/basicColor2"
             android:textSize="24sp" />
 
-        <TextView
-            android:id="@+id/account"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="TextView"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/nickName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/top_bg_color"
+                android:ems="10"
+                android:gravity="center"
+                android:inputType="textPersonName"
+                android:textColor="@color/basicColor2"
+                android:textSize="24sp" />
+
+            <Button
+                android:id="@+id/button7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:onClick="ChangeName"
+                android:text="變更暱稱" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="帳號"
+                android:textColor="@color/basicColor2"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/account"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="TextView"
+                android:textColor="@color/basicColor2"
+                android:textSize="24sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_login_btn"
+            android:onClick="ChangePassword"
+            android:padding="5dp"
+            android:text="更改密碼"
             android:textColor="@color/basicColor2"
             android:textSize="24sp" />
+
     </LinearLayout>
-
-    <Button
-        android:id="@+id/button8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_login_btn"
-        android:onClick="ChangePassword"
-        android:padding="5dp"
-        android:text="更改密碼"
-        android:textColor="@color/basicColor2"
-        android:textSize="24sp" />
 
 </LinearLayout>

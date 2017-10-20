@@ -20,156 +20,227 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentStart="false"
-            android:layout_alignParentTop="false"
-            android:layout_weight=".9"
-            android:gravity="center_vertical|center_horizontal"
-            android:orientation="horizontal"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="8dp">
+            android:layout_height="match_parent"
+            android:layout_weight=".91"
+            android:background="@color/top_bg_color"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight=".44"
-                android:orientation="vertical"
-                android:visibility="invisible">
+            <ImageButton
+                android:id="@+id/Profile"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@color/empty"
+                android:onClick="toEditProfile"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/item_person" />
 
-            </LinearLayout>
+            <ImageButton
+                android:id="@+id/Review"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@color/empty"
+                android:onClick="checkReview"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/item_memory" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight=".12"
-                android:gravity="center_vertical|center_horizontal"
-                android:orientation="vertical">
+            <ImageButton
+                android:id="@+id/Notice"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@color/empty"
+                android:onClick="toRequest"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/item_message" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:orientation="vertical">
+            <ImageButton
+                android:id="@+id/Target"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="false"
+                android:background="@color/empty"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/item_edit_light" />
 
-                    <com.mikhaellopez.circularprogressbar.CircularProgressBar
-                        android:id="@+id/yourCircularProgressbar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="150dp"
-                        android:layout_gravity="center"
-                        android:layout_weight="0.8"
-                        app:cpb_background_progressbar_color="#FFCDD2"
-                        app:cpb_background_progressbar_width="5dp"
-                        app:cpb_progressbar_color="#F44336"
-                        app:cpb_progressbar_width="10dp" />
+            <ImageButton
+                android:id="@+id/Quest"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@color/empty"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/item_q" />
 
-                    <TextView
-                        android:id="@+id/taskTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_weight="0.2"
-                        android:forceHasOverlappingRendering="false"
-                        android:gravity="center_horizontal"
-                        android:textSize="36sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5"
-                    android:orientation="vertical">
-
-                    <ListView
-                        android:id="@+id/listview_task"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.1"
-                        android:divider="@null"
-                        android:dividerHeight="10dp"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
-                        android:scrollbars="none" />
-
-                    <ImageView
-                        android:id="@+id/more_arrow"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.9"
-                        android:adjustViewBounds="true"
-                        android:padding="5dp"
-                        android:scaleType="fitCenter"
-                        app:srcCompat="@drawable/item_down_arrow" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight=".44"
-                android:gravity="bottom"
-                android:orientation="vertical"
-                android:paddingBottom="10dp">
-
-                <ImageButton
-                    android:id="@+id/imageButton3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:background="@color/empty"
-                    android:padding="5dp"
-                    android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/item_mes" />
-
-                <ImageButton
-                    android:id="@+id/imageButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:background="@color/empty"
-                    android:padding="5dp"
-                    android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/item_bag" />
-            </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentRight="false"
-            android:layout_alignParentStart="false"
-            android:layout_alignParentTop="false"
-            android:layout_centerVertical="false"
-            android:layout_weight=".1"
-            android:background="@drawable/bg_new_task_btn"
-            android:orientation="horizontal"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="8dp">
+            android:layout_height="match_parent"
+            android:layout_weight=".09"
+            android:orientation="vertical"
+            android:paddingTop="10dp">
 
-            <Button
-                android:id="@+id/showAddTaskBtn"
+            <LinearLayout
+                android:id="@+id/linearLayout2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignLeft="@+id/showAddTaskBtn"
-                android:layout_alignParentTop="true"
-                android:layout_alignStart="@+id/showAddTaskBtn"
-                android:layout_weight="1"
-                android:background="@color/black"
-                android:onClick="onClick"
-                android:text="+ 新任務"
-                android:textColor="@android:color/black"
-                android:textSize="18sp" />
+                android:layout_alignParentLeft="false"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentTop="false"
+                android:layout_weight=".07"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="horizontal"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".44"
+                    android:orientation="vertical"
+                    android:visibility="invisible">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".12"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.6"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:orientation="vertical">
+
+                        <com.mikhaellopez.circularprogressbar.CircularProgressBar
+                            android:id="@+id/yourCircularProgressbar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="150dp"
+                            android:layout_gravity="center"
+                            android:layout_weight="0.8"
+                            app:cpb_background_progressbar_color="#FFCDD2"
+                            app:cpb_background_progressbar_width="5dp"
+                            app:cpb_progressbar_color="#F44336"
+                            app:cpb_progressbar_width="10dp" />
+
+                        <TextView
+                            android:id="@+id/taskTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="0.2"
+                            android:forceHasOverlappingRendering="false"
+                            android:gravity="center_horizontal"
+                            android:textSize="30sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:orientation="vertical">
+
+                        <ListView
+                            android:id="@+id/listview_task"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.1"
+                            android:divider="@null"
+                            android:dividerHeight="10dp"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp"
+                            android:scrollbars="none" />
+
+                        <ImageView
+                            android:id="@+id/more_arrow"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.9"
+                            android:adjustViewBounds="true"
+                            android:padding="5dp"
+                            android:scaleType="fitCenter"
+                            app:srcCompat="@drawable/item_down_arrow" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".44"
+                    android:gravity="bottom"
+                    android:orientation="vertical"
+                    android:paddingBottom="10dp">
+
+                    <ImageButton
+                        android:id="@+id/imageButton3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:background="@color/empty"
+                        android:padding="5dp"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/item_mes" />
+
+                    <ImageButton
+                        android:id="@+id/imageButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:background="@color/empty"
+                        android:padding="5dp"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/item_bag" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentLeft="false"
+                android:layout_alignParentRight="false"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentTop="false"
+                android:layout_centerVertical="false"
+                android:layout_weight=".93"
+                android:background="@drawable/bg_new_task_btn"
+                android:orientation="horizontal"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="8dp">
+
+                <Button
+                    android:id="@+id/showAddTaskBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignLeft="@+id/showAddTaskBtn"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignStart="@+id/showAddTaskBtn"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_new_task_btn"
+                    android:onClick="onClick"
+                    android:text="+ 新任務"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
         </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

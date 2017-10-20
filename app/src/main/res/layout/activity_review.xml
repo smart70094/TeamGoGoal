@@ -1,13 +1,74 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_empty">
+    android:background="@drawable/bg_empty"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight=".91"
+        android:background="@color/top_bg_color"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/Profile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@color/empty"
+            android:onClick="toEditProfile"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/item_person" />
+
+        <ImageButton
+            android:id="@+id/Review"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@color/empty"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/item_memory_light" />
+
+        <ImageButton
+            android:id="@+id/Notice"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@color/empty"
+            android:onClick="toRequest"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/item_message" />
+
+        <ImageButton
+            android:id="@+id/Target"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="false"
+            android:background="@color/empty"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/item_edit" />
+
+        <ImageButton
+            android:id="@+id/Quest"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@color/empty"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/item_q" />
+
+
+    </LinearLayout>
 
     <com.lukedeighton.wheelview.WheelView
         android:id="@+id/wheelview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="0.09"
         app:emptyItemColor="#0d5302"
         app:repeatItems="true"
         app:rotatableWheelDrawable="false"
@@ -29,4 +90,4 @@
         app:wheelItemTransformer="com.lukedeighton.wheelview.transformer.SimpleItemTransformer"
 
     -->
-</RelativeLayout>
+</LinearLayout>

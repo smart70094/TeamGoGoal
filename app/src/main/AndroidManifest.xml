@@ -36,8 +36,6 @@
         </receiver>
 
         <service android:name=".NofyService" />
-
-        <activity android:name=".round_animate" />
         <activity android:name=".RegisterAccount" />
     </application>
 

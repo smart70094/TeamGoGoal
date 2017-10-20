@@ -2,6 +2,7 @@ package com.example.teamgogoal.teamgogoal;
 
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -105,8 +106,7 @@ public class TaskActivity extends AppCompatActivity {
             submitTaskBtn = (Button) addTaskMsg.findViewById(R.id.submitTaskBtn);
             cannelTaskBtn = (Button) addTaskMsg.findViewById(R.id.cannelTaskBtn);
             clearTaskMessageBtn = (Button) addTaskMsg.findViewById(R.id.clearTaskMessageBtn);
-            msgDialog = new AlertDialog.Builder(TaskActivity.this)
-                    .setView(addTaskMsg);
+            msgDialog = new AlertDialog.Builder(TaskActivity.this, R.style.Translucent_NoTitle).setView(addTaskMsg);
             msgDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialogInterface) {
@@ -184,6 +184,9 @@ public class TaskActivity extends AppCompatActivity {
         }
     }
 
+
+
+
     private class DbOperationTask extends AsyncTask<String, Void, Void> {
         protected Void doInBackground(String... params) {
             String cmd = params[0];
@@ -257,7 +260,7 @@ public class TaskActivity extends AppCompatActivity {
         new DbOperationTask().execute("updateTask", currID, param1, param2, param3, param4, param5);
         currID = "";
 
-        taskDate.get(map_id).put("missionName",param1);
+        taskDate.get(map_id).put("missionName", param1);
         task_listAdapter.notifyDataSetChanged();
 
         taskMsg.dismiss();
@@ -640,6 +643,26 @@ public class TaskActivity extends AppCompatActivity {
         circularProgressBar.setBackgroundProgressBarWidth(circularProgressBar.getProgressBarWidth());
         int animationDuration = 2500; // 2500ms = 2,5s
         circularProgressBar.setProgressWithAnimation(percentage, animationDuration); // Default duration = 1500ms
+    }
+
+
+
+    public void toEditProfile(View view) {
+        Intent intent = new Intent();
+        intent.setClass(this, EditProfile.class);
+        startActivity(intent);
+    }
+
+    public void checkReview(View view) {
+        Intent intent = new Intent();
+        intent.setClass(this, Review.class);
+        startActivity(intent);
+    }
+
+    public void toRequest(View view) {
+        Intent intent = new Intent();
+        intent.setClass(this, RequestActivity.class);
+        startActivity(intent);
     }
 
 }

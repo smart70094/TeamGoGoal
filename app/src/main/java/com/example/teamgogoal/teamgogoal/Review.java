@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import com.lukedeighton.wheelview.WheelView;
 
@@ -140,5 +141,19 @@ public class Review extends AppCompatActivity {
 
         });
     }
+
+
+    public void toEditProfile(View view) {
+        Intent intent = new Intent();
+        intent.setClass(this, EditProfile.class);
+        startActivity(intent);
+    }
+
+    public void toRequest(View view) {
+        Intent intent = new Intent();
+        intent.setClass(this, RequestActivity.class);
+        startActivity(intent);
+    }
+
 
 }
