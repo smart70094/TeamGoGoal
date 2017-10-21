@@ -27,9 +27,10 @@ public class Review extends AppCompatActivity {
     //private Gallery gallery;
     private List<GalleryModel> list;
     private ArrayList<CompleteTarget> completetarget;
-    private LoginActivity.User user=LoginActivity.getUser();
+    private LoginActivity.User user = LoginActivity.getUser();
     private String userID;
     String localhost = LoginActivity.getLocalHost();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +90,7 @@ public class Review extends AppCompatActivity {
                     String tid = obj.getString("tid");
                     String target = obj.getString("targetName");
                     String planet = obj.getString("planet");
-                    completetarget.add(new CompleteTarget(tid,target, planet));
+                    completetarget.add(new CompleteTarget(tid, target, planet));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -107,10 +108,10 @@ public class Review extends AppCompatActivity {
                     list.add(new GalleryModel(R.drawable.earth_item, cTarget.getTarget(), ResourcesCompat.getDrawable(getResources(), R.drawable.planet_earth, null)));
                     break;
                 case "mars":
-                    list.add(new GalleryModel(R.drawable.mars_item, cTarget.getTarget(),ResourcesCompat.getDrawable(getResources(), R.drawable.mars,null)));
+                    list.add(new GalleryModel(R.drawable.mars_item, cTarget.getTarget(), ResourcesCompat.getDrawable(getResources(), R.drawable.mars, null)));
                     break;
                 case "jupiter":
-                    list.add(new GalleryModel(R.drawable.jupiter_item, cTarget.getTarget(),ResourcesCompat.getDrawable(getResources(), R.drawable.jupiter,null)));
+                    list.add(new GalleryModel(R.drawable.jupiter_item, cTarget.getTarget(), ResourcesCompat.getDrawable(getResources(), R.drawable.jupiter, null)));
                     break;
             }
         }
@@ -119,21 +120,21 @@ public class Review extends AppCompatActivity {
 
     private void initView() {
         final WheelView wheelView = (WheelView) findViewById(R.id.wheelview);
+        wheelView.setAdapter(new PictureAdapter2(list, this));
 
-        wheelView.setAdapter(new PictureAdapter2(list,this));
+
         wheelView.setOnWheelItemClickListener(new WheelView.OnWheelItemClickListener() {
 
             @Override
             public void onWheelItemClick(WheelView parent, int position, boolean isSelected) {
 
-                if(isSelected) {
+                if (isSelected) {
                     Intent intent = new Intent();
                     intent.setClass(Review.this, Record.class);
                     intent.putExtra("tid", completetarget.get(position).getTid());
                     intent.putExtra("userID", userID);
                     intent.putExtra("target", completetarget.get(position).getTarget());
                     intent.putExtra("planet_imv", list.get(position).getImageView());
-                    Log.d("DDDD", Integer.toString(list.get(position).getImageView()));
                     startActivity(intent);
                 }
             }
