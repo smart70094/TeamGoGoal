@@ -50,6 +50,7 @@ public class target_listadapter extends BaseAdapter {
             convertView = myInflater.inflate(R.layout.target_list, null);
             holder = new ViewHolder();
             holder.targetName = (TextView) convertView.findViewById(R.id.targetName);
+            holder.targetDate = (TextView) convertView.findViewById(R.id.targetDate);
 
             //圖片區
             //holder.dateAndTime = (TextView) convertView.findViewById(R.id.dataAndTime);
@@ -59,6 +60,7 @@ public class target_listadapter extends BaseAdapter {
         }
 
         holder.targetName.setText(list.get(position).get("targetName"));
+        holder.targetDate.setText(list.get(position).get("targetDate"));
 
         //圖片
         //holder.dateAndTime.setText(list.get(position).get("date"));
@@ -70,6 +72,7 @@ public class target_listadapter extends BaseAdapter {
     static class ViewHolder {
         ImageView targetPlanet;
         TextView targetName;
+        TextView targetDate;
     }
 
 }

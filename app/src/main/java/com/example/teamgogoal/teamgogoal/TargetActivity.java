@@ -224,61 +224,6 @@ public class TargetActivity extends AppCompatActivity {
             if ((targetNameEt.getText().toString().equals("") || targeContentEt.getText().toString().equals("") || startTimeEt.getText().toString().equals("") || endTimeEt.getText().toString().equals("") || participatorTxt.getText().toString().equals(""))) {
                 Toast.makeText(this, "請輸入完整資訊", Toast.LENGTH_SHORT).show();
             } else {
-
-
-
-
-
-
-
-               /* LinearLayout tll = new LinearLayout(this);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(30, 20, 30, 0);
-                tll.setOrientation(LinearLayout.HORIZONTAL);
-                tll.setLayoutParams(layoutParams);
-                tll.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View view) {
-                        Integer id = view.getId();
-                        String auth = targetMap.get(id).td.auth.trim();
-                        if (auth.equals(user.account)) {
-                            final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"read", "update", "delete"}, view.getId());
-                            mutiItemDialog.show();
-                        } else {
-                            submitTargetBtn.setEnabled(false);
-                            clearTargetBtn.setEnabled(false);
-                            read(id);
-                        }
-                        return false;
-                    }
-                });
-
-                tll.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        //enterTaskActivity(view.getId());
-                    }
-                });
-
-                ImageView img = new ImageView(this);
-                img = toCircleImage(R.drawable.images, img);
-                img.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                img.setAdjustViewBounds(true);
-                layoutParams = new LinearLayout.LayoutParams(250, 250);
-                layoutParams.setMargins(0, 0, 20, 0);
-                img.setLayoutParams(layoutParams);
-
-
-                TextView txt = new TextView(this);
-                String targetName = targetNameEt.getText().toString();
-                txt.setText(targetName);
-
-                tll.addView(img);
-                tll.addView(txt);
-                targetll.addView(tll);
-                targetll.setEnabled(false);*/
-
                 String param1 = targetNameEt.getText().toString();
                 String param2 = targeContentEt.getText().toString();
                 String param3 = startTimeEt.getText().toString();
@@ -389,6 +334,7 @@ public class TargetActivity extends AppCompatActivity {
                 tg_hashmap.put("tid", s);
                 tg_hashmap.put("planet_imv", "null");
                 tg_hashmap.put("targetName", set.getValue().targetName);
+                tg_hashmap.put("targetDate", set.getValue().startTime.trim().replace("-",".") + "-" + set.getValue().endTime.trim().replace("-","."));
 
                 TargetData.add(tg_hashmap);
 
