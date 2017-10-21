@@ -8,20 +8,38 @@
 
     <ImageView
         android:id="@+id/targetPlanet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight=".8"
+        android:scaleType="fitCenter"
         app:srcCompat="@drawable/item_empty_planet" />
 
-    <TextView
-        android:id="@+id/targetName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:fontFamily="微軟正黑體"
-        android:text="TextView"
-        android:textColor="@color/basicColor2"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight=".2"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/targetName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="微軟正黑體"
+            android:text="TextView"
+            android:textColor="@color/basicColor2"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/targetDate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical"
+            android:text="TextView"
+            android:textColor="@color/textColor"
+            android:textSize="18sp" />
+    </LinearLayout>
 
 </LinearLayout>
