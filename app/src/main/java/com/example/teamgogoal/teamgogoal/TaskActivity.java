@@ -13,6 +13,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
@@ -113,7 +114,7 @@ public class TaskActivity extends AppCompatActivity {
                     initial();
                 }
             });
-            new DbOperationTask().execute("read");
+            //new DbOperationTask().execute("read");
             LayoutInflater factoryCheerMsg = LayoutInflater.from(this);
             View cheerMsg = factoryCheerMsg.inflate(R.layout.activity_cheer_msg, null);
             submit = (Button) cheerMsg.findViewById(R.id.cheerBtn);
@@ -157,6 +158,27 @@ public class TaskActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             Log.v("jim_Task_onCreate", e.toString());
+        }
+    }
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) { // 攔截返回鍵
+            taskMap.clear();
+            finish();
+        }
+        return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loading();
+    }
+
+    protected void loading() {
+        synchronized (this) {
+            Log.v("jim_loading","testing area");
+            new DbOperationTask().execute("read");
         }
     }
 
