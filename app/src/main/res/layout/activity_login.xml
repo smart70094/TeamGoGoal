@@ -69,8 +69,8 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
                     android:gravity="center_vertical|center_horizontal"
                     android:orientation="horizontal">
 
@@ -89,10 +89,8 @@
                         android:layout_height="match_parent"
                         android:layout_weight=".35"
                         android:orientation="horizontal"
-                        android:paddingBottom="10dp"
                         android:paddingLeft="10dp"
-                        android:paddingRight="90dp"
-                        android:paddingTop="10dp">
+                        android:paddingRight="90dp">
 
                         <EditText
                             android:id="@+id/accountTxt"
@@ -100,7 +98,7 @@
                             android:layout_height="match_parent"
                             android:background="@color/black"
                             android:inputType="textPersonName"
-                            android:padding="5dp"
+                            android:paddingLeft="5dp"
                             android:text="123"
                             android:textColor="@android:color/black"
                             android:textSize="18sp" />
@@ -110,8 +108,14 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:orientation="horizontal"></LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -130,10 +134,8 @@
                         android:layout_height="match_parent"
                         android:layout_weight=".35"
                         android:orientation="vertical"
-                        android:paddingBottom="10dp"
                         android:paddingLeft="10dp"
-                        android:paddingRight="90dp"
-                        android:paddingTop="10dp">
+                        android:paddingRight="90dp">
 
                         <EditText
                             android:id="@+id/passwordTxt"
@@ -142,7 +144,7 @@
                             android:layout_gravity="center_horizontal"
                             android:background="@color/black"
                             android:inputType="textPassword"
-                            android:padding="5dp"
+                            android:paddingLeft="5dp"
                             android:text="456"
                             android:textColor="@android:color/black"
                             android:textSize="18sp" />

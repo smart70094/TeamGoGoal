@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -51,6 +52,7 @@ public class target_listadapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.targetName = (TextView) convertView.findViewById(R.id.targetName);
             holder.targetDate = (TextView) convertView.findViewById(R.id.targetDate);
+            holder.completeBar = (ProgressBar) convertView.findViewById(R.id.completeBar);
 
             //圖片區
             //holder.dateAndTime = (TextView) convertView.findViewById(R.id.dataAndTime);
@@ -61,6 +63,9 @@ public class target_listadapter extends BaseAdapter {
 
         holder.targetName.setText(list.get(position).get("targetName"));
         holder.targetDate.setText(list.get(position).get("targetDate"));
+
+        double percent = Double.valueOf(list.get(position).get("completemission")) / Double.valueOf(list.get(position).get("allmission"));
+        holder.completeBar.setProgress((int) (percent*100 + 0.5));
 
         //圖片
         //holder.dateAndTime.setText(list.get(position).get("date"));
@@ -73,6 +78,7 @@ public class target_listadapter extends BaseAdapter {
         ImageView targetPlanet;
         TextView targetName;
         TextView targetDate;
+        ProgressBar completeBar;
     }
 
 }

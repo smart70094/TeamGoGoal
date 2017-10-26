@@ -235,7 +235,7 @@ public class TargetActivity extends AppCompatActivity {
                 param8 += user.account + ",";
 
                 nextID = nextID.trim();
-                TargetDB.TargetDetail td = new TargetDB.TargetDetail(nextID, param1, param2, param3, param4, param5, param6, param7, param8);
+                TargetDB.TargetDetail td = new TargetDB.TargetDetail(nextID, param1, param2, param3, param4, param5, param6, param7, param8,"0","0");
                 new DbOperationTask().execute("createTarget", nextID, param1, param2, param3, param4, param5, param6, param7, param8);
 
 
@@ -335,6 +335,8 @@ public class TargetActivity extends AppCompatActivity {
                 tg_hashmap.put("planet_imv", "null");
                 tg_hashmap.put("targetName", set.getValue().targetName);
                 tg_hashmap.put("targetDate", set.getValue().startTime.trim().replace("-",".") + "-" + set.getValue().endTime.trim().replace("-","."));
+                tg_hashmap.put("allmission", set.getValue().allmission);
+                tg_hashmap.put("completemission", set.getValue().completemission);
 
                 TargetData.add(tg_hashmap);
 
@@ -348,8 +350,8 @@ public class TargetActivity extends AppCompatActivity {
 
         target_listAdapter = new target_listadapter(this);
         target_listAdapter.setData(TargetData);
-        target_listAdapter.notifyDataSetChanged();
         target_listview.setAdapter(target_listAdapter);
+        target_listAdapter.notifyDataSetChanged();
 
         target_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

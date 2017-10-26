@@ -1,15 +1,12 @@
 package com.example.teamgogoal.teamgogoal;
 
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -131,7 +128,7 @@ public class TaskActivity extends AppCompatActivity {
             //進度條-建興
             circularProgressBar = (CircularProgressBar) findViewById(R.id.yourCircularProgressbar);
             percentage = 0;
-            intiDataBase();
+            initDataBase();
             //進度條結束
 
             // ListView 滾動監聽事件
@@ -183,8 +180,6 @@ public class TaskActivity extends AppCompatActivity {
             Log.v("jim_TaskActivity_showAddTaskMsg", e.toString());
         }
     }
-
-
 
 
     private class DbOperationTask extends AsyncTask<String, Void, Void> {
@@ -494,14 +489,6 @@ public class TaskActivity extends AppCompatActivity {
         }
     }
 
-    protected ImageView toCircleImage(int imgId, ImageView img) {
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imgId);
-        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-        roundedBitmapDrawable.setCircular(true);
-        img.setImageDrawable(roundedBitmapDrawable);
-        return img;
-    }
-
     //------------帥哥建興的--------------
     private void completeTask(final Integer key) {
         final View dialog_view;
@@ -539,7 +526,7 @@ public class TaskActivity extends AppCompatActivity {
         Button cancel;
     }
 
-//--------------資料庫連接 Code---------------------//
+    //--------------資料庫連接 Code   ---------------------//
 
     private class TransTask extends AsyncTask<String, Void, String> {
         @Override
@@ -576,9 +563,10 @@ public class TaskActivity extends AppCompatActivity {
         }
     }
 
-    //--------------資料庫連接 Code---------------------//
 
-    private void intiDataBase() {
+    //--------------資料庫連接 Code   進度條搜尋百分比---------------------//
+
+    private void initDataBase() {
         String phpurl = LoginActivity.getLocalHost() + "searchPercent.php?tid=" + currTid;
         new TransTask_searchPercent().execute(phpurl);
     }
@@ -613,7 +601,6 @@ public class TaskActivity extends AppCompatActivity {
             initView();
         }
 
-
         private void parseJSON(String s) {
             try {
                 JSONArray array = new JSONArray(s);
@@ -634,19 +621,116 @@ public class TaskActivity extends AppCompatActivity {
             }
         }
 
+        private void initView() {
+            circularProgressBar.setColor(ContextCompat.getColor(TaskActivity.this, R.color.processbar));
+            circularProgressBar.setBackgroundColor(ContextCompat.getColor(TaskActivity.this, R.color.processbar_bg));
+            circularProgressBar.setProgressBarWidth(18);
+            circularProgressBar.setBackgroundProgressBarWidth(circularProgressBar.getProgressBarWidth());
+            int animationDuration = 2500; // 2500ms = 2,5s
+            circularProgressBar.setProgressWithAnimation(percentage, animationDuration); // Default duration = 1500ms
+        }
+
     }
 
-    private void initView() {
-        circularProgressBar.setColor(ContextCompat.getColor(this, R.color.processbar));
-        circularProgressBar.setBackgroundColor(ContextCompat.getColor(this, R.color.processbar_bg));
-        circularProgressBar.setProgressBarWidth(18);
-        circularProgressBar.setBackgroundProgressBarWidth(circularProgressBar.getProgressBarWidth());
-        int animationDuration = 2500; // 2500ms = 2,5s
-        circularProgressBar.setProgressWithAnimation(percentage, animationDuration); // Default duration = 1500ms
+
+    //---------------- 元素搜尋---------------------//
+
+
+    public void checkElement(View view) {
+        String phpurl = LoginActivity.getLocalHost() + "searchElement.php?&tid=" + currTid + "&uid=" + LoginActivity.getUser().uid;
+        new TransTask_searchElement().execute(phpurl);
     }
 
 
+    private class TransTask_searchElement extends AsyncTask<String, Void, String> {
+        String mine, mountain, snow, fire, soil;
+        private ProgressDialog pd;
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(TaskActivity.this);
+            pd.setMessage("Processing...");
+            pd.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            StringBuilder sb = new StringBuilder();
+            try {
+                URL url = new URL(params[0]);
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(url.openStream()));
+                String line = in.readLine();
+                while (line != null) {
+                    Log.d("HTTP", line);
+                    sb.append(line);
+                    line = in.readLine();
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return sb.toString();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            parseJSON(s);
+            initElementView();
+            pd.dismiss();
+        }
+
+
+        private void parseJSON(String s) {
+            try {
+                JSONArray array = new JSONArray(s);
+                JSONObject obj = array.getJSONObject(0);
+                mine = obj.getString("mine");
+                mountain = obj.getString("mountain");
+                snow = obj.getString("snow");
+                fire = obj.getString("fire");
+                soil = obj.getString("soil");
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        private void initElementView() {
+            View dialog_view = LayoutInflater.from(TaskActivity.this).inflate(R.layout.element_dialog, null);
+            ;
+
+            TextView count_mine = ((TextView) dialog_view.findViewById(R.id.count_mine));
+            TextView count_mountain = (TextView) dialog_view.findViewById(R.id.count_mountain);
+            TextView count_snow = (TextView) dialog_view.findViewById(R.id.count_snow);
+            TextView count_fire = (TextView) dialog_view.findViewById(R.id.count_fire);
+            TextView count_soil = (TextView) dialog_view.findViewById(R.id.count_soil);
+            Button Comfirm = (Button) dialog_view.findViewById(R.id.hitComfirm);
+
+            count_mine.setText(mine);
+            count_mountain.setText(mountain);
+            count_snow.setText(snow);
+            count_fire.setText(fire);
+            count_soil.setText(soil);
+
+            Comfirm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+
+            dialog = new AlertDialog.Builder(TaskActivity.this, R.style.Translucent_NoTitle).setView(dialog_view).create();
+            dialog.show();
+        }
+
+    }
+
+
+    //-----標提列----//
     public void toEditProfile(View view) {
         Intent intent = new Intent();
         intent.setClass(this, EditProfile.class);
