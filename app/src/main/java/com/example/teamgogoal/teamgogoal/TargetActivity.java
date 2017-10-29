@@ -415,7 +415,6 @@ public class TargetActivity extends AppCompatActivity {
         startTimeEt.setText(td.startTime);
         endTimeEt.setText(td.endTime);
         participatorTxt.setText(td.participator);
-        dreamEt.setText(td.dream);
         currID = Integer.toString(id).trim();
         showTarget();
     }

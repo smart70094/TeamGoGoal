@@ -39,11 +39,10 @@ public class TaskDB {
                 String missionContent=obj.getString("missionContent");
                 String remindTime=obj.getString("remindTime");
                 String tid=obj.getString("tid");
-                String planet=obj.getString("planet");
                 String state=obj.getString("state");
                 String auth=obj.getString("auth");
                 String collaborator=obj.getString("collaborator");
-                TaskDB.TaskDetail taskDetail=new TaskDB.TaskDetail(mid,missionName,missionContent,remindTime,tid,planet,state,auth,collaborator);
+                TaskDB.TaskDetail taskDetail=new TaskDB.TaskDetail(mid,missionName,missionContent,remindTime,tid,state,auth,collaborator);
                 map.put(mid,taskDetail);
             }
         } catch(JSONException e){
@@ -58,7 +57,7 @@ public class TaskDB {
         return  ans.trim();
     }
     protected void create(String param1,String param2,String param3,String param4,String param5,String param6,String param7,String param8){
-        String params="table=mission"+" & mid="+param1 +" & missionName="+param2+" & missionContent="+param3+" & remindTime="+param4+" & tid="+param5+" & planet="+param6+" & state="+param7+" & auth="+param8;
+        String params="table=mission"+" & mid="+param1 +" & missionName="+param2+" & missionContent="+param3+" & remindTime="+param4+" & tid="+param5+" & state="+param7+" & auth="+param8;
         String php="createTask.php";
         String ans=viaParams(params,php);
     }
@@ -68,23 +67,22 @@ public class TaskDB {
         String php="deleteTask.php";
         viaParams(params,php);
     }
-    protected  void update(String param1,String param2,String param3,String param4,String param5,String param6){
-        String params="table=mission"+" & mid="+param1 +" & missionName="+param2+" & missionContent="+param3+" & remindTime="+param4+" & tid="+param5+" & planet="+param6;
+    protected  void update(String param1,String param2,String param3,String param4,String param5){
+        String params="table=mission"+" & mid="+param1 +" & missionName="+param2+" & missionContent="+param3+" & remindTime="+param4+" & tid="+param5;
         String php="updateTask.php";
         String ans=viaParams(params,php);
     }
     public static class TaskDetail  implements Serializable {
-        String mid,missionName,missionContent,tid,state,auth,remindTime,planet,collaborator;
-        TaskDetail(String param1,String param2,String param3,String param4,String param5,String param6,String param7,String param8,String param9){
+        String mid,missionName,missionContent,tid,state,auth,remindTime,collaborator;
+        TaskDetail(String param1,String param2,String param3,String param4,String param5,String param6,String param7,String param8){
             this.mid=param1;
             this.missionName=param2;
             this.missionContent=param3;
             this.remindTime=param4;
             this.tid=param5;
-            this.planet=param6;
-            this.state=param7;
-            this.auth=param8;
-            this.collaborator=param9;
+            this.state=param6;
+            this.auth=param7;
+            this.collaborator=param8;
         }
     }
     public String viaParams(String urlParameters,String php){
@@ -111,7 +109,6 @@ public class TaskDB {
             conn.setAllowUserInteraction(false);
             conn.setInstanceFollowRedirects( false );
             conn.setDoOutput( true );
-
 
             DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
             wr.write(postData);

@@ -128,13 +128,6 @@ public class TargetDB  {
             }
         }
     }
-    protected void createParticipator(String tid,String originator,String subject){
-        socketTrans.setParams("register_request",originator,subject,tid);
-        socketTrans.send(socketTrans.getParams());
-        String result=socketTrans.getResult();
-        Log.v("jim_createParticipator",result);
-    }
-
 
     protected String targetIndex(){
         String params="table=target";
@@ -156,7 +149,7 @@ public class TargetDB  {
 
     //Data
     public static class TargetDetail{
-            String tid,targetName,targetContent,state,auth,startTime,endTime,dream,participator;
+            String tid,targetName,targetContent,state,auth,startTime,endTime,participator;
         TargetDetail(String param1,String param2,String param3,String param4,String param5,String param6,String param7,String param8){
             //Log.v("jim",param1+","+param2+","+param3+","+param4+","+param5+","+param6+","+param7+","+param8);
             this.tid=param1;

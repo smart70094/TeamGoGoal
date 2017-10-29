@@ -55,7 +55,7 @@ public class TaskActivity extends AppCompatActivity {
     TextView taskTitle;
     EditText taskNameTxt, taskContent, remindTimeTxt, cheerEt;
     Button submit, submitTaskBtn, clearTaskMessageBtn, cannelTaskBtn;
-    Map<Integer, TaskUIStructure> taskMap = new HashMap<Integer, TaskUIStructure>();
+    Map<Integer, TaskDB.TaskDetail> taskMap = new HashMap<Integer, TaskDB.TaskDetail>();
     Spinner spinner;
     String currTid = "", nextID = "", currID = "";
     LoginActivity.User user;
@@ -239,9 +239,7 @@ public class TaskActivity extends AppCompatActivity {
                     // tempID=db.targetCount();
                     break;
                 case "updateTask":
-
-                    db.update(params[1], params[2], params[3], params[4], params[5], params[6]);
-
+                    db.update(params[1], params[2], params[3], params[4], params[5]);
                     break;
             }
             return null;
@@ -251,14 +249,11 @@ public class TaskActivity extends AppCompatActivity {
 
     protected void delete(int id) {
         try {
-
-            TaskActivity.TaskUIStructure taskUIS = taskMap.get(id);
-            TaskDB.TaskDetail td = taskUIS.td;
+            TaskDB.TaskDetail td = taskMap.get(id);
             new TaskActivity.DbOperationTask().execute("delete", td.mid);
             taskMap.remove(id);
             taskDate.remove(map_id);
             task_listAdapter.notifyDataSetChanged();
-
         } catch (Exception e) {
             Log.v("jim1", e.toString());
         }
@@ -272,14 +267,13 @@ public class TaskActivity extends AppCompatActivity {
         String param5 = spinner.getSelectedItem().toString();
 
         int key = Integer.parseInt(currID.trim());
-        TaskActivity.TaskUIStructure taskUIS = taskMap.get(key);
-        taskUIS.td.missionName = param1;
-        taskUIS.td.missionContent = param2;
-        taskUIS.td.remindTime = param3;
-        taskUIS.td.tid = param4;
-        taskUIS.td.planet = param5;
-        taskUIS.txtName.setText(param2 + "      執行者:" + taskUIS.td.auth);
-        new DbOperationTask().execute("updateTask", currID, param1, param2, param3, param4, param5);
+        TaskDB.TaskDetail td = taskMap.get(key);
+        td.missionName = param1;
+        td.missionContent = param2;
+        td.remindTime = param3;
+        td.tid = param4;
+
+        new DbOperationTask().execute("updateTask", currID, param1, param2, param3, param4);
         currID = "";
 
         taskDate.get(map_id).put("missionName", param1);
@@ -299,14 +293,13 @@ public class TaskActivity extends AppCompatActivity {
             String param3 = remindTimeTxt.getText().toString();
             String param4 = currTid;
             String param5 = spinner.getSelectedItem().toString();
-            String param6 = "no";
+            String param6 = "N";
             String param7 = user.account;
 
             nextID = nextID.trim();
-            TaskDB.TaskDetail td = new TaskDB.TaskDetail(nextID, param1, param2, param3, param4, param5, param6, param7, "null");
+            TaskDB.TaskDetail td = new TaskDB.TaskDetail(nextID, param1, param2, param3, param4, param5, param6, param7);
 
             new TaskActivity.DbOperationTask().execute("createTask", nextID, param1, param2, param3, param4, param5, param6, param7);
-
 
             HashMap<String, String> tk_hashmap = new HashMap<>();
             tk_hashmap.put("mid", nextID);
@@ -316,10 +309,9 @@ public class TaskActivity extends AppCompatActivity {
             taskDate.add(tk_hashmap);
             task_listAdapter.notifyDataSetChanged();
 
-
             int k = Integer.parseInt(nextID.trim());
-            TaskUIStructure targetUIS = new TaskUIStructure(td, new LinearLayout(this), null, new TextView(this));
-            taskMap.put(k, targetUIS);
+
+            taskMap.put(k, td);
             Toast.makeText(this, "新增任務成功", Toast.LENGTH_SHORT).show();
             taskMsg.dismiss();
         }
@@ -347,8 +339,7 @@ public class TaskActivity extends AppCompatActivity {
                 tk_hashmap.put("missionName", set.getValue().missionName);
                 taskDate.add(tk_hashmap);
 
-                TaskUIStructure taskUIS = new TaskUIStructure(set.getValue(), new LinearLayout(this), null, new TextView(this));
-                taskMap.put(key, taskUIS);
+                taskMap.put(key, set.getValue());
             }
 
             /*------Date:1015 rebuild-----*/
@@ -373,7 +364,7 @@ public class TaskActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 map_id = i;
                 int id = Integer.valueOf(taskDate.get(i).get("mid"));
-                String auth = taskMap.get(id).td.auth.trim();
+                String auth = taskMap.get(id).auth.trim();
                 if (auth.equals(user.account.trim())) {
                     final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"詳細", "修改", "刪除", "撰寫回顧"}, id);
                     mutiItemDialog.show();
@@ -398,9 +389,6 @@ public class TaskActivity extends AppCompatActivity {
                 switch (cmd[index]) {
                     case "詳細":
                         peek(id);
-                        submitTaskBtn.setEnabled(false);
-                        clearTaskMessageBtn.setEnabled(false);
-                        cannelTaskBtn.setEnabled(false);
                         break;
                     case "修改":
                         peek(id);
@@ -419,19 +407,10 @@ public class TaskActivity extends AppCompatActivity {
 
     protected void peek(int id) {
         showAddTaskMsg();
-        TaskUIStructure taskUIS = taskMap.get(id);
-        taskNameTxt.setText(taskUIS.td.missionName);
-        taskContent.setText(taskUIS.td.missionContent);
-        remindTimeTxt.setText(taskUIS.td.remindTime);
-        int pos = -1;
-        for (int i = 0; i < list.length; i++) {
-            if (taskUIS.td.planet.equals(list[i])) {
-                pos = i;
-                break;
-            }
-        }
-        pos -= 1;
-        spinner.setSelection(pos);
+        TaskDB.TaskDetail td = taskMap.get(id);
+        taskNameTxt.setText(td.missionName);
+        taskContent.setText(td.missionContent);
+        remindTimeTxt.setText(td.remindTime);
     }
 
     public void onClick(View view) {
@@ -460,9 +439,9 @@ public class TaskActivity extends AppCompatActivity {
         try {
             String msgStr = cheerEt.getText().toString();
             Integer key = Integer.parseInt(currID.trim());
-            TaskUIStructure taskUIS = taskMap.get(key);
+            TaskDB.TaskDetail td = taskMap.get(key);
 
-            socketTrans.setParams("register_cheer", user.account, taskUIS.td.auth.trim(), msgStr);
+            socketTrans.setParams("register_cheer", user.account, td.auth.trim(), msgStr);
             socketTrans.send(socketTrans.getParams());
             msg.dismiss();
         } catch (Exception e) {
@@ -502,20 +481,6 @@ public class TaskActivity extends AppCompatActivity {
         taskMsg.dismiss();
     }
 
-    public class TaskUIStructure {
-        TaskDB.TaskDetail td;
-        LinearLayout ll;
-        ImageView img;
-        TextView txtName;
-
-        TaskUIStructure(TaskDB.TaskDetail td, LinearLayout ll, ImageView img, TextView txtNam) {
-            this.td = td;
-            this.ll = ll;
-            this.img = img;
-            this.txtName = txtNam;
-        }
-    }
-
     protected ImageView toCircleImage(int imgId, ImageView img) {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imgId);
         RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
@@ -540,7 +505,7 @@ public class TaskActivity extends AppCompatActivity {
                 String mid = Integer.toString(key);
                 Log.d("hhhhhhhhhhh", mid);
                 //String phpurl = LoginActivity.getLocalHost() + "updateTaskState.php?mid=" + mid;
-                String phpurl = LoginActivity.getLocalHost() + "updateTaskState.php?mid=" + mid + "&tid=" + currTid + "&uid=" + LoginActivity.getUser().uid + "&partnerid=" + taskMap.get(key).td.collaborator;
+                String phpurl = LoginActivity.getLocalHost() + "updateTaskState.php?mid=" + mid + "&tid=" + currTid + "&uid=" + LoginActivity.getUser().uid + "&partnerid=" + taskMap.get(key).collaborator;
                 new TransTask().execute(phpurl);
             }
         });
@@ -666,8 +631,6 @@ public class TaskActivity extends AppCompatActivity {
         int animationDuration = 2500; // 2500ms = 2,5s
         circularProgressBar.setProgressWithAnimation(percentage, animationDuration); // Default duration = 1500ms
     }
-
-
 
     public void toEditProfile(View view) {
         Intent intent = new Intent();
