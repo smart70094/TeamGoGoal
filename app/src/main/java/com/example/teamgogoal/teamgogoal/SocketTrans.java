@@ -143,28 +143,4 @@ public  class SocketTrans {     //執行緒
         }
         return null;
     }
-    public void showNotification(String contentText){
-       try{
-           NotificationChannel channelMsg = new NotificationChannel(
-                   "msg",
-                   "Channel msg",
-                   NotificationManager.IMPORTANCE_HIGH);
-           channelMsg.setDescription("socketMsg");
-           channelMsg.enableLights(true);
-           channelMsg.enableVibration(true);
-           //NotificationManager notificationManager=(NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-           notificationManager.createNotificationChannel(channelMsg);
-
-           Notification.Builder builder =
-                   new Notification.Builder(context)
-                           .setSmallIcon(android.R.drawable.ic_notification_clear_all)
-                           .setContentTitle("TeamGoGoal")
-                           .setContentText(contentText)
-                           .setChannelId("msg");
-           notificationManager.notify(1, builder.build());
-       }catch(Exception e){
-           Log.v("jim_showNotification",e.toString());
-       }
-    }
-
 }

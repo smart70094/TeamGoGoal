@@ -44,9 +44,8 @@ public class TargetDB  {
                 String endTime=obj.getString("targetEndTime");
                 String state=obj.getString("state");
                 String auth=obj.getString("auth");
-                String dream=obj.getString("dream");
                 String participator=readParticipator(tid);
-                TargetDetail TargetDetail=new TargetDetail(tid,targetName,targetContent,startTime,endTime,state,auth,dream,participator);
+                TargetDetail TargetDetail=new TargetDetail(tid,targetName,targetContent,startTime,endTime,state,auth,participator);
                 //Log.v("jim",TargetDetail.tid +","+TargetDetail.targetName+","+TargetDetail.targetContent+","+TargetDetail.startTime+","+TargetDetail.endTime+","+TargetDetail.state+","+TargetDetail.auth+","+TargetDetail.dream);
                 map.put(obj.getString("tid"),TargetDetail);
             }
@@ -63,19 +62,19 @@ public class TargetDB  {
         ans=s.substring(2);
         return ans.trim();
     }
-    protected String createTarget(String param1,String param2,String param3,String param4,String param5,String param6,String param7,String param8){
-        String params="table=target"+" & tid="+param1 +" & targetName="+param2+" & targetContent="+param3+" & targetStartTime="+param4+" & targetEndTime="+param5+" & state="+param6+" & auth="+param7+" & dream="+param8;
+    protected String createTarget(String param1,String param2,String param3,String param4,String param5,String param6,String param7){
+        String params="table=target"+" & tid="+param1 +" & targetName="+param2+" & targetContent="+param3+" & targetStartTime="+param4+" & targetEndTime="+param5+" & state="+param6+" & auth="+param7;
         String php="createTarget.php";
         String ans=viaParams(params,php);
         return  ans;
     }
-    protected  void updateTarget(String param1,String param2,String param3,String param4,String param5,String param6,String param7,String param8,String param9,String param10){
-        String params="table=target"+" & tid="+param1 +" & targetName="+param2+" & targetContent="+param3+" & targetStartTime="+param4+" & targetEndTime="+param5+" & state="+param6+" & auth="+param7+" & dream="+param8;
+    protected  void updateTarget(String param1,String param2,String param3,String param4,String param5,String param6,String param7,String param8,String param9){
+        String params="table=target"+" & tid="+param1 +" & targetName="+param2+" & targetContent="+param3+" & targetStartTime="+param4+" & targetEndTime="+param5+" & state="+param6+" & auth="+param7;
         String php="updateTarget.php";
         String ans=viaParams(params,php);
 
-       String str[]=param9.split(",");
-        String old_str[]=param10.split(",");
+       String str[]=param8.split(",");
+        String old_str[]=param9.split(",");
         List new_list = new ArrayList(Arrays.asList(str));
         List old_list = new ArrayList(Arrays.asList(old_str));
         List list = new ArrayList(Arrays.asList(new Object[old_list.size()]));
@@ -158,7 +157,7 @@ public class TargetDB  {
     //Data
     public static class TargetDetail{
             String tid,targetName,targetContent,state,auth,startTime,endTime,dream,participator;
-        TargetDetail(String param1,String param2,String param3,String param4,String param5,String param6,String param7,String param8,String param9){
+        TargetDetail(String param1,String param2,String param3,String param4,String param5,String param6,String param7,String param8){
             //Log.v("jim",param1+","+param2+","+param3+","+param4+","+param5+","+param6+","+param7+","+param8);
             this.tid=param1;
             this.targetName=param2;
@@ -167,8 +166,7 @@ public class TargetDB  {
             this.endTime=param5;
             this.state=param6;
             this.auth=param7;
-            this.dream=param8;
-            this.participator=param9;
+            this.participator=param8;
         }
     }
     public String viaParams(String urlParameters,String php){

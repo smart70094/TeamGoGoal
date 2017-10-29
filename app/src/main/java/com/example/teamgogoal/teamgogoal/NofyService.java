@@ -29,6 +29,7 @@ public class NofyService extends IntentService {
         //timestamp =  System.currentTimeMillis();
         // Extract additional values from the bundle
         String val = intent.getStringExtra("foo");
+        String title=intent.getStringExtra("title");
         // Extract the receiver passed into the service
         ResultReceiver rec = intent.getParcelableExtra("receiver");
         // Sleep a bit first
@@ -95,7 +96,7 @@ public class NofyService extends IntentService {
         Notification.Builder notificationBuilder =
                 new Notification.Builder(this)
                         .setSmallIcon(android.R.drawable.ic_notification_clear_all)
-                        .setContentTitle("123")
+                        .setContentTitle("TeamGoGoal")
                         .setContentText(val)
                         .setPriority(Notification.PRIORITY_MAX)
                         .setContentIntent(viewPendingIntent);

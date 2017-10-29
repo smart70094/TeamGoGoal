@@ -34,7 +34,7 @@ import java.net.URL;
 
 public class LoginActivity extends AppCompatActivity {
     //public static final String localhost="http://169.254.68.146/DB/";
-    public static final String ip="36.233.70.5";
+    public static final String ip="1.170.92.4";
     //public static final String ip="111.253.228.128";
     //public static final String ip="1.165.110.246";
     public static final String localhost="http://"+ip+"/TeamGoGoal/";

@@ -75,7 +75,7 @@ public class TargetActivity extends AppCompatActivity {
     MultiAutoCompleteTextView participatorTxt;
 
     SocketTrans socketTrans = LoginActivity.socketTrans;
-    static Map<Integer, TargetUIStructure> targetMap = new HashMap<Integer, TargetUIStructure>();
+    static Map<Integer, TargetDB.TargetDetail> targetMap = new HashMap<Integer, TargetDB.TargetDetail>();
 
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -176,7 +176,7 @@ public class TargetActivity extends AppCompatActivity {
                 break;
             case R.id.submitTargetBtn:
                 if (currID.equals("")) addTarget();
-                else update();
+                else update(Integer.parseInt(currID));
                 break;
             case R.id.clearMessageBtn:
                 initial();
@@ -228,15 +228,14 @@ public class TargetActivity extends AppCompatActivity {
                 String param2 = targeContentEt.getText().toString();
                 String param3 = startTimeEt.getText().toString();
                 String param4 = endTimeEt.getText().toString();
-                String param5 = "no";
+                String param5 = "N";
                 String param6 = LoginActivity.user.account;
-                String param7 = dreamEt.getText().toString();
-                String param8 = participatorTxt.getText().toString();
-                param8 += user.account + ",";
+                String param7 = participatorTxt.getText().toString();
+                param7 += user.account + ",";
 
                 nextID = nextID.trim();
-                TargetDB.TargetDetail td = new TargetDB.TargetDetail(nextID, param1, param2, param3, param4, param5, param6, param7, param8);
-                new DbOperationTask().execute("createTarget", nextID, param1, param2, param3, param4, param5, param6, param7, param8);
+                TargetDB.TargetDetail td = new TargetDB.TargetDetail(nextID, param1, param2, param3, param4, param5, param6, param7);
+                new DbOperationTask().execute("createTarget", nextID, param1, param2, param3, param4, param5, param6, param7);
 
 
                 HashMap<String, String> tg_hashmap = new HashMap<>();
@@ -250,8 +249,7 @@ public class TargetActivity extends AppCompatActivity {
 
                 int k = Integer.parseInt(nextID);
                 //tll.setId(k);
-                TargetUIStructure targetUIS = new TargetUIStructure(td, new LinearLayout(this), null, new TextView(this));
-                targetMap.put(k, targetUIS);
+                targetMap.put(k, td);
 
                 //帥哥峻禾部分
                 socketTrans.setParams("initial_target", nextID, param4);
@@ -265,14 +263,6 @@ public class TargetActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.v("jim1", e.toString());
         }
-    }
-
-    protected ImageView toCircleImage(int imgId, ImageView img) {
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imgId);
-        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-        roundedBitmapDrawable.setCircular(true);
-        img.setImageDrawable(roundedBitmapDrawable);
-        return img;
     }
 
     protected void initial() {
@@ -300,7 +290,6 @@ public class TargetActivity extends AppCompatActivity {
         int mDay = c.get(Calendar.DAY_OF_MONTH);
         new DatePickerDialog(TargetActivity.this, new DatePickerDialog.OnDateSetListener() {
             int id = txtID;
-
             public void onDateSet(DatePicker view, int year, int month, int day) {
                 String format = setDateFormat(year, month, day);
                 EditText txt = (EditText) addTargetMsg.findViewById(id);
@@ -318,10 +307,7 @@ public class TargetActivity extends AppCompatActivity {
 
     protected void fresh(Map<String, TargetDB.TargetDetail> map) {
         Iterator it = map.entrySet().iterator();
-
         while (it.hasNext()) {
-
-
             /*------Date:1015 rebuild-----*/
             Map.Entry<String, TargetDB.TargetDetail> set = (Map.Entry) it.next();
 
@@ -338,14 +324,13 @@ public class TargetActivity extends AppCompatActivity {
 
                 TargetData.add(tg_hashmap);
 
-                TargetUIStructure targetUIS = new TargetUIStructure(set.getValue(), new LinearLayout(this), null, new TextView(this));
-                targetMap.put(key, targetUIS);
+                TargetDB.TargetDetail td = set.getValue();
+                targetMap.put(key, td);
             }
             /*------Date:1015 rebuild-----*/
         }
 
         target_listview = (ListView) findViewById(R.id.listview_target);
-
         target_listAdapter = new target_listadapter(this);
         target_listAdapter.setData(TargetData);
         target_listAdapter.notifyDataSetChanged();
@@ -362,11 +347,8 @@ public class TargetActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 map_id = i;
-
                 Integer id = Integer.valueOf(TargetData.get(i).get("tid"));
-
-                String auth = targetMap.get(id).td.auth.trim();
-
+                String auth = targetMap.get(id).auth.trim();
                 if (auth.equals(user.account)) {
                     final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"詳細", "修改", "刪除"}, id);
                     mutiItemDialog.show();
@@ -381,7 +363,6 @@ public class TargetActivity extends AppCompatActivity {
         });
 
     }
-
 
     public AlertDialog getMutiItemDialog(final String[] cmd, final int id) {
 
@@ -414,28 +395,21 @@ public class TargetActivity extends AppCompatActivity {
 
     protected void delete(int id) {
         try {
-            TargetUIStructure targetUIS = targetMap.get(id);
-            TargetDB.TargetDetail td = targetUIS.td;
+            TargetDB.TargetDetail td = targetMap.get(id);
             targetMap.remove(id);
             TargetData.remove(map_id);
             target_listAdapter.notifyDataSetChanged();
-
-
             if (user.account.equals(td.auth.trim()))
                 new DbOperationTask().execute("deleteParticipator_all", td.tid);
             else
                 new DbOperationTask().execute("deleteParticipator", td.tid, user.account);
-
         } catch (Exception e) {
             Log.v("jim1", e.toString());
         }
-
-
     }
 
     protected void read(int id) {
-        TargetUIStructure targetUIS = targetMap.get(id);
-        TargetDB.TargetDetail td = targetUIS.td;
+        TargetDB.TargetDetail td = targetMap.get(id);
         targetNameEt.setText(td.targetName);
         targeContentEt.setText(td.targetContent);
         startTimeEt.setText(td.startTime);
@@ -443,33 +417,29 @@ public class TargetActivity extends AppCompatActivity {
         participatorTxt.setText(td.participator);
         dreamEt.setText(td.dream);
         currID = Integer.toString(id).trim();
-
         showTarget();
     }
 
-    protected void update() {
+    protected void update(int id) {
         String param1 = targetNameEt.getText().toString();
         String param2 = targeContentEt.getText().toString();
         String param3 = startTimeEt.getText().toString();
         String param4 = endTimeEt.getText().toString();
-        String param5 = "no";
+        String param5 = targetMap.get(id).state;
         String param6 = LoginActivity.user.account;
-        String param7 = dreamEt.getText().toString();
-        String param8 = participatorTxt.getText().toString();
+        String param7 = participatorTxt.getText().toString();
 
         int key = Integer.parseInt(currID.trim());
-        TargetUIStructure targetUIS = targetMap.get(key);
-        String param9 = targetUIS.td.participator;
-        targetUIS.td.targetName = param1;
-        targetUIS.td.targetContent = param2;
-        targetUIS.td.startTime = param3;
-        targetUIS.td.endTime = param4;
-        targetUIS.td.dream = param7;
-        targetUIS.td.participator = param8;
-        targetUIS.txtName.setText(param1);
+        TargetDB.TargetDetail td = targetMap.get(key);
+        String param8 = td.participator;
+        td.targetName = param1;
+        td.targetContent = param2;
+        td.startTime = param3;
+        td.endTime = param4;
+        td.participator = param8;
 
         //String param8=participatorTxt.getText().toString();
-        new DbOperationTask().execute("updateTarget", currID, param1, param2, param3, param4, param5, param6, param7, param8, param9);
+        new DbOperationTask().execute("updateTarget", currID, param1, param2, param3, param4, param5, param6, param7, param8);
         currID = "";
 
         TargetData.get(map_id).put("targetName", param1);
@@ -493,7 +463,7 @@ public class TargetActivity extends AppCompatActivity {
                             try {
                                 fresh(t);
                             } catch (Exception e) {
-                                Log.v("jim11", e.toString());
+                                Log.v("jim_DbOperationTask", e.toString());
                             }
                         }
                     });
@@ -501,13 +471,16 @@ public class TargetActivity extends AppCompatActivity {
                     nextID = db.targetIndex();
                     break;
                 case "createTarget":
-                    db.createTarget(params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8]);
-                    db.createParticipator(params[1], params[9]);
-
-                    nextID = db.targetIndex();
+                    try{
+                        db.createTarget(params[1], params[2], params[3], params[4], params[5], params[6], params[7]);
+                        db.createParticipator(params[1], params[8]);
+                        nextID = db.targetIndex();
+                    }catch(Exception e){
+                        Log.v("jim_createTarget:",e.toString());
+                    }
                     break;
                 case "updateTarget":
-                    db.updateTarget(params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], params[9], params[10]);
+                    db.updateTarget(params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], params[9]);
                     break;
                 case "deleteParticipator_all":
                     db.deleteTargetAll(params[1]);
@@ -515,8 +488,6 @@ public class TargetActivity extends AppCompatActivity {
                 case "deleteParticipator":
                     db.deleteParticipator(params[1], params[2]);
                     break;
-
-
             }
             return null;
         }
@@ -524,9 +495,7 @@ public class TargetActivity extends AppCompatActivity {
 
     public void enterTaskActivity(int tid, String targetName) {
         try {
-
             //TargetUIStructure targetUIS = targetMap.get(id);
-
             Intent intent = new Intent();
             /*
             intent.putExtra("tid", targetUIS.td.tid.trim());
@@ -541,21 +510,6 @@ public class TargetActivity extends AppCompatActivity {
             Log.v("jim_enterTaskActivity", e.toString());
         }
     }
-
-    public class TargetUIStructure implements Serializable {
-        TargetDB.TargetDetail td;
-        LinearLayout ll;
-        ImageView img;
-        TextView txtName;
-
-        TargetUIStructure(TargetDB.TargetDetail td, LinearLayout ll, ImageView img, TextView txtNam) {
-            this.td = td;
-            this.ll = ll;
-            this.img = img;
-            this.txtName = txtNam;
-        }
-    }
-
 
     //-----------------帥哥建興開始-----------------
     public void checkReview(View view) {
@@ -572,8 +526,6 @@ public class TargetActivity extends AppCompatActivity {
     }
 
     class TransTask extends AsyncTask<String, Void, String> {
-
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -581,7 +533,6 @@ public class TargetActivity extends AppCompatActivity {
             pd.setMessage("Processing...");
             pd.show();
         }
-
 
         @Override
         protected String doInBackground(String... params) {
@@ -634,6 +585,5 @@ public class TargetActivity extends AppCompatActivity {
         participatorTxt.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
-
     // Date:8/20 尋找帳號結束---------------------------
 }
