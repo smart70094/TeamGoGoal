@@ -69,7 +69,7 @@ public class TaskActivity extends AppCompatActivity {
 
     /*---Date:1015 rebuild----*/
     List<HashMap<String, String>> taskDate = new ArrayList<>();
-    private task_listadapter task_listAdapter;
+    private Task_ListAdapter task_listAdapter;
     ListView task_listview;
     int map_id;
     /*---Date:1015 rebuild----*/
@@ -318,6 +318,8 @@ public class TaskActivity extends AppCompatActivity {
                 tk_hashmap.put("mid", s);
                 tk_hashmap.put("personal_photo", "null");
                 tk_hashmap.put("missionName", set.getValue().missionName);
+                tk_hashmap.put("state",set.getValue().state);
+                tk_hashmap.put("auth",set.getValue().auth);
                 taskDate.add(tk_hashmap);
 
                 TaskUIStructure taskUIS = new TaskUIStructure(set.getValue(), new LinearLayout(this), null, new TextView(this));
@@ -328,7 +330,7 @@ public class TaskActivity extends AppCompatActivity {
 
         }
 
-        task_listAdapter = new task_listadapter(this);
+        task_listAdapter = new Task_ListAdapter(this);
         task_listAdapter.setData(taskDate);
 
         task_listview.setAdapter(task_listAdapter);

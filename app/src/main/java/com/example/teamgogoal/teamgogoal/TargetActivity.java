@@ -61,7 +61,7 @@ public class TargetActivity extends AppCompatActivity {
 
     /*---Date:1015 rebuild----*/
     List<HashMap<String, String>> TargetData = new ArrayList<>();
-    private target_listadapter target_listAdapter;
+    private Target_ListAdapter target_listAdapter;
     ListView target_listview;
     int map_id;
     /*---Date:1015 rebuild----*/
@@ -348,7 +348,7 @@ public class TargetActivity extends AppCompatActivity {
 
         target_listview = (ListView) findViewById(R.id.listview_target);
 
-        target_listAdapter = new target_listadapter(this);
+        target_listAdapter = new Target_ListAdapter(this);
         target_listAdapter.setData(TargetData);
         target_listview.setAdapter(target_listAdapter);
         target_listAdapter.notifyDataSetChanged();
