@@ -78,7 +78,7 @@ public class EditProfile extends AppCompatActivity implements OnClickListener {
         imageview = (ImageView) findViewById(R.id.imageView_pic);
 
         clickCount = 0;
-        String imageUrl = localhost + "profile picture/" + user.uid;
+        String imageUrl = localhost + "profilepicture/" + user.uid;
 
         btnselectpic.setOnClickListener(this);
         uploadButton.setOnClickListener(this);
@@ -88,19 +88,34 @@ public class EditProfile extends AppCompatActivity implements OnClickListener {
         //account.setText("帳號：" + user.account);
         name.setText(user.name);
         account.setText(user.account);
-        new AsyncTask<String, Void, Bitmap>() {
-            @Override
-            protected Bitmap doInBackground(String... params) {
-                String url = params[0];
-                return getBitmapFromURL(url);
-            }
 
-            @Override
-            protected void onPostExecute(Bitmap result) {
-                imageview.setImageDrawable(toCircleImage(result));
-                super.onPostExecute(result);
+        new TransTask().execute(imageUrl);
+
+    }
+
+    private class TransTask  extends AsyncTask<String, Void, Bitmap> {
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            //String url = params[0];
+            try {
+                URL url = new URL(params[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                Bitmap bitmap = BitmapFactory.decodeStream(input);
+                return bitmap;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
             }
-        }.execute(imageUrl);
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            imageview.setImageDrawable(toCircleImage(result));
+            super.onPostExecute(result);
+        }
     }
 
     public Bitmap getBitmapFromURL(String imageUrl) {
