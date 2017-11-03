@@ -122,31 +122,6 @@ public class TargetActivity extends AppCompatActivity {
         }
     }
 
-    public void registerAlarm() {
-        /*Thread thread=new Thread(new Runnable(){
-            @Override
-            public void run() {
-                final Intent notificationIntent = new Intent(this, AlarmReceiver.class);
-                String NOTIFICATION_ID="";
-                String NOTIFICATION="";
-                notificationIntent.putExtra(NOTIFICATION_ID, 1);
-                notificationIntent.putExtra(NOTIFICATION, notification);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-                //set time
-                android.icu.util.Calendar calendar = android.icu.util.Calendar.getInstance();
-                calendar.setTimeInMillis(System.currentTimeMillis());
-                calendar.set(android.icu.util.Calendar.HOUR_OF_DAY, 12);
-                calendar.set(android.icu.util.Calendar.MINUTE, 03);
-
-
-                alarmManager.set(AlarmManager.RTC_WAKEUP,  calendar.getTimeInMillis(), pendingIntent);
-            }
-        });
-        thread.start();*/
-    }
-
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) { // 攔截返回鍵
             targetMap.clear();
@@ -158,7 +133,14 @@ public class TargetActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         loading();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
     }
 
     protected void loading() {
@@ -193,18 +175,7 @@ public class TargetActivity extends AppCompatActivity {
         }
     }
 
-    //帥哥峻禾部分
-    public void toEditProfile(View view) {
-        intent = new Intent();
-        intent.setClass(TargetActivity.this, EditProfile.class);
-        startActivity(intent);
-    }
 
-    public void toRequest(View view) {
-        intent = new Intent();
-        intent.setClass(TargetActivity.this, RequestActivity.class);
-        startActivity(intent);
-    }
 
     protected void showTarget() {
         try {
@@ -374,8 +345,6 @@ public class TargetActivity extends AppCompatActivity {
                 switch (cmd[index]) {
                     case "詳細":
                         read(id);
-                        submitTargetBtn.setEnabled(false);
-                        clearTargetBtn.setEnabled(false);
                         break;
                     case "修改":
                         read(id);
@@ -449,6 +418,7 @@ public class TargetActivity extends AppCompatActivity {
     }
 
 
+
     //background run
     private class DbOperationTask extends AsyncTask<String, Void, Void> {
         protected Void doInBackground(String... params) {
@@ -511,12 +481,7 @@ public class TargetActivity extends AppCompatActivity {
     }
 
     //-----------------帥哥建興開始-----------------
-    public void checkReview(View view) {
-        Intent intent = new Intent();
-        intent.setClass(this, Review.class);
 
-        startActivity(intent);
-    }
 
     // Date:8/20 尋找帳號開始---------------------------
     private void initmactv() {
@@ -585,4 +550,32 @@ public class TargetActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
     // Date:8/20 尋找帳號結束---------------------------
+
+
+    //帥哥峻禾部分
+    public void toEditProfile(View view) {
+        intent = new Intent();
+        intent.setClass(TargetActivity.this, EditProfile.class);
+        startActivity(intent);
+    }
+
+    public void toRequest(View view) {
+        intent = new Intent();
+        intent.setClass(TargetActivity.this, RequestActivity.class);
+        startActivity(intent);
+    }
+
+    public void checkReview(View view) {
+        Intent intent = new Intent();
+        intent.setClass(this, Review.class);
+
+        startActivity(intent);
+    }
+
+
+    public void fresh_activity(View view) {
+        finish();
+        Intent intent = new Intent(this,TargetActivity.class);
+        startActivity(intent);
+    }
 }

@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.lang.annotation.Target;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,6 +56,11 @@ public  class SocketTrans {     //執行緒
         this.subject=subject;
         param=cmd+","+originator+","+subject+","+tid+"\n";
     }
+    public void setParams(String... parms){
+        param="";
+        for(String s:parms)  param+=s+",";
+        param=param.substring(0,param.length()-1)+"\n";
+    }
     protected  String getParams(){
         return param;
     }
@@ -67,7 +73,6 @@ public  class SocketTrans {     //執行緒
         out = clientSocket.getOutputStream();
         send(param);
     }
-
     protected static void setResult(String s){
         result=s;
     }
@@ -119,6 +124,7 @@ public  class SocketTrans {     //執行緒
                                 i.putExtra("foo", s);
                                 i.putExtra("receiver", receiverForSimple);
                                 // Start the service
+
                                 context.startService(i);
                             }
                        }
@@ -129,6 +135,11 @@ public  class SocketTrans {     //執行緒
             }
         });
         t.start();
+    }
+    public void close() throws IOException {
+        br.close();
+        out.close();
+        clientSocket.close();
     }
     protected String getResult() {
         try{

@@ -86,7 +86,7 @@ public class TargetDB  {
                 String params3="table=registerrequest & originator="+user.account+" & cmd=request_ask & cmdContext="+param1.trim()+" & subject="+list.get(i).toString().trim();
                 String php3="createRegisterRequest.php";
                 String s=viaParams(params3,php3);
-                socketTrans.setParams("register_request", user.account.trim(), list.get(i).toString().trim(), param1.trim());
+                socketTrans.setParams("register_request", user.account.trim(), list.get(i).toString().trim(), param2.trim());
                 socketTrans.send();
             }
         }
@@ -97,6 +97,27 @@ public class TargetDB  {
                 String params2="table=participator & tid="+param1 +" & account="+list.get(i).toString().trim();
                 String php2="deleteParticipator.php";
                 String ss=viaParams(params2,php2);
+
+                //將退出訊息記錄到request與傳送socket訊息
+                params2="table=registerrequest & originator="+user.account+" & cmd=request_delete & cmdContext="+param1.trim()+" & subject="+list.get(i).toString().trim();
+                php2="createRegisterRequest.php";
+                String s=viaParams(params2,php2);
+
+                socketTrans.setParams("register_delete", user.account.trim(), list.get(i).toString().trim(), param2.trim());
+                socketTrans.send();
+            }
+        }
+
+        list=intersect(old_list,new_list);
+        list.remove(user.account);
+        for(int i=0;i<list.size();i++){
+            if(!list.get(i).equals("")){
+                String params2="table=registerrequest & originator="+user.account+" & cmd=request_update & cmdContext="+param2.trim()+" & subject="+list.get(i).toString().trim();
+                String php2="createRegisterRequest.php";
+                String ss=viaParams(params2,php2);
+
+                socketTrans.setParams("register_update", user.account.trim(), list.get(i).toString().trim(), param2.trim());
+                socketTrans.send();
             }
         }
     }
@@ -106,6 +127,13 @@ public class TargetDB  {
         list.removeAll(ls2);
         return list;
     }
+    public List intersect(List ls, List ls2) {
+        List list = new ArrayList(Arrays.asList(new Object[ls.size()]));
+        Collections.copy(list, ls);
+        list.retainAll(ls2);
+        return list;
+    }
+
     protected void createParticipator(String id,String param1){
         String str[]=param1.split(",");
         String php,params;
@@ -113,9 +141,11 @@ public class TargetDB  {
         for(int i=0;i<str.length;i++){
             if(!str[i].equals("")){
                 if(str[i].equals(user.account)) {
+
                     php="createParticipator.php";
                     params="table=participator & tid="+id.trim()+" & account="+str[i].trim();
-                    viaParams(params,php);
+                    String result=viaParams(params,php);
+                    Log.v("jim",result);
                 }else{
                     php="createRegisterRequest.php";
                     params="table=registerrequest & originator="+user.account+" & cmd=request_ask & cmdContext="+id.trim()+" & subject="+str[i].trim();

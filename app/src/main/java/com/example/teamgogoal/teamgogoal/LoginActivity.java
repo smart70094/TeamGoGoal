@@ -33,10 +33,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class LoginActivity extends AppCompatActivity {
-    //public static final String localhost="http://169.254.68.146/DB/";
-    public static final String ip="1.170.92.4";
-    //public static final String ip="111.253.228.128";
-    //public static final String ip="1.165.110.246";
+    public static final String ip="111.253.215.17";
     public static final String localhost="http://"+ip+"/TeamGoGoal/";
     EditText accountTxt,passwordTxt;
     CheckBox chkRemeberAccount;
@@ -60,7 +57,6 @@ public class LoginActivity extends AppCompatActivity {
             chkRemeberAccount.setChecked(true);
         else
             chkRemeberAccount.setChecked(false);
-
         socketTrans=new SocketTrans();
         socketTrans.setActivity(LoginActivity.this);
         socketTrans.setNotification((NotificationManager)getSystemService(NOTIFICATION_SERVICE));
@@ -79,16 +75,12 @@ public class LoginActivity extends AppCompatActivity {
         am.startNow();
 
         ScrollView scrollView = (ScrollView)this.findViewById(R.id.scrollView1);
-
-
         scrollView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 return true;
             }
         });
-
-
     }
     public static User getUser(){return user;}
     public static String getLocalHost(){return localhost;}
@@ -103,13 +95,6 @@ public class LoginActivity extends AppCompatActivity {
         overridePendingTransition(R.transition.slide_in_right, R.transition.animo_no);
     }
     //帥哥峻禾的部分結束----------------------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
 
     private class TransTask  extends AsyncTask<String, Void, String> {
         @Override

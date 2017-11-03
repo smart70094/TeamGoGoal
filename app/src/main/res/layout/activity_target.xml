@@ -64,6 +64,7 @@
                 android:layout_weight="1"
                 android:adjustViewBounds="false"
                 android:background="@color/empty"
+                android:onClick="fresh_activity"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/item_edit_light" />
 

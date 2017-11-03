@@ -60,7 +60,7 @@ public class NofyService extends IntentService {
         // Construct pending intent to serve as action for notification item
         Intent intent = new Intent(this, TargetActivity.class);
         intent.putExtra("message", "Launched via notification with message: " + val + " and timestamp " + timestamp);
-        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         // Create notification
         String longText = "Intent service has a new message with: " + val + " and a timestamp of: " + timestamp;
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

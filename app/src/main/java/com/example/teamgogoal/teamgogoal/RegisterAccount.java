@@ -33,7 +33,8 @@ public class RegisterAccount extends AppCompatActivity {
     boolean CheckThreadWorking;
     EditText acc;
     EditText pass;
-    EditText name;
+    EditText nameET;
+    EditText emailET;
     Dialog dialog;
 
     @Override
@@ -45,7 +46,8 @@ public class RegisterAccount extends AppCompatActivity {
         CheckThreadWorking = true;
         acc = (EditText) findViewById(R.id.Account);
         pass = (EditText) findViewById(R.id.Password);
-        name = (EditText) findViewById(R.id.Name);
+        nameET = (EditText) findViewById(R.id.Name);
+        emailET=(EditText) findViewById(R.id.emailET);
 
         /*星球旋轉動畫*/
         ImageView iv = (ImageView) this.findViewById(R.id.imageView3);
@@ -80,35 +82,46 @@ public class RegisterAccount extends AppCompatActivity {
 
         CAresult = null;
         CheckThreadWorking = true;
-
-        new CheckAccount().execute("account=" + acc.getText().toString() + "&password=" + pass.getText().toString() + "&name=" + name.getText().toString() + "&role=user");
-
-        int count = 0;
-        while (CheckThreadWorking) {
-            try {
-                Thread.sleep(100);
-                count++;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if (count == 10) {
-                break;
-            }
-        }
+        String account=acc.getText().toString().trim();
+        String password=pass.getText().toString().trim();
+        String name=nameET.getText().toString().trim();
+        String email=emailET.getText().toString().trim();
 
         String title = "";
         String content = "";
         Boolean success = false;
-        if (!CAresult.matches(".*\\d+.*")) {
-            new CreateAccount().execute("account=" + acc.getText().toString() + "&password=" + pass.getText().toString() + "&name=" + name.getText().toString() + "&role=user");
-            title = "註冊成功";
-            content = "你的帳號是" + acc.getText().toString() + "\n你的密碼是" + pass.getText().toString() + "\n你的暱稱是" + name.getText().toString();
-            success = true;
-        } else {
-            title = "註冊失敗";
-            content = "你的帳號" + acc.getText().toString() + "已經被使用\n請更換帳號後重試";
+        if(account.equals("") || password.equals("") || name.equals("") || email.equals("")){
+            title = "TeamGoGoal";
+            content = "請輸入完整資料";
             success = false;
+        }else{
+            new CheckAccount().execute("account=" + account);
+            int count = 0;
+            while (CheckThreadWorking) {
+                try {
+                    Thread.sleep(100);
+                    count++;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (count == 10) {
+                    break;
+                }
+            }
+
+            if (!CAresult.matches(".*\\d+.*")) {
+                new CreateAccount().execute("account=" + account + "&password=" + password + "&name=" + name + "&role=user" +"&email="+email,email);
+                title = "註冊成功";
+                content = "你的帳號是" + acc.getText().toString() + "\n你的密碼是" + pass.getText().toString() + "\n你的暱稱是" + nameET.getText().toString()+"\n"+"請去信箱開通您的帳號";
+
+                success = true;
+            } else {
+                title = "註冊失敗";
+                content = "你的帳號" + acc.getText().toString() + "已經被使用\n請更換帳號後重試";
+                success = false;
+            }
         }
+
         showCompleteMsg(title, content, success);
     }
 
@@ -149,8 +162,6 @@ public class RegisterAccount extends AppCompatActivity {
     public void cancel(View view) {
         RegisterAccount.this.finish();
     }
-
-
 
     //帥哥峻禾的部分開始----------------------------------------------------------------------------------------------------------------------
     class CreateAccount extends AsyncTask<String, Void, Void> {
@@ -201,10 +212,21 @@ public class RegisterAccount extends AppCompatActivity {
             } catch (Exception e) {
                 Log.v("HaRuNa", e.toString());
             }
-            //return sb.toString();
+
+            try {
+                String uid=  sb.toString().trim();
+                String email=params[1].trim();
+                SocketTrans socketTrans=new SocketTrans();
+                socketTrans.connection();
+                socketTrans.setParams("register_email",email,uid,localhost+"activeAccount?uid="+uid.trim());
+                socketTrans.send();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             return null;
         }
-
     }
 
     public class CheckAccount extends AsyncTask<String, Void, String> {

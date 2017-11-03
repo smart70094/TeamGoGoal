@@ -145,6 +145,26 @@ public class RequestActivity extends AppCompatActivity {
                                 }
                             });
                             txt.setText("來自"+originator + "的訊息" + cmdContext);
+                        }else if(cmd.trim().equals("request_update")){
+                            ll.setOnClickListener(new View.OnClickListener() {
+                                public void onClick(View v) {
+                                    //產生視窗物件
+                                    final int id = v.getId();
+                                    new AlertDialog.Builder(RequestActivity.this)
+                                            .setTitle("TeamGoGoal")//設定視窗標題
+                                            .setIcon(R.mipmap.ic_launcher)//設定對話視窗圖示
+                                            .setMessage(originator + "已更新「" + cmdContext+"」目標的資訊")//設定顯示的文字
+                                            .setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    String rid = Integer.toString(id).trim();
+                                                    new DeleteRequest().execute(rid, targetId);
+                                                }
+                                            })//設定結束的子視窗
+                                            .show();//呈現對話視窗
+                                }
+                            });
+                            txt.setText(originator + "已更新「" + cmdContext+"」目標的資訊");
                         }
                         ll.addView(txt);
                         requestll.addView(ll);
@@ -161,6 +181,16 @@ public class RequestActivity extends AppCompatActivity {
     }
     private class DeleteRequest extends AsyncTask<String,Void,String> {
         @Override
+        protected String doInBackground(String... params) {
+            String rid=params[0];
+            String tid=params[1];
+            TargetDB targetdb=new TargetDB();
+            targetdb.createParticipator(tid,user.account);
+            db.deleteRegisterRequest(rid);
+            return rid;
+        }
+
+        @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             try{
@@ -174,15 +204,7 @@ public class RequestActivity extends AppCompatActivity {
             }
         }
 
-        @Override
-        protected String doInBackground(String... params) {
-            String rid=params[0];
-            String tid=params[1];
-            TargetDB targetdb=new TargetDB();
-            targetdb.createParticipator(tid,user.account);
-            db.deleteRegisterRequest(rid);
-            return rid;
-        }
+
     }
     public class RequestUIStructure{
         LinearLayout ll;
