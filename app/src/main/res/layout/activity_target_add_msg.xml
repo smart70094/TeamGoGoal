@@ -39,8 +39,7 @@
                 <TextView
                     android:id="@+id/taskName"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".7"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="目標名稱"
                     android:textColor="@color/basicColor"
@@ -49,8 +48,7 @@
                 <EditText
                     android:id="@+id/targetNameTxt"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".3"
+                    android:layout_height="wrap_content"
                     android:background="@color/item_bg_color"
                     android:inputType="textPersonName"
                     android:padding="5dp"
@@ -68,8 +66,7 @@
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".7"
+                    android:layout_height="wrap_content"
                     android:fontFamily="微軟正黑體"
                     android:gravity="center"
                     android:text="目標內容"
@@ -79,8 +76,7 @@
                 <EditText
                     android:id="@+id/targetContent"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".3"
+                    android:layout_height="wrap_content"
                     android:background="@color/item_bg_color"
                     android:ems="10"
                     android:inputType="textMultiLine"
@@ -99,8 +95,7 @@
                 <TextView
                     android:id="@+id/textView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".7"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="起始日期"
                     android:textColor="@color/basicColor"
@@ -115,7 +110,7 @@
                     <EditText
                         android:id="@+id/startTimeTxt"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_weight=".09"
                         android:background="@color/item_bg_color"
                         android:ems="8"
@@ -126,7 +121,7 @@
                     <ImageButton
                         android:id="@+id/selectStartTimeBtn"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_weight=".91"
                         android:background="@color/item_bg_color"
                         android:onClick="onClick"
@@ -147,8 +142,7 @@
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".7"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="結束日期"
                     android:textColor="@color/basicColor"
@@ -163,7 +157,7 @@
                     <EditText
                         android:id="@+id/EndTimeTxt"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_weight=".09"
                         android:background="@color/item_bg_color"
                         android:ems="8"
@@ -174,7 +168,7 @@
                     <ImageButton
                         android:id="@+id/selectEndTimeBtn"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_weight=".91"
                         android:background="@color/item_bg_color"
                         android:onClick="onClick"
@@ -194,8 +188,7 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".7"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="藍       圖"
                     android:textColor="@color/basicColor"
@@ -204,8 +197,7 @@
                 <EditText
                     android:id="@+id/dreamET"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".3"
+                    android:layout_height="wrap_content"
                     android:background="@color/item_bg_color"
                     android:ems="10"
                     android:inputType="textPersonName"
@@ -226,8 +218,7 @@
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight=".7"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="成員"
                 android:textColor="@color/basicColor"
@@ -236,8 +227,7 @@
             <MultiAutoCompleteTextView
                 android:id="@+id/multiAutoCompleteTextView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight=".3"
+                android:layout_height="wrap_content"
                 android:background="@color/item_bg_color"
                 android:padding="5dp"
                 android:textSize="24sp" />

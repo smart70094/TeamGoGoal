@@ -6,17 +6,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class task_listadapter extends BaseAdapter {
+public class Target_ListAdapter extends BaseAdapter {
     private LayoutInflater myInflater;
     List<HashMap<String, String>> list = new ArrayList<>();
 
-    public task_listadapter(Context context) {
+    public Target_ListAdapter(Context context) {
         myInflater = LayoutInflater.from(context);
 
     }
@@ -47,9 +48,11 @@ public class task_listadapter extends BaseAdapter {
 
         if (convertView == null) {
 
-            convertView = myInflater.inflate(R.layout.task_list, null);
+            convertView = myInflater.inflate(R.layout.target_list, null);
             holder = new ViewHolder();
-            holder.missionName = (TextView) convertView.findViewById(R.id.missionName);
+            holder.targetName = (TextView) convertView.findViewById(R.id.targetName);
+            holder.targetDate = (TextView) convertView.findViewById(R.id.targetDate);
+            holder.completeBar = (ProgressBar) convertView.findViewById(R.id.completeBar);
 
             //圖片區
             //holder.dateAndTime = (TextView) convertView.findViewById(R.id.dataAndTime);
@@ -58,7 +61,11 @@ public class task_listadapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.missionName.setText(list.get(position).get("missionName"));
+        holder.targetName.setText(list.get(position).get("targetName"));
+        holder.targetDate.setText(list.get(position).get("targetDate"));
+
+        double percent = Double.valueOf(list.get(position).get("completemission")) / Double.valueOf(list.get(position).get("allmission"));
+        holder.completeBar.setProgress((int) (percent*100 + 0.5));
 
         //圖片
         //holder.dateAndTime.setText(list.get(position).get("date"));
@@ -68,8 +75,10 @@ public class task_listadapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        ImageView personal_photo;
-        TextView missionName;
+        ImageView targetPlanet;
+        TextView targetName;
+        TextView targetDate;
+        ProgressBar completeBar;
     }
 
 }

@@ -4,12 +4,8 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,11 +17,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.MultiAutoCompleteTextView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -35,7 +28,6 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -61,7 +53,7 @@ public class TargetActivity extends AppCompatActivity {
 
     /*---Date:1015 rebuild----*/
     List<HashMap<String, String>> TargetData = new ArrayList<>();
-    private target_listadapter target_listAdapter;
+    private Target_ListAdapter target_listAdapter;
     ListView target_listview;
     int map_id;
     /*---Date:1015 rebuild----*/
@@ -133,7 +125,6 @@ public class TargetActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         loading();
     }
 
@@ -205,8 +196,10 @@ public class TargetActivity extends AppCompatActivity {
                 param7 += user.account + ",";
 
                 nextID = nextID.trim();
-                TargetDB.TargetDetail td = new TargetDB.TargetDetail(nextID, param1, param2, param3, param4, param5, param6, param7);
+                TargetDB.TargetDetail td = new TargetDB.TargetDetail(nextID, param1, param2, param3, param4, param5, param6, param7, "0", "0");
                 new DbOperationTask().execute("createTarget", nextID, param1, param2, param3, param4, param5, param6, param7);
+                /*TargetDB.TargetDetail td = new TargetDB.TargetDetail(nextID, param1, param2, param3, param4, param5, param6, param7, param8,"0","0");
+                new DbOperationTask().execute("createTarget", nextID, param1, param2, param3, param4, param5, param6, param7, param8);*/
 
 
                 HashMap<String, String> tg_hashmap = new HashMap<>();
@@ -292,6 +285,8 @@ public class TargetActivity extends AppCompatActivity {
                 tg_hashmap.put("planet_imv", "null");
                 tg_hashmap.put("targetName", set.getValue().targetName);
                 tg_hashmap.put("targetDate", set.getValue().startTime.trim().replace("-",".") + "-" + set.getValue().endTime.trim().replace("-","."));
+                tg_hashmap.put("allmission", set.getValue().allmission);
+                tg_hashmap.put("completemission", set.getValue().completemission);
 
                 TargetData.add(tg_hashmap);
 
@@ -302,10 +297,11 @@ public class TargetActivity extends AppCompatActivity {
         }
 
         target_listview = (ListView) findViewById(R.id.listview_target);
-        target_listAdapter = new target_listadapter(this);
+
+        target_listAdapter = new Target_ListAdapter(this);
         target_listAdapter.setData(TargetData);
-        target_listAdapter.notifyDataSetChanged();
         target_listview.setAdapter(target_listAdapter);
+        target_listAdapter.notifyDataSetChanged();
 
         target_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

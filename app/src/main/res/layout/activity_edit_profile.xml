@@ -22,6 +22,7 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:background="@color/empty"
+            android:padding="5dp"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/item_person_light" />
 
@@ -32,6 +33,7 @@
             android:layout_weight="1"
             android:background="@color/empty"
             android:onClick="checkReview"
+            android:padding="5dp"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/item_memory" />
 
@@ -42,6 +44,7 @@
             android:layout_weight="1"
             android:background="@color/empty"
             android:onClick="toRequest"
+            android:padding="5dp"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/item_message" />
 
@@ -52,6 +55,7 @@
             android:layout_weight="1"
             android:adjustViewBounds="false"
             android:background="@color/empty"
+            android:padding="5dp"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/item_edit" />
 
@@ -61,6 +65,7 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:background="@color/empty"
+            android:padding="5dp"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/item_q" />
 
