@@ -49,17 +49,6 @@ public class TargetDB {
                 String participator = readParticipator(tid);
                 TargetDetail TargetDetail = new TargetDetail(tid, targetName, targetContent, startTime, endTime, state, auth, participator, allmission, completemission);
                 map.put(obj.getString("tid"), TargetDetail);
-                /*String tid=obj.getString("tid");
-                String targetName=obj.getString("targetName");
-                String targetContent=obj.getString("targetContent");
-                String startTime=obj.getString("targetStartTime");
-                String endTime=obj.getString("targetEndTime");
-                String state=obj.getString("state");
-                String auth=obj.getString("auth");
-                String participator=readParticipator(tid);
-                TargetDetail TargetDetail=new TargetDetail(tid,targetName,targetContent,startTime,endTime,state,auth,participator);
-                //Log.v("jim",TargetDetail.tid +","+TargetDetail.targetName+","+TargetDetail.targetContent+","+TargetDetail.startTime+","+TargetDetail.endTime+","+TargetDetail.state+","+TargetDetail.auth+","+TargetDetail.dream);
-                map.put(obj.getString("tid"),TargetDetail);*/
             }
         } catch (JSONException e) {
             Log.v("jim error in read：", e.toString());

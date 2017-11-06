@@ -56,8 +56,8 @@ public class TaskDB {
         String ans=viaParams(params,php);
         return  ans.trim();
     }
-    protected void create(String param1,String param2,String param3,String param4,String param5,String param6,String param7,String param8){
-        String params="table=mission"+" & mid="+param1 +" & missionName="+param2+" & missionContent="+param3+" & remindTime="+param4+" & tid="+param5+" & state="+param7+" & auth="+param8;
+    protected void create(String param1,String param2,String param3,String param4,String param5,String param6,String param7){
+        String params="table=mission"+" & mid="+param1 +" & missionName="+param2+" & missionContent="+param3+" & remindTime="+param4+" & tid="+param5+" & state="+param6+" & auth="+param7;
         String php="createTask.php";
         String ans=viaParams(params,php);
     }

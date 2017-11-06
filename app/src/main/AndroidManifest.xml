@@ -28,6 +28,7 @@
         <activity android:name=".Record" />
         <activity android:name=".EditProfile" />
 
+        <service android:name=".RegisterAlarmService" />
         <receiver android:name=".AlarmReceiver" />
         <receiver android:name=".AlarmInitReceiver">
             <intent-filter>

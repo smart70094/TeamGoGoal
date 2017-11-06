@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 
 /**
  * Created by hp on 2017/9/7.
@@ -12,13 +13,11 @@ import android.content.Intent;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
-    public static String NOTIFICATION_ID = "notification-id";
-    public static String NOTIFICATION = "notification";
-
     public void onReceive(Context context, Intent intent) {
-        NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification = intent.getParcelableExtra(NOTIFICATION);
-        int id = intent.getIntExtra(NOTIFICATION_ID, 0);
-        notificationManager.notify(id, notification);
+        String taskName=intent.getStringExtra("taskName");
+        String data="你今天完成了「"+taskName+"」了嘛？";
+        Intent nofyIntent=new Intent(context,NofyService.class);
+        nofyIntent.putExtra("foo",data);
+        context.startService(nofyIntent);
     }
 }

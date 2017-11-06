@@ -14,7 +14,7 @@ import android.support.v4.app.NotificationManagerCompat;
 
 
 public class NofyService extends IntentService {
-    public static final int NOTIF_ID = 56;
+    public static  int NOTIF_ID = 0;
     long timestamp;
     public MySimpleReceiver receiverForSimple;
 
@@ -84,7 +84,7 @@ public class NofyService extends IntentService {
 
 
         // mId allows you to update the notification later on.
-        mNotificationManager.notify(NOTIF_ID, builder.build());
+        mNotificationManager.notify(NOTIF_ID++, builder.build());
     }
     private void createNotification_v7(String val) {
         int notificationId = 001;
@@ -102,7 +102,7 @@ public class NofyService extends IntentService {
                         .setContentIntent(viewPendingIntent);
         NotificationManagerCompat notificationManager =
                 NotificationManagerCompat.from(this);
-        notificationManager.notify(notificationId, notificationBuilder.build());
+        notificationManager.notify(NOTIF_ID++, notificationBuilder.build());
     }
 
     private void sleep(long millis) {

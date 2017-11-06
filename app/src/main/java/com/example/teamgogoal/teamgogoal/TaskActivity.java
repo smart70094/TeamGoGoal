@@ -227,7 +227,7 @@ public class TaskActivity extends AppCompatActivity {
                     nextID = db.taskIndex();
                     break;
                 case "createTask":
-                    db.create(params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8]);
+                    db.create(params[1], params[2], params[3], params[4], params[5], params[6], params[7]);
                     nextID = db.taskIndex();
                     break;
                 case "delete":
@@ -252,17 +252,26 @@ public class TaskActivity extends AppCompatActivity {
             taskMap.remove(id);
             taskDate.remove(map_id);
             task_listAdapter.notifyDataSetChanged();
+
+            Intent intent=new Intent(getApplicationContext(),RegisterAlarmService.class);
+            intent.putExtra("cmd","cancel");
+            intent.putExtra("mid",currID.trim());
+            startService(intent);
         } catch (Exception e) {
             Log.v("jim1", e.toString());
         }
     }
 
     protected void update() {
+        Intent intent=new Intent(getApplicationContext(),RegisterAlarmService.class);
+        intent.putExtra("cmd","cancel");
+        intent.putExtra("mid",currID.trim());
+        startService(intent);
+
         String param1 = taskNameTxt.getText().toString();
         String param2 = taskContent.getText().toString();
         String param3 = remindTimeTxt.getText().toString();
         String param4 = currTid;
-        String param5 = spinner.getSelectedItem().toString();
 
         int key = Integer.parseInt(currID.trim());
         TaskDB.TaskDetail td = taskMap.get(key);
@@ -276,8 +285,13 @@ public class TaskActivity extends AppCompatActivity {
 
         taskDate.get(map_id).put("missionName", param1);
         task_listAdapter.notifyDataSetChanged();
-
         taskMsg.dismiss();
+
+        intent.putExtra("cmd","adding");
+        intent.putExtra("mid",currID.trim());
+        intent.putExtra("taskName",param1);
+        intent.putExtra("remindTime",param3);
+        startService(intent);
     }
 
     protected void addTask() {
@@ -286,13 +300,13 @@ public class TaskActivity extends AppCompatActivity {
             Toast.makeText(this, "請輸入完整資料", Toast.LENGTH_SHORT).show();
         } else {
 
-            String param1 = taskNameTxt.getText().toString();
-            String param2 = taskContent.getText().toString();
-            String param3 = remindTimeTxt.getText().toString();
-            String param4 = currTid;
-            String param5 = spinner.getSelectedItem().toString();
-            String param6 = "N";
-            String param7 = user.account;
+            String param1 = taskNameTxt.getText().toString().trim();
+            String param2 = taskContent.getText().toString().trim();
+            String param3 = remindTimeTxt.getText().toString().trim();
+            String param4 = currTid.trim();
+            String param5 = "N";
+            String param6 = user.account;
+            String param7 = "";
 
             nextID = nextID.trim();
             TaskDB.TaskDetail td = new TaskDB.TaskDetail(nextID, param1, param2, param3, param4, param5, param6, param7);
@@ -312,6 +326,13 @@ public class TaskActivity extends AppCompatActivity {
             taskMap.put(k, td);
             Toast.makeText(this, "新增任務成功", Toast.LENGTH_SHORT).show();
             taskMsg.dismiss();
+
+            Intent intent=new Intent(getApplicationContext(),RegisterAlarmService.class);
+            intent.putExtra("cmd","adding");
+            intent.putExtra("mid",nextID.trim());
+            intent.putExtra("taskName",param1);
+            intent.putExtra("remindTime",param3);
+            startService(intent);
         }
     }
 

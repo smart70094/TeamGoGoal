@@ -1,6 +1,7 @@
 package com.example.teamgogoal.teamgogoal;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,13 +31,13 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.ProtocolException;
 import java.net.URL;
+import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
-    //public static final String localhost="http://169.254.68.146/DB/";
-    public static final String ip="192.168.0.101";
+    public static final String ip="125.231.119.109";
     //public static final String ip="111.253.228.128";
-    //public static final String ip="1.165.110.246";
     public static final String localhost="http://"+ip+"/TeamGoGoal/";
     EditText accountTxt,passwordTxt;
     CheckBox chkRemeberAccount;
@@ -102,59 +103,14 @@ public class LoginActivity extends AppCompatActivity {
     private class TransTask  extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            String account=params[0];
-            String password=params[1];
-            String urlParameters="table=account & account="+params[0]+" & password="+params[1];
-            String php="connectAccountDB.php";
-            byte[] postData = new byte[0];
-            try {
-                postData = urlParameters.getBytes("UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            int postDataLength = postData.length;
-            String checkurl = LoginActivity.getLocalHost()+php;
-            Log.v("localhost:",checkurl);
-            StringBuilder sb=null;
-            try {
-                URL connectto = new URL(checkurl);
-                HttpURLConnection conn = (HttpURLConnection) connectto.openConnection();
-                conn.setRequestMethod( "POST" );
-                conn.setRequestProperty( "Content-Length", Integer.toString( postDataLength ));
-                conn.setRequestProperty( "Content-Type", "application/x-www-form-urlencoded");
-                conn.setRequestProperty( "Accept-Charset", "UTF-8");
-                conn.setRequestProperty( "Accept-Encoding", "UTF-8");
-                conn.setUseCaches(false);
-                conn.setAllowUserInteraction(false);
-                conn.setInstanceFollowRedirects( false );
-                conn.setDoOutput( true );
-
-
-                DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
-                wr.write(postData);
-                wr.flush();
-                wr.close();
-
-                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                sb = new StringBuilder();
-                String line;
-
-                while ((line = br.readLine()) != null) {
-                    //Log.v("jim",line);
-                    sb.append(line+"\n");
-                }
-                br.close();
-                conn.disconnect();
-            }
-            catch (Exception e) {
-                Log.v("jim",e.toString());
-            }
-            parseJSON(sb.toString());
-
-
-
             String cmd="loginFailure";
             try{
+                String account=params[0];
+                String password=params[1];
+                String urlParameters="table=account & account="+account+" & password="+password;
+                String php="connectAccountDB.php";
+                String result=viaParams(urlParameters,php);
+                parseJSON(result);
                 if(user!=null){
                     socketTrans.setParams("register_online",user.account);
                     socketTrans.connection();
@@ -177,6 +133,7 @@ public class LoginActivity extends AppCompatActivity {
                     intent.setClass(LoginActivity.this, TargetActivity.class);
                     startActivity(intent);
                     Toast.makeText(LoginActivity.this, "登入成功", Toast.LENGTH_SHORT).show();
+                   // new registerAlarmThread().execute();
                     if(chkRemeberAccount.isChecked()){
                         settings=getSharedPreferences("account",0);
                         settings.edit()
@@ -218,6 +175,44 @@ public class LoginActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+
+    private class registerAlarmThread extends AsyncTask<Void, Void, String>{
+        protected String doInBackground(Void... voids) {
+            try{
+                String urlParameters="table=mission & auth="+user.account;
+                String php="readAlarmMission.php";
+                return viaParams(urlParameters,php);
+            }catch(Exception e){
+                Log.v("jim_registerAlarmThread",e.toString());
+            }
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String data) {
+            super.onPostExecute(data);
+            Intent intent=new Intent(LoginActivity.this,RegisterAlarmService.class);
+            try {
+                JSONArray array = new JSONArray(data);
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject obj = array.getJSONObject(i);
+                    //從php取值出來放入intent讓service使用
+                    String mid = obj.getString("mid");
+                    String taskName = obj.getString("missionName").trim();
+                    String remindTime = obj.getString("remindTime").trim();
+                    intent.putExtra("cmd","adding");
+                    intent.putExtra("mid",mid.trim());
+                    intent.putExtra("taskName",taskName);
+                    intent.putExtra("remindTime",remindTime);
+                    startService(intent);
+                }
+            } catch (Exception e) {
+                Log.v("jim error in read：", e.toString());
+            }
+
         }
     }
 
@@ -267,5 +262,48 @@ public class LoginActivity extends AppCompatActivity {
                             }).show();
         }
         return true;
+    }
+
+    public String viaParams(String urlParameters,String php) throws Exception {
+        byte[] postData = new byte[0];
+        try {
+            postData = urlParameters.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        int postDataLength = postData.length;
+        String checkurl = LoginActivity.getLocalHost()+php;
+        Log.v("localhost:",checkurl);
+        StringBuilder sb=null;
+
+        URL connectto = new URL(checkurl);
+        HttpURLConnection conn = (HttpURLConnection) connectto.openConnection();
+        conn.setRequestMethod( "POST" );
+        conn.setRequestProperty( "Content-Length", Integer.toString( postDataLength ));
+        conn.setRequestProperty( "Content-Type", "application/x-www-form-urlencoded");
+        conn.setRequestProperty( "Accept-Charset", "UTF-8");
+        conn.setRequestProperty( "Accept-Encoding", "UTF-8");
+        conn.setUseCaches(false);
+        conn.setAllowUserInteraction(false);
+        conn.setInstanceFollowRedirects( false );
+        conn.setDoOutput( true );
+
+
+        DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
+        wr.write(postData);
+        wr.flush();
+        wr.close();
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        sb = new StringBuilder();
+        String line;
+
+        while ((line = br.readLine()) != null) {
+            //Log.v("jim",line);
+            sb.append(line+"\n");
+        }
+        br.close();
+        conn.disconnect();
+        return sb.toString();
     }
 }
