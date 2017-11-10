@@ -1,7 +1,6 @@
 package com.example.teamgogoal.teamgogoal;
 
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,59 +26,52 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.ProtocolException;
-import java.net.Socket;
 import java.net.URL;
-import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
     //public static final String localhost="http://169.254.68.146/DB/";
-    public static final String ip="192.168.0.100";
+    public static final String ip = "192.168.0.100";
     //public static final String ip="111.253.228.128";
-    public static final String localhost="http://"+ip+"/TeamGoGoal/";
-    EditText accountTxt,passwordTxt;
+    public static final String localhost = "http://" + ip + "/TeamGoGoal/";
+    EditText accountTxt, passwordTxt;
 
     Intent intent;
-    public static  User user=null;
+    public static User user = null;
     public static SocketTrans socketTrans;
     private SharedPreferences settings;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        accountTxt=(EditText) findViewById(R.id.accountTxt);
-        passwordTxt=(EditText) findViewById(R.id.passwordTxt);
-        settings=getSharedPreferences("account",0);
-        accountTxt.setText(settings.getString("account",""));
-        passwordTxt.setText(settings.getString("password",""));
+        accountTxt = (EditText) findViewById(R.id.accountTxt);
+        passwordTxt = (EditText) findViewById(R.id.passwordTxt);
+        settings = getSharedPreferences("account", 0);
+        accountTxt.setText(settings.getString("account", ""));
+        passwordTxt.setText(settings.getString("password", ""));
 
-        if(!(accountTxt.getText().toString().equals("") && passwordTxt.getText().toString().equals("")))
-            chkRemeberAccount.setChecked(true);
-        else
-            chkRemeberAccount.setChecked(false);
-        socketTrans=new SocketTrans();
+        socketTrans = new SocketTrans();
         socketTrans.setActivity(LoginActivity.this);
-        socketTrans.setNotification((NotificationManager)getSystemService(NOTIFICATION_SERVICE));
+        socketTrans.setNotification((NotificationManager) getSystemService(NOTIFICATION_SERVICE));
 
 
 
         /*星球旋轉動畫*/
-        ImageView iv = (ImageView)this.findViewById(R.id.imageView3);
+        ImageView iv = (ImageView) this.findViewById(R.id.imageView3);
 
         Animation am = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        am.setDuration( 10000 );
+        am.setDuration(10000);
         am.setRepeatCount(Animation.INFINITE);
         am.setInterpolator(new LinearInterpolator());
         am.setStartOffset(0);
         iv.setAnimation(am);
         am.startNow();
 
-        ScrollView scrollView = (ScrollView)this.findViewById(R.id.scrollView1);
+        ScrollView scrollView = (ScrollView) this.findViewById(R.id.scrollView1);
         scrollView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -87,40 +79,49 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-    public static User getUser(){return user;}
-    public static String getLocalHost(){return localhost;}
-    public static String getIp(){return ip;}
+
+    public static User getUser() {
+        return user;
+    }
+
+    public static String getLocalHost() {
+        return localhost;
+    }
+
+    public static String getIp() {
+        return ip;
+    }
 
     //帥哥峻禾的部分開始----------------------------------------------------------------------------------------------------------------------
 
     public void creat(View view) {
         Intent i = new Intent();
-        i.setClass(this,RegisterAccount.class);
+        i.setClass(this, RegisterAccount.class);
         startActivity(i);
         overridePendingTransition(R.transition.slide_in_right, R.transition.animo_no);
     }
 
     //帥哥峻禾的部分結束----------------------------------------------------------------------------------------------------------------------
 
-    private class TransTask  extends AsyncTask<String, Void, String> {
+    private class TransTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            String cmd="loginFailure";
-            try{
-                String account=params[0];
-                String password=params[1];
-                String urlParameters="table=account & account="+account+" & password="+password;
-                String php="connectAccountDB.php";
-                String result=viaParams(urlParameters,php);
+            String cmd = "loginFailure";
+            try {
+                String account = params[0];
+                String password = params[1];
+                String urlParameters = "table=account & account=" + account + " & password=" + password;
+                String php = "connectAccountDB.php";
+                String result = viaParams(urlParameters, php);
                 parseJSON(result);
-                if(user!=null){
-                    socketTrans.setParams("register_online",user.account);
+                if (user != null) {
+                    socketTrans.setParams("register_online", user.account);
                     socketTrans.connection();
                     socketTrans.receiver();
-                    cmd="connectSuccessful";
+                    cmd = "connectSuccessful";
                 }
-            }catch(Exception e){
-                cmd="ConnectFailure";
+            } catch (Exception e) {
+                cmd = "ConnectFailure";
             }
             return cmd;
         }
@@ -131,25 +132,9 @@ public class LoginActivity extends AppCompatActivity {
             switch (cmd) {
                 case "connectSuccessful":
                     intent = new Intent();
-
                     intent.setClass(LoginActivity.this, TargetActivity.class);
                     startActivity(intent);
                     Toast.makeText(LoginActivity.this, "登入成功", Toast.LENGTH_SHORT).show();
-                   // new registerAlarmThread().execute();
-                    if(chkRemeberAccount.isChecked()){
-                        settings=getSharedPreferences("account",0);
-                        settings.edit()
-                                .putString("account",accountTxt.getText().toString())
-                                .putString("password",passwordTxt.getText().toString())
-                                .commit();
-                    }else{
-                        settings=getSharedPreferences("account",0);
-                        settings.edit()
-                                .putString("account","")
-                                .putString("password","")
-                                .commit();
-                    }
-
                     break;
                 case "ConnectFailure":
                     Toast.makeText(LoginActivity.this, "網路出現問題", Toast.LENGTH_SHORT).show();
@@ -161,18 +146,19 @@ public class LoginActivity extends AppCompatActivity {
             }
 
         }
+
         private void parseJSON(String s) {
             try {
                 JSONArray array = new JSONArray(s);
-                for (int i=0; i<array.length(); i++){
+                for (int i = 0; i < array.length(); i++) {
                     JSONObject obj = array.getJSONObject(i);
                     String uid = obj.getString("uid");
                     String account = obj.getString("account");
                     String password = obj.getString("password");
                     String name = obj.getString("name");
                     String role = obj.getString("role");
-                    Log.d("JSON:",uid+"/"+account+"/"+password+"/"+role+"/");
-                    user = new User(uid,account,password,name,role);
+                    Log.d("JSON:", uid + "/" + account + "/" + password + "/" + role + "/");
+                    user = new User(uid, account, password, name, role);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -182,25 +168,25 @@ public class LoginActivity extends AppCompatActivity {
 
     public void forgetPassword(View view) {
         //Test Data
-        String account="123";
-        String email="smart70094@yahoo.com.tw";
+        String account = "123";
+        String email = "smart70094@yahoo.com.tw";
 
         /*
         from interface get data
         String account=view.getAccount();
         String email=view.getEmail();
         */
-        new forgetPasswordThread().execute(account,email);
+        new forgetPasswordThread().execute(account, email);
     }
 
-    private class forgetPasswordThread extends AsyncTask<String, Void, String>{
+    private class forgetPasswordThread extends AsyncTask<String, Void, String> {
         protected String doInBackground(String... params) {
             try {
-                String account=params[0];
-                String email=params[1];
-                SocketTrans socket=new SocketTrans();
+                String account = params[0];
+                String email = params[1];
+                SocketTrans socket = new SocketTrans();
                 socket.connection();
-                socket.setParams("register_forgetPassword",account,email);
+                socket.setParams("register_forgetPassword", account, email);
                 socket.send();
                 return socketTrans.getResult();
             } catch (Exception e) {
@@ -208,30 +194,32 @@ public class LoginActivity extends AppCompatActivity {
             }
             return null;
         }
+
         @Override
         protected void onPostExecute(String data) {
             super.onPostExecute(data);
-            if(!data.equals(null)){
-                Toast.makeText(LoginActivity.this,data,Toast.LENGTH_LONG).show();
+            if (!data.equals(null)) {
+                Toast.makeText(LoginActivity.this, data, Toast.LENGTH_LONG).show();
             }
         }
     }
 
-    private class registerAlarmThread extends AsyncTask<Void, Void, String>{
+    private class registerAlarmThread extends AsyncTask<Void, Void, String> {
         protected String doInBackground(Void... voids) {
-            try{
-                String urlParameters="table=mission & auth="+user.account;
-                String php="readAlarmMission.php";
-                return viaParams(urlParameters,php);
-            }catch(Exception e){
-                Log.v("jim_registerAlarmThread",e.toString());
+            try {
+                String urlParameters = "table=mission & auth=" + user.account;
+                String php = "readAlarmMission.php";
+                return viaParams(urlParameters, php);
+            } catch (Exception e) {
+                Log.v("jim_registerAlarmThread", e.toString());
             }
             return "";
         }
+
         @Override
         protected void onPostExecute(String data) {
             super.onPostExecute(data);
-            Intent intent=new Intent(LoginActivity.this,RegisterAlarmService.class);
+            Intent intent = new Intent(LoginActivity.this, RegisterAlarmService.class);
             try {
                 JSONArray array = new JSONArray(data);
                 for (int i = 0; i < array.length(); i++) {
@@ -240,10 +228,10 @@ public class LoginActivity extends AppCompatActivity {
                     String mid = obj.getString("mid");
                     String taskName = obj.getString("missionName").trim();
                     String remindTime = obj.getString("remindTime").trim();
-                    intent.putExtra("cmd","adding");
-                    intent.putExtra("mid",mid.trim());
-                    intent.putExtra("taskName",taskName);
-                    intent.putExtra("remindTime",remindTime);
+                    intent.putExtra("cmd", "adding");
+                    intent.putExtra("mid", mid.trim());
+                    intent.putExtra("taskName", taskName);
+                    intent.putExtra("remindTime", remindTime);
                     startService(intent);
                 }
             } catch (Exception e) {
@@ -253,25 +241,29 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public class User implements  Cloneable{
-        String uid,account,password,name,state;
-        public User(String uid,String account,String password,String name,String state){
+    public class User implements Cloneable {
+        String uid, account, password, name, state;
+
+        public User(String uid, String account, String password, String name, String state) {
             this.uid = uid;
             this.account = account;
             this.password = password;
             this.name = name;
-            this.state=state;
+            this.state = state;
         }
+
         protected User clone() throws CloneNotSupportedException {
             return (User) super.clone();
         }
     }
+
     public void login(View view) {
 
-        String account=accountTxt.getText().toString();
-        String password=passwordTxt.getText().toString();
-        new TransTask().execute(account,password);
+        String account = accountTxt.getText().toString();
+        String password = passwordTxt.getText().toString();
+        new TransTask().execute(account, password);
     }
+
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // TODO Auto-generated method stub
 
@@ -301,7 +293,7 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-    public String viaParams(String urlParameters,String php) throws Exception {
+    public String viaParams(String urlParameters, String php) throws Exception {
         byte[] postData = new byte[0];
         try {
             postData = urlParameters.getBytes("UTF-8");
@@ -309,21 +301,21 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         int postDataLength = postData.length;
-        String checkurl = LoginActivity.getLocalHost()+php;
-        Log.v("localhost:",checkurl);
-        StringBuilder sb=null;
+        String checkurl = LoginActivity.getLocalHost() + php;
+        Log.v("localhost:", checkurl);
+        StringBuilder sb = null;
 
         URL connectto = new URL(checkurl);
         HttpURLConnection conn = (HttpURLConnection) connectto.openConnection();
-        conn.setRequestMethod( "POST" );
-        conn.setRequestProperty( "Content-Length", Integer.toString( postDataLength ));
-        conn.setRequestProperty( "Content-Type", "application/x-www-form-urlencoded");
-        conn.setRequestProperty( "Accept-Charset", "UTF-8");
-        conn.setRequestProperty( "Accept-Encoding", "UTF-8");
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Length", Integer.toString(postDataLength));
+        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        conn.setRequestProperty("Accept-Charset", "UTF-8");
+        conn.setRequestProperty("Accept-Encoding", "UTF-8");
         conn.setUseCaches(false);
         conn.setAllowUserInteraction(false);
-        conn.setInstanceFollowRedirects( false );
-        conn.setDoOutput( true );
+        conn.setInstanceFollowRedirects(false);
+        conn.setDoOutput(true);
 
 
         DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
@@ -337,7 +329,7 @@ public class LoginActivity extends AppCompatActivity {
 
         while ((line = br.readLine()) != null) {
             //Log.v("jim",line);
-            sb.append(line+"\n");
+            sb.append(line + "\n");
         }
         br.close();
         conn.disconnect();

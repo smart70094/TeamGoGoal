@@ -1,28 +1,31 @@
 package com.example.teamgogoal.teamgogoal;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Task_ListAdapter extends BaseAdapter {
+public class Request_ListAdapter extends BaseAdapter {
+    RequestDB db;
+    ViewHolder holder;
     Context context;
     private LayoutInflater myInflater;
     List<HashMap<String, String>> list = new ArrayList<>();
 
-    public Task_ListAdapter(Context context) {
+    public Request_ListAdapter(Context context,RequestDB db) {
         myInflater = LayoutInflater.from(context);
         this.context = context;
+        this.db = db;
     }
 
     public void setData(List<HashMap<String, String>> list) {
@@ -47,56 +50,83 @@ public class Task_ListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+
 
         if (convertView == null) {
 
-            convertView = myInflater.inflate(R.layout.task_list, null);
+            convertView = myInflater.inflate(R.layout.request_list, null);
             holder = new ViewHolder();
-            holder.missionName = (TextView) convertView.findViewById(R.id.missionName);
-            holder.linearlayout_bg = (LinearLayout) convertView.findViewById(R.id.LinearLayout_bg);
-            holder.complete_btn = (ImageButton) convertView.findViewById(R.id.complete_btn);
-
-            //圖片區
-            //holder.dateAndTime = (TextView) convertView.findViewById(R.id.dataAndTime);
+            holder.request_context = (TextView) convertView.findViewById(R.id.request_context);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        String auth = list.get(position).get("auth").trim();
-        String state = list.get(position).get("state").trim();
+        String cmd = list.get(position).get("cmd").trim();
+        String cmdContext = list.get(position).get("cmdContext").trim();
+        String originator = list.get(position).get("originator").trim();
 
-        holder.missionName.setText(list.get(position).get("missionName"));
-        if(auth.equals(LoginActivity.user.account)){
-            holder.linearlayout_bg.setBackground(ContextCompat.getDrawable(context,R.drawable.bg_record_msg));
-
-            if(state.equals("Y")){
-                holder.complete_btn.setVisibility(View.INVISIBLE);
-            }else {
-                holder.complete_btn.setVisibility(View.VISIBLE);
-            }
-        }else{
-            holder.linearlayout_bg.setBackground(ContextCompat.getDrawable(context,R.drawable.bg_task_other_complete));
-            holder.complete_btn.setVisibility(View.INVISIBLE);
+        switch(cmd) {
+            case "request_ask":
+                request_ask(originator, cmdContext,convertView,position);
+                break;
         }
-
-
-
-        holder.missionName.setText(list.get(position).get("missionName"));
-
-        //圖片
-        //holder.dateAndTime.setText(list.get(position).get("date"));
 
 
         return convertView;
     }
 
+    private void request_ask(final String originator,final String cmdContext, View convertView, final int position) {
+        holder.request_context.setText(originator + "邀請你加入任務" + cmdContext);
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String id = list.get(position).get("rid");
+                //final int id = v.getId();
+                new AlertDialog.Builder(context)
+                        .setTitle("TeamGoGoal")//設定視窗標題
+                        .setIcon(R.mipmap.ic_launcher)//設定對話視窗圖示
+                        .setMessage(originator + "邀請你加入任務" + cmdContext)//設定顯示的文字
+                        .setPositiveButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })//設定結束的子視窗
+                        .setNegativeButton("加入", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                new Thread(new Runnable() {
+                                    public void run() {
+                                        String rid = id;
+                                        new DeleteRequest().execute(rid, cmdContext);
+                                        list.remove(position);
+                                    }
+                                }).start();
+                            }
+                        })//設定結束的子視窗
+                        .show();//呈現對話視窗
+            }
+        });
+    }
+
+    public class DeleteRequest extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... params) {
+            String rid = params[0];
+            String tid = params[1];
+            TargetDB targetdb = new TargetDB();
+            targetdb.createParticipator(tid, LoginActivity.user.account);
+            db.deleteRegisterRequest(rid);
+            return null;
+        }
+    }
+
     static class ViewHolder {
         ImageView personal_photo;
-        TextView missionName;
-        LinearLayout linearlayout_bg;
-        ImageButton complete_btn;
+        TextView request_context;
     }
 
 }

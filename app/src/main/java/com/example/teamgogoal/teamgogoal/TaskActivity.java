@@ -209,7 +209,7 @@ public class TaskActivity extends AppCompatActivity {
     public void requestMessage(View view) {
         /*String participator="";
         */
-        String participator="456,678";
+        String participator="456-789";
         socketTrans.setParams("requestMessage",participator);
         socketTrans.send();
     }
