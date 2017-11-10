@@ -25,9 +25,9 @@ public  class SocketTrans {     //執行緒
     private OutputStream out;            //取得網路輸出串流
     private static BufferedReader br;            //取得網路輸入串流
     private static Map<String,Socket> map=new HashMap<String,Socket>();
-    String cmd;
+    /*String cmd;
     String subject;
-    String originator;
+    String originator;*/
     String param;
     static String result=null;
     public Context context;
@@ -39,23 +39,7 @@ public  class SocketTrans {     //執行緒
     protected void setNotification(NotificationManager notificationManager){
         this.notificationManager=notificationManager;
     }
-    protected   void setParams(String cmd,String originator){
-        this.cmd=cmd;
-        this.originator=originator;
-        param=cmd+","+originator+"\n";
-    }
-    protected void setParams(String cmd,String originaotr,String subject){
-        this.cmd=cmd;
-        this.originator=originaotr;
-        this.subject=subject;
-        param=cmd+","+originator+","+subject+"\n";
-    }
-    protected  void setParams(String cmd,String originator,String subject,String tid){
-        this.cmd=cmd;
-        this.originator=originator;
-        this.subject=subject;
-        param=cmd+","+originator+","+subject+","+tid+"\n";
-    }
+
     public void setParams(String... parms){
         param="";
         for(String s:parms)  param+=s+",";

@@ -65,11 +65,14 @@ public class TargetDB {
         return ans.trim();
     }
 
-    protected String createTarget(String param1, String param2, String param3, String param4, String param5, String param6, String param7) {
-        String params = "table=target" + " & tid=" + param1 + " & targetName=" + param2 + " & targetContent=" + param3 + " & targetStartTime=" + param4 + " & targetEndTime=" + param5 + " & state=" + param6 + " & auth=" + param7;
-        String php = "createTarget.php";
-        String ans = viaParams(params, php);
-        return ans;
+    protected void createTarget(String... dataList) {
+        String name=dataList[0];
+        String context=dataList[1];
+        String startTime=dataList[2];
+        String endTime=dataList[3];
+        String auth=dataList[4];
+        socketTrans.setParams("addTarget",name+","+context+","+startTime+","+endTime+","+auth);
+        socketTrans.send();
     }
 
     protected void updateTarget(String param1, String param2, String param3, String param4, String param5, String param6, String param7, String param8, String param9) {

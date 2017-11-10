@@ -197,10 +197,7 @@ public class TargetActivity extends AppCompatActivity {
 
                 nextID = nextID.trim();
                 TargetDB.TargetDetail td = new TargetDB.TargetDetail(nextID, param1, param2, param3, param4, param5, param6, param7, "0", "0");
-                new DbOperationTask().execute("createTarget", nextID, param1, param2, param3, param4, param5, param6, param7);
-                /*TargetDB.TargetDetail td = new TargetDB.TargetDetail(nextID, param1, param2, param3, param4, param5, param6, param7, param8,"0","0");
-                new DbOperationTask().execute("createTarget", nextID, param1, param2, param3, param4, param5, param6, param7, param8);*/
-
+                new DbOperationTask().execute("createTarget",param1, param2, param3, param4, param6,param7);
 
                 HashMap<String, String> tg_hashmap = new HashMap<>();
                 tg_hashmap.put("tid", nextID);
@@ -437,8 +434,8 @@ public class TargetActivity extends AppCompatActivity {
                     break;
                 case "createTarget":
                     try{
-                        db.createTarget(params[1], params[2], params[3], params[4], params[5], params[6], params[7]);
-                        db.createParticipator(params[1], params[8]);
+                        db.createTarget(params[1], params[2], params[3], params[4], params[5]);
+                        db.createParticipator(params[1], params[6]);
                         nextID = db.targetIndex();
                     }catch(Exception e){
                         Log.v("jim_createTarget:",e.toString());

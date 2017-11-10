@@ -206,6 +206,14 @@ public class TaskActivity extends AppCompatActivity {
         }
     }
 
+    public void requestMessage(View view) {
+        /*String participator="";
+        */
+        String participator="456,678";
+        socketTrans.setParams("requestMessage",participator);
+        socketTrans.send();
+    }
+
 
     private class DbOperationTask extends AsyncTask<String, Void, Void> {
         protected Void doInBackground(String... params) {

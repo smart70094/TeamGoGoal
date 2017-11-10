@@ -28,15 +28,17 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
+import java.net.Socket;
 import java.net.URL;
 import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
-    public static final String ip="125.231.119.109";
+    public static final String ip="36.233.142.34";
     //public static final String ip="111.253.228.128";
     public static final String localhost="http://"+ip+"/TeamGoGoal/";
     EditText accountTxt,passwordTxt;
@@ -98,6 +100,7 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(i);
         overridePendingTransition(R.transition.slide_in_right, R.transition.animo_no);
     }
+
     //帥哥峻禾的部分結束----------------------------------------------------------------------------------------------------------------------
 
     private class TransTask  extends AsyncTask<String, Void, String> {
@@ -178,6 +181,42 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    public void forgetPassword(View view) {
+        //Test Data
+        String account="123";
+        String email="smart70094@yahoo.com.tw";
+
+        /*
+        from interface get data
+        String account=view.getAccount();
+        String email=view.getEmail();
+        */
+        new forgetPasswordThread().execute(account,email);
+    }
+
+    private class forgetPasswordThread extends AsyncTask<String, Void, String>{
+        protected String doInBackground(String... params) {
+            try {
+                String account=params[0];
+                String email=params[1];
+                SocketTrans socket=new SocketTrans();
+                socket.connection();
+                socket.setParams("register_forgetPassword",account,email);
+                socket.send();
+                return socketTrans.getResult();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(String data) {
+            super.onPostExecute(data);
+            if(!data.equals(null)){
+                Toast.makeText(LoginActivity.this,data,Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 
     private class registerAlarmThread extends AsyncTask<Void, Void, String>{
         protected String doInBackground(Void... voids) {
@@ -190,7 +229,6 @@ public class LoginActivity extends AppCompatActivity {
             }
             return "";
         }
-
         @Override
         protected void onPostExecute(String data) {
             super.onPostExecute(data);
