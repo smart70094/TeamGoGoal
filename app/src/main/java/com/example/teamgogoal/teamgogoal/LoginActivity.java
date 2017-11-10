@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -34,12 +33,11 @@ import java.net.URL;
 
 public class LoginActivity extends AppCompatActivity {
     //public static final String localhost="http://169.254.68.146/DB/";
-    public static final String ip="192.168.0.101";
+    public static final String ip="192.168.0.100";
     //public static final String ip="111.253.228.128";
     //public static final String ip="1.165.110.246";
     public static final String localhost="http://"+ip+"/TeamGoGoal/";
     EditText accountTxt,passwordTxt;
-    CheckBox chkRemeberAccount;
 
     Intent intent;
     public static  User user=null;
@@ -52,14 +50,9 @@ public class LoginActivity extends AppCompatActivity {
 
         accountTxt=(EditText) findViewById(R.id.accountTxt);
         passwordTxt=(EditText) findViewById(R.id.passwordTxt);
-        chkRemeberAccount=(CheckBox) findViewById(R.id.chkRemeberUser);
         settings=getSharedPreferences("account",0);
         accountTxt.setText(settings.getString("account",""));
         passwordTxt.setText(settings.getString("password",""));
-        if(!(accountTxt.getText().toString().equals("") && passwordTxt.getText().toString().equals("")))
-            chkRemeberAccount.setChecked(true);
-        else
-            chkRemeberAccount.setChecked(false);
 
         socketTrans=new SocketTrans();
         socketTrans.setActivity(LoginActivity.this);
@@ -189,20 +182,6 @@ public class LoginActivity extends AppCompatActivity {
                     intent.setClass(LoginActivity.this, TargetActivity.class);
                     startActivity(intent);
                     Toast.makeText(LoginActivity.this, "登入成功", Toast.LENGTH_SHORT).show();
-                    if(chkRemeberAccount.isChecked()){
-                        settings=getSharedPreferences("account",0);
-                        settings.edit()
-                                .putString("account",accountTxt.getText().toString())
-                                .putString("password",passwordTxt.getText().toString())
-                                .commit();
-                    }else{
-                        settings=getSharedPreferences("account",0);
-                        settings.edit()
-                                .putString("account","")
-                                .putString("password","")
-                                .commit();
-                    }
-
                     break;
                 case "ConnectFailure":
                     Toast.makeText(LoginActivity.this, "網路出現問題", Toast.LENGTH_SHORT).show();

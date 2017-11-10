@@ -3,12 +3,8 @@ package com.example.teamgogoal.teamgogoal;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -44,7 +40,7 @@ import java.net.URL;
  * Created by -HaRuNa- on 2017/8/21.
  */
 
-public class EditProfile extends AppCompatActivity implements OnClickListener {
+public class EditProfile extends AppCompatActivity{
     String localhost = LoginActivity.getLocalHost();
     LoginActivity.User user;
 
@@ -60,8 +56,11 @@ public class EditProfile extends AppCompatActivity implements OnClickListener {
     private EditText name;
     private ImageView imageview;
     private TextView account;
+
+    /*Dialog*/
     private Dialog changePwdDialog;
     private Dialog hit_dialog;
+    private Dialog personal_photo_selector_dialog;
 
     private tempFileManager tempImgFile = new tempFileManager();
 
@@ -73,15 +72,11 @@ public class EditProfile extends AppCompatActivity implements OnClickListener {
         user = LoginActivity.getUser();
         name = (EditText) findViewById(R.id.nickName);
         account = (TextView) findViewById(R.id.account);
-        uploadButton = (Button) findViewById(R.id.uploadButton);
-        btnselectpic = (Button) findViewById(R.id.button_selectpic);
         imageview = (ImageView) findViewById(R.id.imageView_pic);
 
         clickCount = 0;
         String imageUrl = localhost + "profilepicture/" + user.uid;
 
-        btnselectpic.setOnClickListener(this);
-        uploadButton.setOnClickListener(this);
         upLoadServerUri = localhost + "UploadToServer.php?uid=" + user.uid;
         //upLoadServerUri = "http://along.event2007.com/m/UploadToServer.php";
 
@@ -93,7 +88,8 @@ public class EditProfile extends AppCompatActivity implements OnClickListener {
 
     }
 
-    private class TransTask  extends AsyncTask<String, Void, Bitmap> {
+
+    private class TransTask extends AsyncTask<String, Void, Bitmap> {
         @Override
         protected Bitmap doInBackground(String... params) {
             //String url = params[0];
@@ -133,59 +129,10 @@ public class EditProfile extends AppCompatActivity implements OnClickListener {
         }
     }
 
-    public void ChangeName(View view) {
-        new EditProfile.ChangeNameTask().execute("uid=" + user.uid + "&name=" + name.getText().toString());
-        Toast.makeText(getApplicationContext(), "暱稱變更為" + name.getText().toString(), Toast.LENGTH_SHORT).show();
-    }
-
-    public void ChangePassword(View view) {
-
-        View dialog_view;
-        dialog_view = LayoutInflater.from(this).inflate(R.layout.hit_dialog, null);
-        Hit hit = new Hit();
-        hit.setHitTitle((TextView) dialog_view.findViewById(R.id.hitTitle));
-        hit.setHtiContent((TextView) dialog_view.findViewById(R.id.hitContent));
-        hit.setConfirm((Button) dialog_view.findViewById(R.id.hitComfirm));
-
-        LayoutInflater inflater = LayoutInflater.from(EditProfile.this);
-        final View v = inflater.inflate(R.layout.change_password, null);
-
-        Button changePwdConfirm = (Button) v.findViewById(R.id.changePwdConfirm);
-        Button changePwdCancel = (Button) v.findViewById(R.id.changePwdCancel);
 
 
-        changePwdConfirm.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EditText oldPassword = (EditText) (v.findViewById(R.id.oldPassword));
-                EditText newPassword = (EditText) (v.findViewById(R.id.newPassword));
-                EditText newPasswordConfirm = (EditText) (v.findViewById(R.id.newPasswordConfirm));
 
-                if (!oldPassword.getText().toString().equals(user.password)) {
-                    showCompleteMsg("修改失敗", "舊密碼輸入錯誤\n請重新輸入",false);
-                } else if (!newPassword.getText().toString().equals(newPasswordConfirm.getText().toString())) {
-                    showCompleteMsg("修改失敗", "新密碼與新密碼確認不同\n請重新輸入",false);
-                } else {
-                    new EditProfile.ChangePasswordTask().execute("uid=" + user.uid + "&password=" + newPassword.getText().toString());
-                    user.password = newPassword.getText().toString();
-                    showCompleteMsg("修改成功", "密碼變更成功",true);
-                }
-            }
-        });
-
-
-        changePwdCancel.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                changePwdDialog.dismiss();
-            }
-        });
-
-        changePwdDialog = new AlertDialog.Builder(this, R.style.Translucent_NoTitle).setView(v).create();
-        changePwdDialog.show();
-    }
-
-    private void showCompleteMsg(String title, String content,final boolean success) {
+    private void showCompleteMsg(String title, String content, final boolean success) {
 
         View dialog_view;
 
@@ -203,17 +150,23 @@ public class EditProfile extends AppCompatActivity implements OnClickListener {
             @Override
             public void onClick(View view) {
                 hit_dialog.dismiss();
-                if(success){
+                if (success) {
                     changePwdDialog.dismiss();
                 }
 
 
-            }});
+            }
+        });
 
-        hit_dialog = new AlertDialog.Builder(this,R.style.Translucent_NoTitle).setView(dialog_view).create();
+        hit_dialog = new AlertDialog.Builder(this, R.style.Translucent_NoTitle).setView(dialog_view).create();
         hit_dialog.show();
     }
 
+    public void ChangeName(View view) {
+        new EditProfile.ChangeNameTask().execute("uid=" + user.uid + "&name=" + name.getText().toString());
+        user.name = name.getText().toString();
+        Toast.makeText(getApplicationContext(), "暱稱變更為" + name.getText().toString(), Toast.LENGTH_SHORT).show();
+    }
 
     public class ChangeNameTask extends AsyncTask<String, Void, Void> {
         @Override
@@ -265,6 +218,54 @@ public class EditProfile extends AppCompatActivity implements OnClickListener {
             //return sb.toString();
             return null;
         }
+    }
+
+    //修改密碼
+    public void ChangePassword(View view) {
+
+        View dialog_view;
+        dialog_view = LayoutInflater.from(this).inflate(R.layout.hit_dialog, null);
+        Hit hit = new Hit();
+        hit.setHitTitle((TextView) dialog_view.findViewById(R.id.hitTitle));
+        hit.setHtiContent((TextView) dialog_view.findViewById(R.id.hitContent));
+        hit.setConfirm((Button) dialog_view.findViewById(R.id.hitComfirm));
+
+        LayoutInflater inflater = LayoutInflater.from(EditProfile.this);
+        final View v = inflater.inflate(R.layout.change_password, null);
+
+        Button changePwdConfirm = (Button) v.findViewById(R.id.changePwdConfirm);
+        Button changePwdCancel = (Button) v.findViewById(R.id.changePwdCancel);
+
+
+        changePwdConfirm.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText oldPassword = (EditText) (v.findViewById(R.id.oldPassword));
+                EditText newPassword = (EditText) (v.findViewById(R.id.newPassword));
+                EditText newPasswordConfirm = (EditText) (v.findViewById(R.id.newPasswordConfirm));
+
+                if (!oldPassword.getText().toString().equals(user.password)) {
+                    showCompleteMsg("修改失敗", "舊密碼輸入錯誤\n請重新輸入", false);
+                } else if (!newPassword.getText().toString().equals(newPasswordConfirm.getText().toString())) {
+                    showCompleteMsg("修改失敗", "新密碼與新密碼確認不同\n請重新輸入", false);
+                } else {
+                    new EditProfile.ChangePasswordTask().execute("uid=" + user.uid + "&password=" + newPassword.getText().toString());
+                    user.password = newPassword.getText().toString();
+                    showCompleteMsg("修改成功", "密碼變更成功", true);
+                }
+            }
+        });
+
+
+        changePwdCancel.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changePwdDialog.dismiss();
+            }
+        });
+
+        changePwdDialog = new AlertDialog.Builder(this, R.style.Translucent_NoTitle).setView(v).create();
+        changePwdDialog.show();
     }
 
     public class ChangePasswordTask extends AsyncTask<String, Void, Void> {
@@ -319,34 +320,54 @@ public class EditProfile extends AppCompatActivity implements OnClickListener {
         }
     }
 
-    //上傳照片部分---------------------------------------------------------------------------------------------------------------------------
+    //照片部分---------------------------------------------------------------------------------------------------------------------------
+    public void personal_photo_selector(View view) {
+        View dialog_view;
+
+        dialog_view = LayoutInflater.from(this).inflate(R.layout.camera_selector, null);
+
+        Button button_selectpic = (Button) dialog_view.findViewById(R.id.button_selectpic);
+        Button uploadButton = (Button) dialog_view.findViewById(R.id.uploadButton);
+
+        button_selectpic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                personal_photo_selector_dialog.dismiss();
+                if (android.support.v4.content.ContextCompat.checkSelfPermission(EditProfile.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                    android.support.v4.app.ActivityCompat.requestPermissions(EditProfile.this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, EXTERNAL_STORAGE_REQ_CODE);
+                } else {
+                    getPic();
+                }
+                if (clickCount > 0) {
+                    tempImgFile.destory();
+                }
+                clickCount++;
+            }
+        });
+
+        uploadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog = ProgressDialog.show(EditProfile.this, "", "檔案上傳中...", true);
+                new Thread(new Runnable() {
+                    public void run() {
+                        uploadFile(imagepath);
+                    }
+                }).start();
+            }
+        });
+
+        personal_photo_selector_dialog = new AlertDialog.Builder(this, R.style.Translucent_NoTitle).setView(dialog_view).create();
+        personal_photo_selector_dialog.show();
+
+
+    }
+
     public void getPic() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Complete action using"), 1);
-    }
-
-    @Override
-    public void onClick(View arg0) {
-        if (arg0 == btnselectpic) {
-            if (android.support.v4.content.ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
-                android.support.v4.app.ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, EXTERNAL_STORAGE_REQ_CODE);
-            } else {
-                getPic();
-            }
-            if (clickCount > 0) {
-                tempImgFile.destory();
-            }
-            clickCount++;
-        } else if (arg0 == uploadButton) {
-            dialog = ProgressDialog.show(EditProfile.this, "", "檔案上傳中...", true);
-            new Thread(new Runnable() {
-                public void run() {
-                    uploadFile(imagepath);
-                }
-            }).start();
-        }
     }
 
     @Override
@@ -485,44 +506,10 @@ public class EditProfile extends AppCompatActivity implements OnClickListener {
         }
     }
 
+
     protected Drawable toCircleImage(Bitmap bp) {
-        // 邊框, 影子寬度
-        int borderWidth = 1;
-        int shadowWidth = 25;
-
-        // 邊框, 影子顏色
-        int borderColor= Color.BLACK;
-        int shadowColor=Color.BLUE;
-
-        // 取得圖片
-        Resources mResources = getResources();
-        Bitmap srcBitmap = bp;
-
-        // 以圖片大小為尺寸, 建立一塊畫布
-        int srcBitmapWidth = srcBitmap.getWidth();
-        int srcBitmapHeight = srcBitmap.getHeight();
-        int dstBitmapWidth = Math.min(srcBitmapWidth,srcBitmapHeight)+borderWidth*2;
-        Bitmap dstBitmap = Bitmap.createBitmap(dstBitmapWidth,dstBitmapWidth, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(dstBitmap);
-        canvas.drawColor(Color.YELLOW);
-        canvas.drawBitmap(srcBitmap, (dstBitmapWidth - srcBitmapWidth) / 2, (dstBitmapWidth - srcBitmapHeight) / 2, null);
-
-        // 在畫布上畫邊線
-        Paint paint = new Paint();
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(borderWidth * 2);
-        paint.setColor(borderColor);
-        canvas.drawCircle(canvas.getWidth() / 2, canvas.getHeight() / 2, canvas.getWidth() / 2, paint);
-
-        // 在畫布上畫影子
-        paint.setColor(shadowColor);
-        paint.setStrokeWidth(shadowWidth);
-        canvas.drawCircle(canvas.getWidth()/2,canvas.getHeight()/2,canvas.getWidth()/2,paint);
-
-        // 將圖片切圓角
-        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(mResources, dstBitmap);
+        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bp);
         roundedBitmapDrawable.setCircular(true);
-
         return roundedBitmapDrawable;
     }
 

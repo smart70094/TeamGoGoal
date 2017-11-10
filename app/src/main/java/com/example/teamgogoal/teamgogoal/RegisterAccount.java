@@ -59,14 +59,14 @@ public class RegisterAccount extends AppCompatActivity {
         am.startNow();
 
         ScrollView scrollView = (ScrollView) this.findViewById(R.id.scrollView1);
-
-
         scrollView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 return true;
             }
         });
+
+
 
     }
 
