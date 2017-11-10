@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -38,11 +37,11 @@ import java.net.URL;
 import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
-    public static final String ip="36.233.142.34";
+    //public static final String localhost="http://169.254.68.146/DB/";
+    public static final String ip="192.168.0.100";
     //public static final String ip="111.253.228.128";
     public static final String localhost="http://"+ip+"/TeamGoGoal/";
     EditText accountTxt,passwordTxt;
-    CheckBox chkRemeberAccount;
 
     Intent intent;
     public static  User user=null;
@@ -55,10 +54,10 @@ public class LoginActivity extends AppCompatActivity {
 
         accountTxt=(EditText) findViewById(R.id.accountTxt);
         passwordTxt=(EditText) findViewById(R.id.passwordTxt);
-        chkRemeberAccount=(CheckBox) findViewById(R.id.chkRemeberUser);
         settings=getSharedPreferences("account",0);
         accountTxt.setText(settings.getString("account",""));
         passwordTxt.setText(settings.getString("password",""));
+
         if(!(accountTxt.getText().toString().equals("") && passwordTxt.getText().toString().equals("")))
             chkRemeberAccount.setChecked(true);
         else

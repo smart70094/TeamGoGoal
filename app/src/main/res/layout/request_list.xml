@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/LinearLayout_bg"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_record_msg"
+    android:descendantFocusability="blocksDescendants"
+    android:gravity="center_vertical|center_horizontal|center"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/personal_photo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight=".4"
+        android:scaleType="fitCenter"
+        app:srcCompat="@mipmap/ic_launcher_round" />
+
+    <TextView
+        android:id="@+id/missionName"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight=".2"
+        android:gravity="center_vertical"
+        android:text="TextView"
+        android:textColor="@color/basicColor"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <ImageButton
+        android:id="@+id/complete_btn"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight=".4"
+        android:background="@color/empty"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/item_check" />
+
+</LinearLayout>
