@@ -64,7 +64,7 @@ public class TargetDB {
         return ans.trim();
     }
 
-    protected void createTarget(String... dataList) {
+    protected String  createTarget(String... dataList) {
         String name=dataList[0];
         String context=dataList[1];
         String startTime=dataList[2];
@@ -72,6 +72,7 @@ public class TargetDB {
         String auth=dataList[4];
         socketTrans.setParams("addTarget",name,context,startTime,endTime,auth);
         socketTrans.send();
+        return socketTrans.getResult();
     }
 
     protected void updateTarget(String param1, String param2, String param3, String param4, String param5, String param6, String param7, String param8, String param9) {

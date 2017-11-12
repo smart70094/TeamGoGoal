@@ -12,20 +12,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -124,9 +115,9 @@ public class TargetActivity extends AppCompatActivity {
                 //participatorTxt.setText(user.account);
                 break;
             case R.id.submitTargetBtn:
-                if (currID.equals("")) addTarget();
+                /*if (currID.equals("")) addTarget();
                 else update(Integer.parseInt(currID));
-                break;
+                break;*/
             case R.id.clearMessageBtn:
                 initial();
                 break;
@@ -157,8 +148,15 @@ public class TargetActivity extends AppCompatActivity {
         }
     }
 
-    protected void addTarget() {
-        try {
+    public void addTarget(View view) {
+        Intent intent = new Intent();
+        intent.setClass(this,TargetEventAcivity.class);
+        intent.putExtra("cmd","addTarget");
+        startActivity(intent);
+
+
+
+        /*try {
             if ((targetNameEt.getText().toString().equals("") || targeContentEt.getText().toString().equals("") || startTimeEt.getText().toString().equals("") || endTimeEt.getText().toString().equals(""))) {
                 Toast.makeText(this, "請輸入完整資訊", Toast.LENGTH_SHORT).show();
             } else {
@@ -197,7 +195,7 @@ public class TargetActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             Log.v("jim1", e.toString());
-        }
+        }*/
     }
 
     protected void initial() {

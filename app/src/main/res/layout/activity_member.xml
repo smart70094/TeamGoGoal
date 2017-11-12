@@ -6,4 +6,12 @@
     android:layout_height="match_parent"
     tools:context="com.example.teamgogoal.teamgogoal.Member">
 
+    <Button
+        android:id="@+id/button7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="addMember"
+        android:text="邀請新成員"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 </android.support.constraint.ConstraintLayout>

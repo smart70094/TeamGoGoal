@@ -123,7 +123,7 @@
                     android:layout_alignStart="@+id/showAddTargetBtn"
                     android:layout_weight="1"
                     android:background="@drawable/bg_new_task_btn"
-                    android:onClick="onClick"
+                    android:onClick="addTarget"
                     android:text="+ 新目標"
                     android:textColor="@android:color/black"
                     android:textSize="18sp" />

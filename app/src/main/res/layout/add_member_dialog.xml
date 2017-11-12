@@ -19,19 +19,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="TextView"
+            android:text="邀請"
             android:textColor="@color/basicColor"
             android:textSize="30sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/hitContent"
+        <EditText
+            android:id="@+id/memberID"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="TextView"
-            android:textColor="@color/basicColor"
-            android:textSize="24sp" />
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name" />
 
     </LinearLayout>
 
@@ -48,7 +47,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/hitComfirm"
+            android:id="@+id/addMemberBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

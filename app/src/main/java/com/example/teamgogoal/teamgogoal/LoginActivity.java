@@ -155,9 +155,10 @@ public class LoginActivity extends AppCompatActivity {
                     String account = obj.getString("account");
                     String password = obj.getString("password");
                     String name = obj.getString("name");
+                    String email=obj.getString("email");
                     String role = obj.getString("role");
                     Log.d("JSON:", uid + "/" + account + "/" + password + "/" + role + "/");
-                    user = new User(uid, account, password, name, role);
+                    user = new User(uid, account, password, name, email,role);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -241,13 +242,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public class User implements Cloneable {
-        String uid, account, password, name, state;
+        String uid, account, password, name, state,email;
 
-        public User(String uid, String account, String password, String name, String state) {
+        public User(String uid, String account, String password, String name, String email,String state) {
             this.uid = uid;
             this.account = account;
             this.password = password;
             this.name = name;
+            this.email=email;
             this.state = state;
         }
 

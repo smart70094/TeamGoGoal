@@ -208,11 +208,16 @@
                         android:layout_height="wrap_content"
                         android:text="藍圖" />
 
-                    <Button
-                        android:id="@+id/button9"
+                    <ImageButton
+                        android:id="@+id/imageButton7"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="成員" />
+                        android:adjustViewBounds="true"
+                        android:background="@color/empty"
+                        android:onClick="checkMember"
+                        android:padding="5dp"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/item_member" />
 
                     <Button
                         android:id="@+id/button2"

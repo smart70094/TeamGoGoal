@@ -55,6 +55,7 @@ public class EditProfile extends AppCompatActivity{
     private TextView name;
     private ImageView imageview;
     private TextView account;
+    private TextView mail;
 
     /*Dialog*/
     private Dialog changePwdDialog;
@@ -71,7 +72,9 @@ public class EditProfile extends AppCompatActivity{
         user = LoginActivity.getUser();
         name = (TextView) findViewById(R.id.nickName);
         account = (TextView) findViewById(R.id.account);
+        mail = (TextView)findViewById(R.id.mail);
         imageview = (ImageView) findViewById(R.id.imageView_pic);
+
 
         clickCount = 0;
         String imageUrl = localhost + "profilepicture/" + user.uid;
@@ -82,6 +85,8 @@ public class EditProfile extends AppCompatActivity{
         //account.setText("帳號：" + user.account);
         name.setText(user.name);
         account.setText(user.account);
+        mail.setText(user.email);
+
 
         new TransTask().execute(imageUrl);
 

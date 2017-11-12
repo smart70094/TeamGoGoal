@@ -215,6 +215,7 @@ public class TaskActivity extends AppCompatActivity {
     }
 
 
+
     private class DbOperationTask extends AsyncTask<String, Void, Void> {
         protected Void doInBackground(String... params) {
             String cmd = params[0];
@@ -757,6 +758,21 @@ public class TaskActivity extends AppCompatActivity {
         }
 
     }
+
+
+
+    //---------管理成員-------//
+
+    public void checkMember(View view) {
+        Intent intent = new Intent();
+        intent.putExtra("tid", currTid);
+        intent.setClass(this,Member.class);
+        startActivity(intent);
+
+
+    }
+
+
 
 
     //-----標提列----//
