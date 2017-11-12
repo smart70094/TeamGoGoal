@@ -81,7 +81,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:orientation="vertical">
 
             <LinearLayout
@@ -185,91 +185,216 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="暱稱"
-                android:textColor="@color/basicColor2" />
+            android:layout_weight="2"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"></LinearLayout>
 
-                <EditText
-                    android:id="@+id/nickName"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5"
-                    android:background="@color/top_bg_color"
-                    android:ems="10"
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2.5"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView10"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="名字"
+                        android:textColor="@color/basicColor2" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/nickName"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="7"
+                            android:background="@color/top_bg_color"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:text="TextView"
+                            android:textColor="@color/basicColor2" />
+
+                        <ImageButton
+                            android:id="@+id/imageButton5"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:adjustViewBounds="true"
+                            android:background="@color/top_bg_color"
+                            android:onClick="ChangeName"
+                            android:padding="5dp"
+                            android:scaleType="fitCenter"
+                            app:srcCompat="@drawable/item_pen" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:inputType="textPersonName"
-                    android:textColor="@color/basicColor2" />
+                    android:orientation="vertical">
 
-                <ImageButton
-                    android:id="@+id/imageButton5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/empty"
-                    android:onClick="ChangeName"
-                    app:srcCompat="@drawable/item_pen" />
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="帳號"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/basicColor2" />
 
-                <Button
-                    android:id="@+id/button7"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    <TextView
+                        android:id="@+id/account"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:background="@color/top_bg_color"
+                        android:gravity="center"
+                        android:paddingLeft="5dp"
+                        android:text="TextView"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/basicColor2" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:onClick="ChangeName"
-                    android:text="變更暱稱" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView15"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="密碼"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/basicColor2" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/password"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="7"
+                            android:background="@color/top_bg_color"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:text="********"
+                            android:textColor="@color/basicColor2" />
+
+                        <ImageButton
+                            android:id="@+id/imageButton6"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:adjustViewBounds="true"
+                            android:background="@color/top_bg_color"
+                            android:onClick="ChangePassword"
+                            android:padding="5dp"
+                            android:scaleType="fitCenter"
+                            app:srcCompat="@drawable/item_pen" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView15"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="e-mail"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/basicColor2" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/mail"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="7"
+                            android:background="@color/top_bg_color"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:text="********"
+                            android:textColor="@color/basicColor2" />
+
+                        <ImageButton
+                            android:id="@+id/imageButton6"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:adjustViewBounds="true"
+                            android:background="@color/top_bg_color"
+                            android:onClick="ChangePassword"
+                            android:padding="5dp"
+                            android:scaleType="fitCenter"
+                            app:srcCompat="@drawable/item_pen" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"></LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="帳號"
-                android:textColor="@color/basicColor2"
-                android:textSize="24sp" />
-
-            <TextView
-                android:id="@+id/account"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="TextView"
-                android:textColor="@color/basicColor2"
-                android:textSize="24sp" />
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/button8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_login_btn_unpress"
-            android:onClick="ChangePassword"
-            android:padding="5dp"
-            android:text="更改密碼"
-            android:textColor="@color/basicColor2"
-            android:textSize="24sp" />
+            android:orientation="horizontal"></LinearLayout>
 
     </LinearLayout>
 
