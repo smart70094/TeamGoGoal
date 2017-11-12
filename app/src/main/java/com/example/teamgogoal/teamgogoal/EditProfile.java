@@ -44,7 +44,6 @@ public class EditProfile extends AppCompatActivity{
     String localhost = LoginActivity.getLocalHost();
     LoginActivity.User user;
 
-    private Button uploadButton, btnselectpic;
     private int serverResponseCode = 0;
     private ProgressDialog dialog = null;
     private String upLoadServerUri = null;
@@ -53,7 +52,7 @@ public class EditProfile extends AppCompatActivity{
 
     public static final int EXTERNAL_STORAGE_REQ_CODE = 10;
 
-    private EditText name;
+    private TextView name;
     private ImageView imageview;
     private TextView account;
 
@@ -70,7 +69,7 @@ public class EditProfile extends AppCompatActivity{
         setContentView(R.layout.activity_edit_profile);
 
         user = LoginActivity.getUser();
-        name = (EditText) findViewById(R.id.nickName);
+        name = (TextView) findViewById(R.id.nickName);
         account = (TextView) findViewById(R.id.account);
         imageview = (ImageView) findViewById(R.id.imageView_pic);
 
@@ -163,6 +162,8 @@ public class EditProfile extends AppCompatActivity{
     }
 
     public void ChangeName(View view) {
+
+
         new EditProfile.ChangeNameTask().execute("uid=" + user.uid + "&name=" + name.getText().toString());
         user.name = name.getText().toString();
         Toast.makeText(getApplicationContext(), "暱稱變更為" + name.getText().toString(), Toast.LENGTH_SHORT).show();

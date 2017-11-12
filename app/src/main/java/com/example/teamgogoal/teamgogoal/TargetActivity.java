@@ -82,20 +82,6 @@ public class TargetActivity extends AppCompatActivity {
             startTimeEt = (EditText) addTargetMsg.findViewById(R.id.startTimeTxt);
             endTimeEt = (EditText) addTargetMsg.findViewById(R.id.EndTimeTxt);
 
-
-            /*
-            // Date:8/20-監聽文字變更開始
-            participatorTxt = (MultiAutoCompleteTextView) addTargetMsg.findViewById(R.id.multiAutoCompleteTextView);
-            participatorTxt.setDropDownHeight(200); //設定高度
-            participatorTxt.setThreshold(1);
-            participatorTxt.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
-            // 初始化搜尋資料
-            initmactv();
-*/
-            // Date:8/20-監聽文字變更結束
-
-
-            //participatorTxt=(EditText) addTargetMsg.findViewById(R.id.participatorTxt);
             submitTargetBtn = (Button) addTargetMsg.findViewById(R.id.submitTargetBtn);
             clearTargetBtn = (Button) addTargetMsg.findViewById(R.id.clearMessageBtn);
             cannelBtn = (Button) addTargetMsg.findViewById(R.id.cannelBtn);
@@ -127,12 +113,6 @@ public class TargetActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loading();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        finish();
     }
 
     protected void loading() {
