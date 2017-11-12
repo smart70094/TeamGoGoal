@@ -26,6 +26,7 @@ public class TaskDB {
     public TaskDB(String localhost){
         this.localhost=localhost+"readmission.php";
     }
+    SocketTrans socketTrans = LoginActivity.socketTrans;
 
     protected Map<String,TaskDetail> read(String id){
         Map<String, TaskDetail> map=new HashMap<String,TaskDetail>();
@@ -56,10 +57,19 @@ public class TaskDB {
         String ans=viaParams(params,php);
         return  ans.trim();
     }
-    protected void create(String param1,String param2,String param3,String param4,String param5,String param6,String param7){
-        String params="table=mission"+" & mid="+param1 +" & missionName="+param2+" & missionContent="+param3+" & remindTime="+param4+" & tid="+param5+" & state="+param6+" & auth="+param7;
+    protected void create(String... dataList){
+        /*String params="table=mission"+" & mid="+param1 +" & missionName="+param2+" & missionContent="+param3+" & remindTime="+param4+" & tid="+param5+" & state="+param6+" & auth="+param7;
         String php="createTask.php";
-        String ans=viaParams(params,php);
+        String ans=viaParams(params,php);*/
+
+        String name=dataList[0];
+        String context=dataList[1];
+        String remindTime=dataList[2];
+        String tid=dataList[3];
+        String auth=dataList[4];
+        socketTrans.setParams("addTask",name,context,remindTime,tid,auth);
+        socketTrans.send();
+
     }
     protected void delete(String id){
         id=id.trim();

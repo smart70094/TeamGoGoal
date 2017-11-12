@@ -235,7 +235,7 @@ public class TaskActivity extends AppCompatActivity {
                     nextID = db.taskIndex();
                     break;
                 case "createTask":
-                    db.create(params[1], params[2], params[3], params[4], params[5], params[6], params[7]);
+                    db.create(params[1], params[2], params[3], params[4], params[5]);
                     nextID = db.taskIndex();
                     break;
                 case "delete":
@@ -319,7 +319,7 @@ public class TaskActivity extends AppCompatActivity {
             nextID = nextID.trim();
             TaskDB.TaskDetail td = new TaskDB.TaskDetail(nextID, param1, param2, param3, param4, param5, param6, param7);
 
-            new TaskActivity.DbOperationTask().execute("createTask", nextID, param1, param2, param3, param4, param5, param6, param7);
+            new TaskActivity.DbOperationTask().execute("createTask", param1, param2, param3, param4, param6);
 
             HashMap<String, String> tk_hashmap = new HashMap<>();
             tk_hashmap.put("mid", nextID);

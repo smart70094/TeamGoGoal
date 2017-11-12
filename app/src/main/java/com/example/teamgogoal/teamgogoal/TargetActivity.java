@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,13 +17,10 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.MultiAutoCompleteTextView;
 import android.widget.Toast;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -43,7 +39,7 @@ public class TargetActivity extends AppCompatActivity {
     String localhost = LoginActivity.getLocalHost();
     LoginActivity.User user;
     TargetDB db;
-    EditText targetNameEt, targeContentEt, startTimeEt, endTimeEt, dreamEt;
+    EditText targetNameEt, targeContentEt, startTimeEt, endTimeEt;
     Button submitTargetBtn, clearTargetBtn, cannelBtn;
     View addTargetMsg;
 
@@ -61,10 +57,6 @@ public class TargetActivity extends AppCompatActivity {
     /*---Date:1019 處理中*/
     private ProgressDialog pd;
     /*---Date:1019 處理中*/
-
-
-    //8/20:AutoCompleteTextView
-    MultiAutoCompleteTextView participatorTxt;
 
     SocketTrans socketTrans = LoginActivity.socketTrans;
     static Map<Integer, TargetDB.TargetDetail> targetMap = new HashMap<Integer, TargetDB.TargetDetail>();
@@ -115,28 +107,24 @@ public class TargetActivity extends AppCompatActivity {
         }
     }
 
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    /*public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) { // 攔截返回鍵
             targetMap.clear();
-            finish();
+            TargetData.clear();
+            //finish();
         }
         return true;
-    }
+    }*/
 
     @Override
     protected void onResume() {
         super.onResume();
         loading();
     }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        finish();
-    }
-
     protected void loading() {
         synchronized (this) {
+            targetMap.clear();
+            TargetData.clear();
             new DbOperationTask().execute("readTarget");
         }
     }
@@ -184,7 +172,7 @@ public class TargetActivity extends AppCompatActivity {
 
     protected void addTarget() {
         try {
-            if ((targetNameEt.getText().toString().equals("") || targeContentEt.getText().toString().equals("") || startTimeEt.getText().toString().equals("") || endTimeEt.getText().toString().equals("") || participatorTxt.getText().toString().equals(""))) {
+            if ((targetNameEt.getText().toString().equals("") || targeContentEt.getText().toString().equals("") || startTimeEt.getText().toString().equals("") || endTimeEt.getText().toString().equals(""))) {
                 Toast.makeText(this, "請輸入完整資訊", Toast.LENGTH_SHORT).show();
             } else {
                 String param1 = targetNameEt.getText().toString();
@@ -193,12 +181,10 @@ public class TargetActivity extends AppCompatActivity {
                 String param4 = endTimeEt.getText().toString();
                 String param5 = "N";
                 String param6 = LoginActivity.user.account;
-                String param7 = participatorTxt.getText().toString();
-                param7 += user.account + ",";
 
                 nextID = nextID.trim();
-                TargetDB.TargetDetail td = new TargetDB.TargetDetail(nextID, param1, param2, param3, param4, param5, param6, param7, "0", "0");
-                new DbOperationTask().execute("createTarget",param1, param2, param3, param4, param6,param7);
+                TargetDB.TargetDetail td = new TargetDB.TargetDetail("",param1, param2, param3, param4, param5, param6, "0", "0");
+                new DbOperationTask().execute("createTarget",param1, param2, param3, param4, param6);
 
                 HashMap<String, String> tg_hashmap = new HashMap<>();
                 tg_hashmap.put("tid", nextID);
@@ -215,7 +201,7 @@ public class TargetActivity extends AppCompatActivity {
 
                 //帥哥峻禾部分
                 socketTrans.setParams("initial_target", nextID, param4);
-                socketTrans.send(socketTrans.getParams());
+                socketTrans.send();
 
                 msg.dismiss();
                 Toast.makeText(this, "新增成功", Toast.LENGTH_SHORT).show();
@@ -232,7 +218,6 @@ public class TargetActivity extends AppCompatActivity {
         targeContentEt.setText("");
         startTimeEt.setText("");
         endTimeEt.setText("");
-        participatorTxt.setText("");
         submitTargetBtn.setEnabled(true);
         submitTargetBtn.setText("新增任務");
         clearTargetBtn.setEnabled(true);
@@ -285,9 +270,7 @@ public class TargetActivity extends AppCompatActivity {
                 tg_hashmap.put("targetDate", set.getValue().startTime.trim().replace("-",".") + "-" + set.getValue().endTime.trim().replace("-","."));
                 tg_hashmap.put("allmission", set.getValue().allmission);
                 tg_hashmap.put("completemission", set.getValue().completemission);
-
                 TargetData.add(tg_hashmap);
-
                 TargetDB.TargetDetail td = set.getValue();
                 targetMap.put(key, td);
             }
@@ -295,7 +278,6 @@ public class TargetActivity extends AppCompatActivity {
         }
 
         target_listview = (ListView) findViewById(R.id.listview_target);
-
         target_listAdapter = new Target_ListAdapter(this);
         target_listAdapter.setData(TargetData);
         target_listview.setAdapter(target_listAdapter);
@@ -377,7 +359,6 @@ public class TargetActivity extends AppCompatActivity {
         targeContentEt.setText(td.targetContent);
         startTimeEt.setText(td.startTime);
         endTimeEt.setText(td.endTime);
-        participatorTxt.setText(td.participator);
         currID = Integer.toString(id).trim();
         showTarget();
     }
@@ -389,19 +370,18 @@ public class TargetActivity extends AppCompatActivity {
         String param4 = endTimeEt.getText().toString();
         String param5 = targetMap.get(id).state;
         String param6 = LoginActivity.user.account;
-        String param7 = participatorTxt.getText().toString();
 
         int key = Integer.parseInt(currID.trim());
         TargetDB.TargetDetail td = targetMap.get(key);
-        String param8 = td.participator;
+
         td.targetName = param1;
         td.targetContent = param2;
         td.startTime = param3;
         td.endTime = param4;
-        td.participator = param8;
+
 
         //String param8=participatorTxt.getText().toString();
-        new DbOperationTask().execute("updateTarget", currID, param1, param2, param3, param4, param5, param6, param7, param8);
+        new DbOperationTask().execute("updateTarget", currID, param1, param2, param3, param4, param5, param6);
         currID = "";
 
         TargetData.get(map_id).put("targetName", param1);
@@ -436,7 +416,7 @@ public class TargetActivity extends AppCompatActivity {
                 case "createTarget":
                     try{
                         db.createTarget(params[1], params[2], params[3], params[4], params[5]);
-                        db.createParticipator(params[1], params[6]);
+                        //db.createParticipator(params[1], params[6]);
                         nextID = db.targetIndex();
                     }catch(Exception e){
                         Log.v("jim_createTarget:",e.toString());
@@ -478,7 +458,7 @@ public class TargetActivity extends AppCompatActivity {
 
 
     // Date:8/20 尋找帳號開始---------------------------
-    private void initmactv() {
+   /* private void initmactv() {
         String phpurl = localhost + "searchID.php";
         new TransTask().execute(phpurl);
     }
@@ -545,7 +525,7 @@ public class TargetActivity extends AppCompatActivity {
     }
     // Date:8/20 尋找帳號結束---------------------------
 
-
+*/
     //帥哥峻禾部分
     public void toEditProfile(View view) {
         intent = new Intent();
@@ -568,8 +548,8 @@ public class TargetActivity extends AppCompatActivity {
 
 
     public void fresh_activity(View view) {
-        finish();
-        Intent intent = new Intent(this,TargetActivity.class);
-        startActivity(intent);
+        loading();
+       /* Intent intent = new Intent(this,TargetActivity.class);
+        startActivity(intent);*/
     }
 }

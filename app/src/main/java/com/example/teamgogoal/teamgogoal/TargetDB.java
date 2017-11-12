@@ -46,8 +46,7 @@ public class TargetDB {
                 String auth = obj.getString("auth");
                 String allmission = obj.getString("allmission");
                 String completemission = obj.getString("completemission");
-                String participator = readParticipator(tid);
-                TargetDetail TargetDetail = new TargetDetail(tid, targetName, targetContent, startTime, endTime, state, auth, participator, allmission, completemission);
+                TargetDetail TargetDetail = new TargetDetail(tid, targetName, targetContent, startTime, endTime, state, auth, allmission, completemission);
                 map.put(obj.getString("tid"), TargetDetail);
             }
         } catch (JSONException e) {
@@ -71,7 +70,7 @@ public class TargetDB {
         String startTime=dataList[2];
         String endTime=dataList[3];
         String auth=dataList[4];
-        socketTrans.setParams("addTarget",name+","+context+","+startTime+","+endTime+","+auth);
+        socketTrans.setParams("addTarget",name,context,startTime,endTime,auth);
         socketTrans.send();
     }
 
@@ -197,9 +196,9 @@ public class TargetDB {
 
     //Data
     public static class TargetDetail {
-        String tid, targetName, targetContent, state, auth, startTime, endTime, participator, allmission, completemission;
+        String tid, targetName, targetContent, state, auth, startTime, endTime, allmission, completemission;
 
-        TargetDetail(String param1, String param2, String param3, String param4, String param5, String param6, String param7, String param8, String param9, String param10) {
+        TargetDetail(String param1, String param2, String param3, String param4, String param5, String param6, String param7, String param8, String param9) {
             this.tid = param1;
             this.targetName = param2;
             this.targetContent = param3;
@@ -207,9 +206,8 @@ public class TargetDB {
             this.endTime = param5;
             this.state = param6;
             this.auth = param7;
-            this.participator = param8;
-            this.allmission = param9;
-            this.completemission = param10;
+            this.allmission = param8;
+            this.completemission = param9;
         }
     }
 
