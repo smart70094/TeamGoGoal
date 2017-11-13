@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -131,15 +130,15 @@ public class RegisterAccount extends AppCompatActivity {
 
         dialog_view = LayoutInflater.from(this).inflate(R.layout.hit_dialog, null);
 
-        Hit hit = new Hit();
-        hit.setHitTitle((TextView) dialog_view.findViewById(R.id.hitTitle));
-        hit.setHtiContent((TextView) dialog_view.findViewById(R.id.hitContent));
-        hit.setConfirm((Button) dialog_view.findViewById(R.id.hitComfirm));
+        TextView hitTitle = dialog_view.findViewById(R.id.hitTitle);
+        TextView hitContent = dialog_view.findViewById(R.id.hitContent);
+        TextView hitComfirm = dialog_view.findViewById(R.id.hitComfirm);
 
-        hit.getHitTitle().setText(title);
-        hit.gethtiContent().setText(content);
+        hitTitle.setText(title);
+        hitContent.setText(content);
 
-        hit.getConfirm().setOnClickListener(new View.OnClickListener() {
+
+        hitComfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (success) {
