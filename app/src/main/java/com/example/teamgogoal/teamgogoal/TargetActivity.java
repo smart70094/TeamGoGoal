@@ -27,7 +27,6 @@ import java.util.Map;
 public class TargetActivity extends AppCompatActivity {
     AlertDialog.Builder dialog;
     AlertDialog msg = null;
-    String localhost = LoginActivity.getLocalHost();
     LoginActivity.User user;
     TargetDB db;
     EditText targetNameEt, targeContentEt, startTimeEt, endTimeEt;
@@ -83,15 +82,6 @@ public class TargetActivity extends AppCompatActivity {
             Log.v("jim", e.toString());
         }
     }
-
-    /*public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) { // 攔截返回鍵
-            targetMap.clear();
-            TargetData.clear();
-            //finish();
-        }
-        return true;
-    }*/
 
     @Override
     protected void onResume() {
@@ -153,49 +143,6 @@ public class TargetActivity extends AppCompatActivity {
         intent.setClass(this,TargetEventAcivity.class);
         intent.putExtra("cmd","addTarget");
         startActivity(intent);
-
-
-
-        /*try {
-            if ((targetNameEt.getText().toString().equals("") || targeContentEt.getText().toString().equals("") || startTimeEt.getText().toString().equals("") || endTimeEt.getText().toString().equals(""))) {
-                Toast.makeText(this, "請輸入完整資訊", Toast.LENGTH_SHORT).show();
-            } else {
-                String param1 = targetNameEt.getText().toString();
-                String param2 = targeContentEt.getText().toString();
-                String param3 = startTimeEt.getText().toString();
-                String param4 = endTimeEt.getText().toString();
-                String param5 = "N";
-                String param6 = LoginActivity.user.account;
-
-                nextID = nextID.trim();
-                TargetDB.TargetDetail td = new TargetDB.TargetDetail("",param1, param2, param3, param4, param5, param6, "0", "0");
-                new DbOperationTask().execute("createTarget",param1, param2, param3, param4, param6);
-
-                HashMap<String, String> tg_hashmap = new HashMap<>();
-                tg_hashmap.put("tid", nextID);
-                tg_hashmap.put("planet_imv", "null");
-                tg_hashmap.put("targetName", param1);
-
-                TargetData.add(tg_hashmap);
-                target_listAdapter.notifyDataSetChanged();
-
-
-                int k = Integer.parseInt(nextID);
-                //tll.setId(k);
-                targetMap.put(k, td);
-
-                //帥哥峻禾部分
-                socketTrans.setParams("initial_target", nextID, param4);
-                socketTrans.send();
-
-                msg.dismiss();
-                Toast.makeText(this, "新增成功", Toast.LENGTH_SHORT).show();
-                initial();
-            }
-
-        } catch (Exception e) {
-            Log.v("jim1", e.toString());
-        }*/
     }
 
     protected void initial() {
@@ -315,9 +262,9 @@ public class TargetActivity extends AppCompatActivity {
                         break;
                     case "刪除":
                         delete(id);
-
                         break;
                 }
+
             }
         });
         return builder.create();
@@ -331,6 +278,7 @@ public class TargetActivity extends AppCompatActivity {
             target_listAdapter.notifyDataSetChanged();
             if (user.account.equals(td.auth.trim()))
                 new DbOperationTask().execute("deleteParticipator_all", td.tid);
+
             else
                 new DbOperationTask().execute("deleteParticipator", td.tid, user.account);
         } catch (Exception e) {
@@ -439,78 +387,6 @@ public class TargetActivity extends AppCompatActivity {
         }
     }
 
-    //-----------------帥哥建興開始-----------------
-
-
-    // Date:8/20 尋找帳號開始---------------------------
-   /* private void initmactv() {
-        String phpurl = localhost + "searchID.php";
-        new TransTask().execute(phpurl);
-    }
-
-    class TransTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pd = new ProgressDialog(TargetActivity.this);
-            pd.setMessage("Processing...");
-            pd.show();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            StringBuilder sb = new StringBuilder();
-            try {
-                URL url = new URL(params[0]);
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(url.openStream()));
-                String line = in.readLine();
-                while (line != null) {
-                    Log.d("HTTP", line);
-                    sb.append(line);
-                    line = in.readLine();
-                }
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return sb.toString();
-        }
-
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            List list = parseJSON(s);
-            initListView(list);
-        }
-
-        private List parseJSON(String s) {
-            List list = new ArrayList();
-            try {
-                JSONArray array = new JSONArray(s);
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject obj = array.getJSONObject(i);
-                    list.add(obj.getString("account"));
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            pd.dismiss();
-            return list;
-        }
-    }
-
-    public void initListView(List list) {
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
-        participatorTxt.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-    }
-    // Date:8/20 尋找帳號結束---------------------------
-
-*/
     //帥哥峻禾部分
     public void toEditProfile(View view) {
         intent = new Intent();

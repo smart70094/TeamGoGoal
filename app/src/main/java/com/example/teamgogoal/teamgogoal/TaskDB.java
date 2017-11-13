@@ -58,10 +58,6 @@ public class TaskDB {
         return  ans.trim();
     }
     protected void create(String... dataList){
-        /*String params="table=mission"+" & mid="+param1 +" & missionName="+param2+" & missionContent="+param3+" & remindTime="+param4+" & tid="+param5+" & state="+param6+" & auth="+param7;
-        String php="createTask.php";
-        String ans=viaParams(params,php);*/
-
         String name=dataList[0];
         String context=dataList[1];
         String remindTime=dataList[2];

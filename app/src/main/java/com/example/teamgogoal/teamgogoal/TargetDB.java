@@ -72,7 +72,10 @@ public class TargetDB {
         String auth=dataList[4];
         socketTrans.setParams("addTarget",name,context,startTime,endTime,auth);
         socketTrans.send();
-        return socketTrans.getResult();
+        String result=socketTrans.getResult();
+        socketTrans.setParams("addParticipator",result,auth);
+        socketTrans.send();
+        return null;
     }
 
     protected void updateTarget(String param1, String param2, String param3, String param4, String param5, String param6, String param7, String param8, String param9) {

@@ -65,13 +65,8 @@ public class TargetEventAcivity extends AppCompatActivity {
                 TargetDB.TargetDetail td = new TargetDB.TargetDetail("", param1, param2, param3, param4, param5, param6, "0", "0");
                 new DbOperationTask().execute("createTarget", param1, param2, param3, param4, param6);
 
-
-                /*int k = Integer.parseInt(nextID);
-                //tll.setId(k);
-                targetMap.put(k, td);
-
                 //帥哥峻禾部分
-                socketTrans.setParams("initial_target", nextID, param4);
+                /*socketTrans.setParams("initial_target", nextID, param4);
                 socketTrans.send();*/
 
             }
@@ -114,10 +109,8 @@ public class TargetEventAcivity extends AppCompatActivity {
     }
 
 
-    private class DbOperationTask extends AsyncTask<String, Void, String> {
-
-
-        protected String doInBackground(String... params) {
+    private class DbOperationTask extends AsyncTask<String, Void, Void> {
+        protected Void doInBackground(String... params) {
             String cmd = params[0];
             String result = cmd + ",";
             switch (cmd) {
@@ -138,13 +131,12 @@ public class TargetEventAcivity extends AppCompatActivity {
                     break;*/
                 case "createTarget":
                     try {
-                        result += db.createTarget(params[1], params[2], params[3], params[4], params[5]);
-                        //db.createParticipator(params[1], params[6]);
+                        db.createTarget(params[1], params[2], params[3], params[4], params[5]);
                     } catch (Exception e) {
                         Log.v("jim_createTarget:", e.toString());
                     }
                     break;
-                /*case "updateTarget":
+                case "updateTarget":
                     db.updateTarget(params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], params[9]);
                     break;
                 case "deleteParticipator_all":
@@ -152,22 +144,9 @@ public class TargetEventAcivity extends AppCompatActivity {
                     break;
                 case "deleteParticipator":
                     db.deleteParticipator(params[1], params[2]);
-                    break;*/
-            }
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            String strArr[] = s.split(",");
-            String cmd = strArr[0];
-            String cmdContext = strArr[1];
-            switch (cmd) {
-                case "createTarget":
-
                     break;
             }
+            return null;
         }
     }
 }

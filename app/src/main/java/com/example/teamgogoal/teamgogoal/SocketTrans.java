@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.annotation.Target;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,12 +25,12 @@ public  class SocketTrans {     //執行緒
     private static Socket clientSocket=null;        //客戶端的socket
     private OutputStream out;            //取得網路輸出串流
     private static BufferedReader br;            //取得網路輸入串流
-    private static Map<String,Socket> map=new HashMap<String,Socket>();
+    private static ArrayList<String> waitDealData=new ArrayList<String>();
     /*String cmd;
     String subject;
     String originator;*/
     String param;
-    static String result=null;
+    //static String result=null;
     public Context context;
     public NotificationManager notificationManager;
     public MySimpleReceiver receiverForSimple;
@@ -57,9 +58,7 @@ public  class SocketTrans {     //執行緒
         out = clientSocket.getOutputStream();
         send(param);
     }
-    protected static void setResult(String s){
-        result=s;
-    }
+
     protected  void send(final String s){
         Thread t=new Thread(new Runnable() {
             @Override
@@ -92,6 +91,7 @@ public  class SocketTrans {     //執行緒
         });
         t.start();
     }
+
     protected void receiver() {
         Thread  t=new Thread(new Runnable() {
             @Override
@@ -101,7 +101,7 @@ public  class SocketTrans {     //執行緒
                     while (clientSocket.isConnected()) {
                        if(br.ready()){
                             s = br.readLine().trim();
-                            setResult(s);
+                           waitDealData.add(s);
                             if(!s.equals("")) {
                                 Intent i = new Intent(context,NofyService.class);
                                 // Add extras to the bundle
@@ -120,19 +120,24 @@ public  class SocketTrans {     //執行緒
         });
         t.start();
     }
+
     public void close() throws IOException {
         br.close();
         out.close();
         clientSocket.close();
     }
+
     protected String getResult() {
         try{
-            while(result==null){
+            String result=null;
+            while(waitDealData.get(0)==null || waitDealData.get(0).equals("")){
+                result=waitDealData.get(0);
+                if(result.equals("") && waitDealData.size()>0) waitDealData.remove(0);
                 Thread.sleep(500);
-            }
-            String t_result=result;
-            result=null;
-            return t_result.trim();
+             }
+            result=waitDealData.get(0);
+            waitDealData.remove(0);
+            return result.trim();
         }catch(Exception e){
             Log.v("jim_getResult",e.toString());
         }

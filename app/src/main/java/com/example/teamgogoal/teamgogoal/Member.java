@@ -13,8 +13,7 @@ import android.widget.Toast;
 public class Member extends AppCompatActivity {
     Dialog dialog;
     String currTid;
-
-
+    SocketTrans socketTrans = LoginActivity.socketTrans;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +39,19 @@ public class Member extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //按鈕事件處理
-                Toast.makeText(view.getContext(), "按鈕事件", Toast.LENGTH_SHORT).show();
+                String ParticipatorStr=memberID.getText().toString();
+                ParticipatorStr=ParticipatorStr.replace(",","-");
+                socketTrans.setParams("addParticipator",currTid,ParticipatorStr);
+                socketTrans.send();
+                Toast.makeText(view.getContext(), "邀請成功", Toast.LENGTH_SHORT).show();
             }
         });
 
         dialog = new AlertDialog.Builder(this).setView(dialog_view).create();
         dialog.show();
+    }
+
+    public void requestParticipator(View view){
+
     }
 }

@@ -161,13 +161,6 @@ public class TaskActivity extends AppCompatActivity {
         }
     }
 
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) { // 攔截返回鍵
-            taskMap.clear();
-            finish();
-        }
-        return true;
-    }
 
     @Override
     protected void onResume() {
@@ -177,7 +170,8 @@ public class TaskActivity extends AppCompatActivity {
 
     protected void loading() {
         synchronized (this) {
-            Log.v("jim_loading","testing area");
+            taskMap.clear();
+            taskDate.clear();
             new DbOperationTask().execute("read");
         }
     }
@@ -232,7 +226,6 @@ public class TaskActivity extends AppCompatActivity {
                             }
                         }
                     });
-
                     nextID = db.taskIndex();
                     break;
                 case "createTask":
