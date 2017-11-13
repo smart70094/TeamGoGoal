@@ -21,8 +21,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight=".91"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:background="@color/top_bg_color"
             android:gravity="center"
             android:orientation="horizontal">
@@ -67,8 +67,8 @@
                 android:layout_weight="1"
                 android:adjustViewBounds="false"
                 android:background="@color/empty"
-                android:padding="5dp"
                 android:onClick="fresh_activity"
+                android:padding="5dp"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/item_edit_light" />
 
@@ -87,15 +87,15 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight=".09"
+            android:layout_height="0dp"
+            android:layout_weight="10.9"
             android:orientation="vertical">
 
             <ListView
                 android:id="@+id/listview_target"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight=".1"
+                android:layout_height="0dp"
+                android:layout_weight="9"
                 android:divider="@null"
                 android:dividerHeight="20dp"
                 android:paddingLeft="50dp"
@@ -106,8 +106,8 @@
             <LinearLayout
                 android:id="@+id/showAddTaskll"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight=".9"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:orientation="vertical"
                 android:visibility="visible"
                 tools:layout_editor_absoluteX="8dp"

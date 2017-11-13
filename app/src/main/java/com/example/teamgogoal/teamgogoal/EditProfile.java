@@ -45,7 +45,7 @@ public class EditProfile extends AppCompatActivity{
     LoginActivity.User user;
 
     private int serverResponseCode = 0;
-    private ProgressDialog dialog = null;
+    private ProgressDialog progressdialog = null;
     private String upLoadServerUri = null;
     private String imagepath = null;
     private int clickCount;
@@ -58,7 +58,9 @@ public class EditProfile extends AppCompatActivity{
     private TextView mail;
 
     /*Dialog*/
-    private Dialog changePwdDialog;
+    View dialog_view;
+
+    private Dialog dialog;
     private Dialog hit_dialog;
     private Dialog personal_photo_selector_dialog;
 
@@ -136,29 +138,28 @@ public class EditProfile extends AppCompatActivity{
 
 
 
-    private void showCompleteMsg(String title, String content, final boolean success) {
+    private void showHit(String title, String content, final boolean success) {
 
         View dialog_view;
 
         dialog_view = LayoutInflater.from(this).inflate(R.layout.hit_dialog, null);
 
-        Hit hit = new Hit();
-        hit.setHitTitle((TextView) dialog_view.findViewById(R.id.hitTitle));
-        hit.setHtiContent((TextView) dialog_view.findViewById(R.id.hitContent));
-        hit.setConfirm((Button) dialog_view.findViewById(R.id.hitComfirm));
+        TextView hitTitle = dialog_view.findViewById(R.id.hitTitle);
+        TextView hitContent = dialog_view.findViewById(R.id.hitContent);
+        TextView hitComfirm = dialog_view.findViewById(R.id.hitComfirm);
 
-        hit.getHitTitle().setText(title);
-        hit.gethtiContent().setText(content);
+        hitTitle.setText(title);
+        hitContent.setText(content);
 
-        hit.getConfirm().setOnClickListener(new View.OnClickListener() {
+        hitComfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 hit_dialog.dismiss();
                 if (success) {
-                    changePwdDialog.dismiss();
+                    dialog.dismiss();
+                }else{
+                    hit_dialog.dismiss();
                 }
-
-
             }
         });
 
@@ -168,10 +169,28 @@ public class EditProfile extends AppCompatActivity{
 
     public void ChangeName(View view) {
 
+        View dialog_view;
+        dialog_view = LayoutInflater.from(this).inflate(R.layout.change_name_dialog, null);
 
-        new EditProfile.ChangeNameTask().execute("uid=" + user.uid + "&name=" + name.getText().toString());
-        user.name = name.getText().toString();
-        Toast.makeText(getApplicationContext(), "暱稱變更為" + name.getText().toString(), Toast.LENGTH_SHORT).show();
+        Button Comfirm = (Button) dialog_view.findViewById(R.id.Comfirm);
+        final EditText nameET = (EditText) dialog_view.findViewById(R.id.nameET);
+
+        nameET.setText(user.name);
+
+
+        Comfirm.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new ChangeNameTask().execute("uid=" + user.uid + "&name=" + nameET.getText()).toString();
+                user.name = nameET.getText().toString();
+                name.setText(nameET.getText().toString());
+                dialog.dismiss();
+                showHit("修改成功", "暱稱變更為" +  nameET.getText().toString(), true);
+            }
+        });
+
+        dialog = new AlertDialog.Builder(this, R.style.Translucent_NoTitle).setView(dialog_view).create();
+        dialog.show();
     }
 
     public class ChangeNameTask extends AsyncTask<String, Void, Void> {
@@ -229,49 +248,40 @@ public class EditProfile extends AppCompatActivity{
     //修改密碼
     public void ChangePassword(View view) {
 
-        View dialog_view;
-        dialog_view = LayoutInflater.from(this).inflate(R.layout.hit_dialog, null);
-        Hit hit = new Hit();
-        hit.setHitTitle((TextView) dialog_view.findViewById(R.id.hitTitle));
-        hit.setHtiContent((TextView) dialog_view.findViewById(R.id.hitContent));
-        hit.setConfirm((Button) dialog_view.findViewById(R.id.hitComfirm));
+        dialog_view = LayoutInflater.from(this).inflate(R.layout.change_password_dialog, null);
 
-        LayoutInflater inflater = LayoutInflater.from(EditProfile.this);
-        final View v = inflater.inflate(R.layout.change_password, null);
-
-        Button changePwdConfirm = (Button) v.findViewById(R.id.changePwdConfirm);
-        Button changePwdCancel = (Button) v.findViewById(R.id.changePwdCancel);
+        Button changePwdConfirm = (Button) dialog_view.findViewById(R.id.changePwdConfirm);
+        Button changePwdCancel = (Button) dialog_view.findViewById(R.id.changePwdCancel);
 
 
         changePwdConfirm.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText oldPassword = (EditText) (v.findViewById(R.id.oldPassword));
-                EditText newPassword = (EditText) (v.findViewById(R.id.newPassword));
-                EditText newPasswordConfirm = (EditText) (v.findViewById(R.id.newPasswordConfirm));
+                EditText oldPassword = (EditText) (dialog_view.findViewById(R.id.oldPassword));
+                EditText newPassword = (EditText) (dialog_view.findViewById(R.id.newPassword));
+                EditText newPasswordConfirm = (EditText) (dialog_view.findViewById(R.id.newPasswordConfirm));
 
                 if (!oldPassword.getText().toString().equals(user.password)) {
-                    showCompleteMsg("修改失敗", "舊密碼輸入錯誤\n請重新輸入", false);
+                    showHit("修改失敗", "舊密碼輸入錯誤\n請重新輸入", false);
                 } else if (!newPassword.getText().toString().equals(newPasswordConfirm.getText().toString())) {
-                    showCompleteMsg("修改失敗", "新密碼與新密碼確認不同\n請重新輸入", false);
+                    showHit("修改失敗", "新密碼與新密碼確認不同\n請重新輸入", false);
                 } else {
                     new EditProfile.ChangePasswordTask().execute("uid=" + user.uid + "&password=" + newPassword.getText().toString());
                     user.password = newPassword.getText().toString();
-                    showCompleteMsg("修改成功", "密碼變更成功", true);
+                    showHit("修改成功", "密碼變更成功", true);
                 }
             }
         });
 
-
         changePwdCancel.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                changePwdDialog.dismiss();
+                dialog.dismiss();
             }
         });
 
-        changePwdDialog = new AlertDialog.Builder(this, R.style.Translucent_NoTitle).setView(v).create();
-        changePwdDialog.show();
+        dialog = new AlertDialog.Builder(this, R.style.Translucent_NoTitle).setView(dialog_view).create();
+        dialog.show();
     }
 
     public class ChangePasswordTask extends AsyncTask<String, Void, Void> {
@@ -354,7 +364,7 @@ public class EditProfile extends AppCompatActivity{
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog = ProgressDialog.show(EditProfile.this, "", "檔案上傳中...", true);
+                progressdialog = ProgressDialog.show(EditProfile.this, "", "檔案上傳中...", true);
                 new Thread(new Runnable() {
                     public void run() {
                         uploadFile(imagepath);
@@ -407,7 +417,7 @@ public class EditProfile extends AppCompatActivity{
         File sourceFile = new File(sourceFilePath);
 
         if (!sourceFile.isFile()) {
-            dialog.dismiss();
+            progressdialog.dismiss();
             Log.e("uploadFile", "Source File not exist :" + imagepath);
             runOnUiThread(new Runnable() {
                 public void run() {
@@ -483,7 +493,7 @@ public class EditProfile extends AppCompatActivity{
                 dos.flush();
                 dos.close();
             } catch (MalformedURLException ex) {
-                dialog.dismiss();
+                progressdialog.dismiss();
                 ex.printStackTrace();
                 runOnUiThread(new Runnable() {
                     public void run() {
@@ -494,7 +504,7 @@ public class EditProfile extends AppCompatActivity{
                 Log.e("Upload file to server", "error: " + ex.getMessage(), ex);
             } catch (Exception e) {
 
-                dialog.dismiss();
+                progressdialog.dismiss();
                 e.printStackTrace();
 
                 runOnUiThread(new Runnable() {
@@ -504,7 +514,7 @@ public class EditProfile extends AppCompatActivity{
                 });
                 Log.e("Upload file Exception", "Exception : " + e.getMessage(), e);
             }
-            dialog.dismiss();
+            progressdialog.dismiss();
             //tempImgFile.destory();
             //tempImgFile = null;
             return serverResponseCode;

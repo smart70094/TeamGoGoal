@@ -11,17 +11,20 @@
         android:layout_height="match_parent"
         android:background="@drawable/bg_hit_top"
         android:orientation="vertical"
+        android:paddingBottom="20dp"
         android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+        android:paddingRight="20dp"
+        android:paddingTop="10dp">
 
         <TextView
             android:id="@+id/hitTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
             android:gravity="center"
             android:text="TextView"
             android:textColor="@color/basicColor"
-            android:textSize="30sp"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <TextView
@@ -31,7 +34,7 @@
             android:gravity="center"
             android:text="TextView"
             android:textColor="@color/basicColor"
-            android:textSize="24sp" />
+            android:textSize="18sp" />
 
     </LinearLayout>
 
@@ -44,7 +47,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_hit_bottom"
+        android:background="@color/empty"
         android:orientation="horizontal">
 
         <Button
@@ -55,7 +58,7 @@
             android:background="@drawable/bg_hit_btn"
             android:text="確認"
             android:textColor="@color/basicColor"
-            android:textSize="24sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
     </LinearLayout>
 

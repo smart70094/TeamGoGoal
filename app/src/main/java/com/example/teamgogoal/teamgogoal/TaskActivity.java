@@ -51,13 +51,12 @@ import java.util.Map;
 public class TaskActivity extends AppCompatActivity {
 
     TaskDB db;
-    //LinearLayout taskll;
-    TextView taskTitle;
+    TextView TargetTitle;
     EditText taskNameTxt, taskContent, remindTimeTxt, cheerEt;
     Button submit, submitTaskBtn, clearTaskMessageBtn, cannelTaskBtn;
     Map<Integer, TaskDB.TaskDetail> taskMap = new HashMap<Integer, TaskDB.TaskDetail>();
     Spinner spinner;
-    String currTid = "", nextID = "", currID = "";
+    String currTid = "", nextID = "", currID = "",targetName = "";
     LoginActivity.User user;
     AlertDialog.Builder cheerDialog;
     AlertDialog taskMsg = null, msg = null, dialog = null;   //dialog建興的
@@ -87,13 +86,14 @@ public class TaskActivity extends AppCompatActivity {
             Bundle bundle = getIntent().getExtras();
             user = LoginActivity.getUser();
             currTid = bundle.getString("tid");
-
-            String t_name = bundle.getString("t_name");
+            targetName = bundle.getString("targetName");
             db = new TaskDB(LoginActivity.getLocalHost() + "readmission.php");
 
             LayoutInflater factory = LayoutInflater.from(this);
             addTaskMsg = factory.inflate(R.layout.activity_task_add_msg, null);
-            //taskll = (LinearLayout) findViewById(R.id.taskll);
+
+            TargetTitle = (TextView) findViewById(R.id.TargetTitle);
+            TargetTitle.setText(targetName);
 
             taskNameTxt = (EditText) addTaskMsg.findViewById(R.id.taskNameTxt);
 
@@ -127,8 +127,6 @@ public class TaskActivity extends AppCompatActivity {
                     msg.dismiss();
                 }
             });
-            taskTitle = (TextView) findViewById(R.id.taskTitle);
-            taskTitle.setText(t_name);
             //進度條-建興
             circularProgressBar = (CircularProgressBar) findViewById(R.id.yourCircularProgressbar);
             percentage = 0;
@@ -763,28 +761,6 @@ public class TaskActivity extends AppCompatActivity {
         startActivity(intent);
 
 
-    }
-
-
-
-
-    //-----標提列----//
-    public void toEditProfile(View view) {
-        Intent intent = new Intent();
-        intent.setClass(this, EditProfile.class);
-        startActivity(intent);
-    }
-
-    public void checkReview(View view) {
-        Intent intent = new Intent();
-        intent.setClass(this, Review.class);
-        startActivity(intent);
-    }
-
-    public void toRequest(View view) {
-        Intent intent = new Intent();
-        intent.setClass(this, RequestActivity.class);
-        startActivity(intent);
     }
 
 }

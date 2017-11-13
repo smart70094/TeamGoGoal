@@ -371,15 +371,9 @@ public class TargetActivity extends AppCompatActivity {
 
     public void enterTaskActivity(int tid, String targetName) {
         try {
-            //TargetUIStructure targetUIS = targetMap.get(id);
             Intent intent = new Intent();
-            /*
-            intent.putExtra("tid", targetUIS.td.tid.trim());
-            intent.putExtra("t_name", targetUIS.td.targetName.trim());
-                    */
             intent.putExtra("tid", Integer.toString(tid));
-            intent.putExtra("t_name", targetName);
-            //intent.putExtras(bundle);
+            intent.putExtra("targetName", targetName);
             intent.setClass(TargetActivity.this, TaskActivity.class);
             startActivity(intent);
         } catch (Exception e) {
