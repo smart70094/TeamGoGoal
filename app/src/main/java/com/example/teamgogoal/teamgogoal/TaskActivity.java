@@ -114,7 +114,7 @@ public class TaskActivity extends AppCompatActivity {
                     initial();
                 }
             });
-            //new DbOperationTask().execute("read");
+            //new DbOperationTask().execute("showTargetEvent");
             LayoutInflater factoryCheerMsg = LayoutInflater.from(this);
             View cheerMsg = factoryCheerMsg.inflate(R.layout.activity_cheer_msg, null);
             submit = (Button) cheerMsg.findViewById(R.id.cheerBtn);
@@ -170,7 +170,7 @@ public class TaskActivity extends AppCompatActivity {
         synchronized (this) {
             taskMap.clear();
             taskDate.clear();
-            new DbOperationTask().execute("read");
+            new DbOperationTask().execute("showTargetEvent");
         }
     }
 
@@ -212,7 +212,7 @@ public class TaskActivity extends AppCompatActivity {
         protected Void doInBackground(String... params) {
             String cmd = params[0];
             switch (cmd) {
-                case "read":
+                case "showTargetEvent":
                     final Map<String, TaskDB.TaskDetail> t;
                     t = db.read(currTid);
                     runOnUiThread(new Runnable() {

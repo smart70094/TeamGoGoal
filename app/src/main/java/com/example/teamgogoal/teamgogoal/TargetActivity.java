@@ -234,7 +234,7 @@ public class TargetActivity extends AppCompatActivity {
                 } else {
                     submitTargetBtn.setEnabled(false);
                     clearTargetBtn.setEnabled(false);
-                    read(id);
+                    showTargetEvent(id,"readTarget");
                 }
                 return true;
             }
@@ -252,10 +252,10 @@ public class TargetActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int index) {
                 switch (cmd[index]) {
                     case "詳細":
-                        read(id);
+                        showTargetEvent(id, "readTarget");
                         break;
                     case "修改":
-                        read(id);
+                        showTargetEvent(id, "modifyTarget");
                         submitTargetBtn.setText("更新資料");
                         clearTargetBtn.setEnabled(false);
                         currID = Integer.toString(id).trim();
@@ -286,14 +286,20 @@ public class TargetActivity extends AppCompatActivity {
         }
     }
 
-    protected void read(int id) {
+    protected void showTargetEvent(int id, String cmd) {
         TargetDB.TargetDetail td = targetMap.get(id);
-        targetNameEt.setText(td.targetName);
-        targeContentEt.setText(td.targetContent);
-        startTimeEt.setText(td.startTime);
-        endTimeEt.setText(td.endTime);
-        currID = Integer.toString(id).trim();
-        showTarget();
+
+
+        Intent intent = new Intent();
+        intent.putExtra("cmd",cmd);
+        intent.putExtra("tid",td.tid);
+        intent.putExtra("targetName",td.targetName);
+        intent.putExtra("targetContent",td.targetContent);
+        intent.putExtra("startTime",td.startTime);
+        intent.putExtra("endTime",td.endTime);
+
+        intent.setClass(TargetActivity.this,TargetEventAcivity.class);
+        startActivity(intent);
     }
 
     protected void update(int id) {
@@ -356,7 +362,7 @@ public class TargetActivity extends AppCompatActivity {
                     }
                     break;
                 case "updateTarget":
-                    db.updateTarget(params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], params[9]);
+                    //db.updateTarget(params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], params[9]);
                     break;
                 case "deleteParticipator_all":
                     db.deleteTargetAll(params[1]);

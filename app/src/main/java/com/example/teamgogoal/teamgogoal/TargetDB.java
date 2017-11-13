@@ -13,11 +13,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -50,7 +46,7 @@ public class TargetDB {
                 map.put(obj.getString("tid"), TargetDetail);
             }
         } catch (JSONException e) {
-            Log.v("jim error in read：", e.toString());
+            Log.v("jim error in showTargetEvent：", e.toString());
         }
         return map;
     }
@@ -78,72 +74,10 @@ public class TargetDB {
         return null;
     }
 
-    protected void updateTarget(String param1, String param2, String param3, String param4, String param5, String param6, String param7, String param8, String param9) {
-        String params = "table=target" + " & tid=" + param1 + " & targetName=" + param2 + " & targetContent=" + param3 + " & targetStartTime=" + param4 + " & targetEndTime=" + param5 + " & state=" + param6 + " & auth=" + param7;
+    protected void updateTarget(String param1, String param2, String param3, String param4, String param5) {
+        String params = "table=target" + " & tid=" + param1 + " & targetName=" + param2 + " & targetContent=" + param3 + " & targetStartTime=" + param4 + " & targetEndTime=" + param5;
         String php = "updateTarget.php";
         String ans = viaParams(params, php);
-
-        String str[] = param8.split(",");
-        String old_str[] = param9.split(",");
-        List new_list = new ArrayList(Arrays.asList(str));
-        List old_list = new ArrayList(Arrays.asList(old_str));
-        List list = new ArrayList(Arrays.asList(new Object[old_list.size()]));
-        list = diff(new_list, old_list);
-
-
-        for (int i = 0; i < list.size(); i++) {
-            if (!list.get(i).equals("")) {
-                String params3 = "table=registerrequest & originator=" + user.account + " & cmd=request_ask & cmdContext=" + param1.trim() + " & subject=" + list.get(i).toString().trim();
-                String php3 = "createRegisterRequest.php";
-                String s = viaParams(params3, php3);
-                socketTrans.setParams("register_request", user.account.trim(), list.get(i).toString().trim(), param2.trim());
-                socketTrans.send();
-            }
-        }
-        list.clear();
-        list = diff(old_list, new_list);
-        for (int i = 0; i < list.size(); i++) {
-            if (!list.get(i).equals("")) {
-                String params2 = "table=participator & tid=" + param1 + " & account=" + list.get(i).toString().trim();
-                String php2 = "deleteParticipator.php";
-                String ss = viaParams(params2, php2);
-
-                //將退出訊息記錄到request與傳送socket訊息
-                params2 = "table=registerrequest & originator=" + user.account + " & cmd=request_delete & cmdContext=" + param1.trim() + " & subject=" + list.get(i).toString().trim();
-                php2 = "createRegisterRequest.php";
-                String s = viaParams(params2, php2);
-
-                socketTrans.setParams("register_delete", user.account.trim(), list.get(i).toString().trim(), param2.trim());
-                socketTrans.send();
-            }
-        }
-
-        list = intersect(old_list, new_list);
-        list.remove(user.account);
-        for (int i = 0; i < list.size(); i++) {
-            if (!list.get(i).equals("")) {
-                String params2 = "table=registerrequest & originator=" + user.account + " & cmd=request_update & cmdContext=" + param2.trim() + " & subject=" + list.get(i).toString().trim();
-                String php2 = "createRegisterRequest.php";
-                String ss = viaParams(params2, php2);
-
-                socketTrans.setParams("register_update", user.account.trim(), list.get(i).toString().trim(), param2.trim());
-                socketTrans.send();
-            }
-        }
-    }
-
-    public List diff(List ls, List ls2) {
-        List list = new ArrayList(Arrays.asList(new Object[ls.size()]));
-        Collections.copy(list, ls);
-        list.removeAll(ls2);
-        return list;
-    }
-
-    public List intersect(List ls, List ls2) {
-        List list = new ArrayList(Arrays.asList(new Object[ls.size()]));
-        Collections.copy(list, ls);
-        list.retainAll(ls2);
-        return list;
     }
 
     protected void createParticipator(String id, String param1) {

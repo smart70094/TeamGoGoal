@@ -456,7 +456,7 @@ public class EditProfile extends AppCompatActivity{
                 bufferSize = Math.min(bytesAvailable, maxBufferSize);
                 buffer = new byte[bufferSize];
 
-                // read file and write it into form...
+                // showTargetEvent file and write it into form...
                 bytesRead = fileInputStream.read(buffer, 0, bufferSize);
 
                 while (bytesRead > 0) {

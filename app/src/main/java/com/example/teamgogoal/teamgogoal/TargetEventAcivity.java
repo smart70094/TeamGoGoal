@@ -1,6 +1,7 @@
 package com.example.teamgogoal.teamgogoal;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,23 +15,39 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 public class TargetEventAcivity extends AppCompatActivity {
+    Bundle bundle;
     String cmd;
     Button TargetEventBtn;
     EditText targetNameEt, targeContentEt, startTimeEt, endTimeEt;
     TargetDB db;
+    ProgressDialog progressdialog;
     SocketTrans socketTrans = LoginActivity.socketTrans;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_target_event_acivity);
-        Bundle bundle = getIntent().getExtras();
+        bundle = getIntent().getExtras();
+
         cmd = bundle.getString("cmd");
+
         db=new TargetDB();
+        
         targetNameEt = (EditText) findViewById(R.id.targetNameEt);
         targeContentEt = (EditText) findViewById(R.id.targeContentEt);
         startTimeEt = (EditText) findViewById(R.id.startTimeEt);
         endTimeEt = (EditText) findViewById(R.id.endTimeEt);
+
+        switch (cmd){
+            case "modifyTarget":
+            case "readTarget" :
+                readTarget();
+                initView();
+                break;
+        }
+
+
+
 
         TargetEventBtn = (Button) findViewById(R.id.TargetEventBtn);
         TargetEventBtn.setOnClickListener(new View.OnClickListener() {
@@ -38,16 +55,42 @@ public class TargetEventAcivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 switch (cmd) {
+                    case "readTarget":
+                        finish();
+                        break;
+
                     case "addTarget":
                         addTarget();
                         break;
+
+                    case "modifyTarget":
+                        modifyTarget();
+                        break;
                 }
-
-
             }
         });
 
 
+    }
+
+
+
+    private void readTarget() {
+        targetNameEt.setText(bundle.getString("targetName").trim());
+        targeContentEt.setText(bundle.getString("targetContent").trim());
+        startTimeEt.setText(bundle.getString("startTime").trim());
+        endTimeEt.setText(bundle.getString("endTime").trim());
+    }
+
+    private void initView() {
+        switch (cmd){
+            case "readTarget":
+                targetNameEt.setEnabled(false);
+                targeContentEt.setEnabled(false);
+                startTimeEt.setEnabled(false);
+                endTimeEt.setEnabled(false);
+                break;
+        }
     }
 
     private void addTarget() {
@@ -74,6 +117,18 @@ public class TargetEventAcivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.v("jim1", e.toString());
         }
+    }
+
+    private void modifyTarget() {
+
+        String tid = bundle.getString("tid").trim();
+        String param1 = targetNameEt.getText().toString();
+        String param2 = targeContentEt.getText().toString();
+        String param3 = startTimeEt.getText().toString();
+        String param4 = endTimeEt.getText().toString();
+
+
+        new DbOperationTask().execute("updateTarget", tid, param1, param2, param3, param4);
     }
 
     public void selectStartTime(View view) {
@@ -110,25 +165,12 @@ public class TargetEventAcivity extends AppCompatActivity {
 
 
     private class DbOperationTask extends AsyncTask<String, Void, Void> {
+
+
         protected Void doInBackground(String... params) {
             String cmd = params[0];
             String result = cmd + ",";
             switch (cmd) {
-                /*case "readTarget":
-                    final Map<String, TargetDB.TargetDetail> t;
-                    t = db.readTarget();
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            try {
-                                fresh(t);
-                            } catch (Exception e) {
-                                Log.v("jim_DbOperationTask", e.toString());
-                            }
-                        }
-                    });
-
-                    nextID = db.targetIndex();
-                    break;*/
                 case "createTarget":
                     try {
                         db.createTarget(params[1], params[2], params[3], params[4], params[5]);
@@ -137,16 +179,17 @@ public class TargetEventAcivity extends AppCompatActivity {
                     }
                     break;
                 case "updateTarget":
-                    db.updateTarget(params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], params[9]);
-                    break;
-                case "deleteParticipator_all":
-                    db.deleteTargetAll(params[1]);
-                    break;
-                case "deleteParticipator":
-                    db.deleteParticipator(params[1], params[2]);
+                    db.updateTarget(params[1], params[2], params[3], params[4], params[5]);
                     break;
             }
             return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            finish();
         }
     }
 }

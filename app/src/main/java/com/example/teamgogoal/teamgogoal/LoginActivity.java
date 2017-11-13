@@ -235,7 +235,7 @@ public class LoginActivity extends AppCompatActivity {
                     startService(intent);
                 }
             } catch (Exception e) {
-                Log.v("jim error in read：", e.toString());
+                Log.v("jim error in showTargetEvent：", e.toString());
             }
 
         }
