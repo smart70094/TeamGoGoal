@@ -82,9 +82,7 @@ public class EditProfile extends AppCompatActivity{
         String imageUrl = localhost + "profilepicture/" + user.uid;
 
         upLoadServerUri = localhost + "UploadToServer.php?uid=" + user.uid;
-        //upLoadServerUri = "http://along.event2007.com/m/UploadToServer.php";
 
-        //account.setText("帳號：" + user.account);
         name.setText(user.name);
         account.setText(user.account);
         mail.setText(user.email);
@@ -98,7 +96,6 @@ public class EditProfile extends AppCompatActivity{
     private class TransTask extends AsyncTask<String, Void, Bitmap> {
         @Override
         protected Bitmap doInBackground(String... params) {
-            //String url = params[0];
             try {
                 URL url = new URL(params[0]);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -119,24 +116,6 @@ public class EditProfile extends AppCompatActivity{
             super.onPostExecute(result);
         }
     }
-
-    public Bitmap getBitmapFromURL(String imageUrl) {
-        try {
-            URL url = new URL(imageUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap bitmap = BitmapFactory.decodeStream(input);
-            return bitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-
-
 
     private void showHit(String title, String content, final boolean success) {
 

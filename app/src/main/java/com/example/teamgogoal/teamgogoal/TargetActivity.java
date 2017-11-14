@@ -140,7 +140,7 @@ public class TargetActivity extends AppCompatActivity {
 
     public void addTarget(View view) {
         Intent intent = new Intent();
-        intent.setClass(this,TargetEventAcivity.class);
+        intent.setClass(this,TargetEventActivity.class);
         intent.putExtra("cmd","addTarget");
         startActivity(intent);
     }
@@ -298,7 +298,7 @@ public class TargetActivity extends AppCompatActivity {
         intent.putExtra("startTime",td.startTime);
         intent.putExtra("endTime",td.endTime);
 
-        intent.setClass(TargetActivity.this,TargetEventAcivity.class);
+        intent.setClass(TargetActivity.this,TargetEventActivity.class);
         startActivity(intent);
     }
 
