@@ -1,8 +1,5 @@
 package com.example.teamgogoal.teamgogoal;
 
-import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,27 +10,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 public class TargetActivity extends AppCompatActivity {
-    AlertDialog.Builder dialog;
-    AlertDialog msg = null;
+    AlertDialog dialog;
     LoginActivity.User user;
     TargetDB db;
-    EditText targetNameEt, targeContentEt, startTimeEt, endTimeEt;
-    Button submitTargetBtn, clearTargetBtn, cannelBtn;
-    View addTargetMsg;
-
-    String nextID = "", currID = "";
     Intent intent;
 
 
@@ -44,10 +32,6 @@ public class TargetActivity extends AppCompatActivity {
     int map_id;
     /*---Date:1015 rebuild----*/
 
-    /*---Date:1019 處理中*/
-    private ProgressDialog pd;
-    /*---Date:1019 處理中*/
-
     SocketTrans socketTrans = LoginActivity.socketTrans;
     static Map<Integer, TargetDB.TargetDetail> targetMap = new HashMap<Integer, TargetDB.TargetDetail>();
 
@@ -56,27 +40,7 @@ public class TargetActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_target);
             db = new TargetDB();
-            LayoutInflater factory = LayoutInflater.from(this);
-            addTargetMsg = factory.inflate(R.layout.activity_target_add_msg, null);
-            dialog = new AlertDialog.Builder(TargetActivity.this, R.style.Translucent_NoTitle);
-            targetNameEt = (EditText) addTargetMsg.findViewById(R.id.targetNameTxt);
-            targeContentEt = (EditText) addTargetMsg.findViewById(R.id.targetContent);
-            startTimeEt = (EditText) addTargetMsg.findViewById(R.id.startTimeTxt);
-            endTimeEt = (EditText) addTargetMsg.findViewById(R.id.EndTimeTxt);
-
-            submitTargetBtn = (Button) addTargetMsg.findViewById(R.id.submitTargetBtn);
-            clearTargetBtn = (Button) addTargetMsg.findViewById(R.id.clearMessageBtn);
-            cannelBtn = (Button) addTargetMsg.findViewById(R.id.cannelBtn);
-            dialog.setView(addTargetMsg);
-
-            dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialogInterface) {
-                    initial();
-                }
-            });
             user = LoginActivity.getUser();
-
 
         } catch (Exception e) {
             Log.v("jim", e.toString());
@@ -97,91 +61,12 @@ public class TargetActivity extends AppCompatActivity {
         }
     }
 
-    public void onClick(View view) {
-        int id = view.getId();
-        switch (id) {
-            case R.id.showAddTargetBtn:
-                showTarget();
-                //participatorTxt.setText(user.account);
-                break;
-            case R.id.submitTargetBtn:
-                /*if (currID.equals("")) addTarget();
-                else update(Integer.parseInt(currID));
-                break;*/
-            case R.id.clearMessageBtn:
-                initial();
-                break;
-            case R.id.selectStartTimeBtn:
-                selectDate(R.id.startTimeTxt);
-                break;
-            case R.id.selectEndTimeBtn:
-                selectDate(R.id.EndTimeTxt);
-                break;
-            case R.id.cannelBtn:
-                cancel();
-                break;
-        }
-    }
-
-
-
-    protected void showTarget() {
-        try {
-            if (msg == null) {
-                msg = dialog.show();
-
-            } else {
-                msg.show();
-            }
-        } catch (Exception e) {
-            Log.v("jim", e.toString());
-        }
-    }
-
+    //下方按鈕-新增目標
     public void addTarget(View view) {
         Intent intent = new Intent();
-        intent.setClass(this,TargetEventAcivity.class);
-        intent.putExtra("cmd","addTarget");
+        intent.setClass(this, TargetEventActivity.class);
+        intent.putExtra("cmd", "addTarget");
         startActivity(intent);
-    }
-
-    protected void initial() {
-        targetNameEt.setText("");
-        targeContentEt.setText("");
-        startTimeEt.setText("");
-        endTimeEt.setText("");
-        submitTargetBtn.setEnabled(true);
-        submitTargetBtn.setText("新增任務");
-        clearTargetBtn.setEnabled(true);
-        cannelBtn.setEnabled(true);
-
-    }
-
-    protected void cancel() {
-        initial();
-        msg.dismiss();
-    }
-
-    protected void selectDate(final int txtID) {
-        final Calendar c = Calendar.getInstance();
-        int mYear = c.get(Calendar.YEAR);
-        int mMonth = c.get(Calendar.MONTH);
-        int mDay = c.get(Calendar.DAY_OF_MONTH);
-        new DatePickerDialog(TargetActivity.this, new DatePickerDialog.OnDateSetListener() {
-            int id = txtID;
-            public void onDateSet(DatePicker view, int year, int month, int day) {
-                String format = setDateFormat(year, month, day);
-                EditText txt = (EditText) addTargetMsg.findViewById(id);
-                txt.setText(format);
-            }
-        }, mYear, mMonth, mDay).show();
-
-    }
-
-    private String setDateFormat(int year, int monthOfYear, int dayOfMonth) {
-        return String.valueOf(year) + "-"
-                + String.valueOf(monthOfYear + 1) + "-"
-                + String.valueOf(dayOfMonth);
     }
 
     protected void fresh(Map<String, TargetDB.TargetDetail> map) {
@@ -199,7 +84,7 @@ public class TargetActivity extends AppCompatActivity {
                 tg_hashmap.put("tid", s);
                 tg_hashmap.put("planet_imv", "null");
                 tg_hashmap.put("targetName", set.getValue().targetName);
-                tg_hashmap.put("targetDate", set.getValue().startTime.trim().replace("-",".") + "-" + set.getValue().endTime.trim().replace("-","."));
+                tg_hashmap.put("targetDate", set.getValue().startTime.trim().replace("-", ".") + "-" + set.getValue().endTime.trim().replace("-", "."));
                 tg_hashmap.put("allmission", set.getValue().allmission);
                 tg_hashmap.put("completemission", set.getValue().completemission);
                 TargetData.add(tg_hashmap);
@@ -215,6 +100,8 @@ public class TargetActivity extends AppCompatActivity {
         target_listview.setAdapter(target_listAdapter);
         target_listAdapter.notifyDataSetChanged();
 
+
+        // 目標項目-短按事件:瀏覽任務
         target_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -222,52 +109,57 @@ public class TargetActivity extends AppCompatActivity {
             }
         });
 
+        // 目標項目-長按事件:目標詳細事項(詳細、修改、刪除)
         target_listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 map_id = i;
-                Integer id = Integer.valueOf(TargetData.get(i).get("tid"));
+                final Integer id = Integer.valueOf(TargetData.get(i).get("tid"));
                 String auth = targetMap.get(id).auth.trim();
                 if (auth.equals(user.account)) {
-                    final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"詳細", "修改", "刪除"}, id);
-                    mutiItemDialog.show();
+
+                    View dialog_view = LayoutInflater.from(TargetActivity.this).inflate(R.layout.target_selector, null);
+
+
+                    Button readTarget = (Button) dialog_view.findViewById(R.id.readTarget);
+                    Button modifyTarget = (Button) dialog_view.findViewById(R.id.modifyTarget);
+                    Button deleteTarget = (Button) dialog_view.findViewById(R.id.deleteTarget);
+
+
+                    readTarget.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            showTargetEvent(id, "readTarget");
+                            dialog.dismiss();
+                        }
+                    });
+
+                    modifyTarget.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            showTargetEvent(id, "modifyTarget");
+                            dialog.dismiss();
+                        }
+                    });
+
+                    deleteTarget.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            delete(id);
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog = new AlertDialog.Builder(TargetActivity.this, R.style.hitStyle).setView(dialog_view).create();
+                    dialog.show();
+
                 } else {
-                    submitTargetBtn.setEnabled(false);
-                    clearTargetBtn.setEnabled(false);
-                    showTargetEvent(id,"readTarget");
+                    showTargetEvent(id, "readTarget");
                 }
                 return true;
             }
 
         });
 
-    }
-
-    public AlertDialog getMutiItemDialog(final String[] cmd, final int id) {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        //設定對話框內的項目
-        builder.setItems(cmd, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int index) {
-                switch (cmd[index]) {
-                    case "詳細":
-                        showTargetEvent(id, "readTarget");
-                        break;
-                    case "修改":
-                        showTargetEvent(id, "modifyTarget");
-                        submitTargetBtn.setText("更新資料");
-                        clearTargetBtn.setEnabled(false);
-                        currID = Integer.toString(id).trim();
-                        break;
-                    case "刪除":
-                        delete(id);
-                        break;
-                }
-
-            }
-        });
-        return builder.create();
     }
 
     protected void delete(int id) {
@@ -290,46 +182,16 @@ public class TargetActivity extends AppCompatActivity {
 
 
         Intent intent = new Intent();
-        intent.putExtra("cmd",cmd);
-        intent.putExtra("tid",td.tid);
-        intent.putExtra("targetName",td.targetName);
-        intent.putExtra("targetContent",td.targetContent);
-        intent.putExtra("startTime",td.startTime);
-        intent.putExtra("endTime",td.endTime);
+        intent.putExtra("cmd", cmd);
+        intent.putExtra("tid", td.tid);
+        intent.putExtra("targetName", td.targetName);
+        intent.putExtra("targetContent", td.targetContent);
+        intent.putExtra("startTime", td.startTime);
+        intent.putExtra("endTime", td.endTime);
 
-        intent.setClass(TargetActivity.this,TargetEventAcivity.class);
+        intent.setClass(TargetActivity.this, TargetEventActivity.class);
         startActivity(intent);
     }
-
-    protected void update(int id) {
-        String param1 = targetNameEt.getText().toString();
-        String param2 = targeContentEt.getText().toString();
-        String param3 = startTimeEt.getText().toString();
-        String param4 = endTimeEt.getText().toString();
-        String param5 = targetMap.get(id).state;
-        String param6 = LoginActivity.user.account;
-
-        int key = Integer.parseInt(currID.trim());
-        TargetDB.TargetDetail td = targetMap.get(key);
-
-        td.targetName = param1;
-        td.targetContent = param2;
-        td.startTime = param3;
-        td.endTime = param4;
-
-
-        //String param8=participatorTxt.getText().toString();
-        new DbOperationTask().execute("updateTarget", currID, param1, param2, param3, param4, param5, param6);
-        currID = "";
-
-        TargetData.get(map_id).put("targetName", param1);
-        target_listAdapter.notifyDataSetChanged();
-
-
-        msg.dismiss();
-    }
-
-
 
     //background run
     private class DbOperationTask extends AsyncTask<String, Void, Void> {
@@ -348,20 +210,6 @@ public class TargetActivity extends AppCompatActivity {
                             }
                         }
                     });
-
-                    nextID = db.targetIndex();
-                    break;
-                case "createTarget":
-                    try{
-                        db.createTarget(params[1], params[2], params[3], params[4], params[5]);
-                        //db.createParticipator(params[1], params[6]);
-                        nextID = db.targetIndex();
-                    }catch(Exception e){
-                        Log.v("jim_createTarget:",e.toString());
-                    }
-                    break;
-                case "updateTarget":
-                    //db.updateTarget(params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], params[9]);
                     break;
                 case "deleteTarget_all":
                     db.deleteTargetAll(params[1],params[2]);
@@ -409,7 +257,5 @@ public class TargetActivity extends AppCompatActivity {
 
     public void fresh_activity(View view) {
         loading();
-       /* Intent intent = new Intent(this,TargetActivity.class);
-        startActivity(intent);*/
     }
 }

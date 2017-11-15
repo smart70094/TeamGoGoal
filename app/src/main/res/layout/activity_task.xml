@@ -261,7 +261,7 @@
                     android:layout_alignStart="@+id/showAddTaskBtn"
                     android:layout_weight="1"
                     android:background="@drawable/bg_new_task_btn"
-                    android:onClick="onClick"
+                    android:onClick="addTask"
                     android:text="+ 新任務"
                     android:textAllCaps="false"
                     android:textColor="@android:color/black"

@@ -57,7 +57,8 @@
             android:name=".RegisterAccount"
             android:screenOrientation="portrait" />
         <activity android:name=".Member" />
-        <activity android:name=".TargetEventAcivity"></activity>
+        <activity android:name=".TargetEventActivity" />
+        <activity android:name=".TaskEventActivity"></activity>
     </application>
 
 </manifest>

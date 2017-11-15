@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
-public class TargetEventAcivity extends AppCompatActivity {
+public class TargetEventActivity extends AppCompatActivity {
     Bundle bundle;
     String cmd;
     Button TargetEventBtn;
@@ -32,7 +32,7 @@ public class TargetEventAcivity extends AppCompatActivity {
         cmd = bundle.getString("cmd");
 
         db=new TargetDB();
-        
+
         targetNameEt = (EditText) findViewById(R.id.targetNameEt);
         targeContentEt = (EditText) findViewById(R.id.targeContentEt);
         startTimeEt = (EditText) findViewById(R.id.startTimeEt);

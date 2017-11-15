@@ -65,11 +65,14 @@ public class EditProfile extends AppCompatActivity{
     private Dialog personal_photo_selector_dialog;
 
     private tempFileManager tempImgFile = new tempFileManager();
+    private boolean haveUploadImg;
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
+
+        haveUploadImg = false;
 
         user = LoginActivity.getUser();
         name = (TextView) findViewById(R.id.nickName);
@@ -82,9 +85,7 @@ public class EditProfile extends AppCompatActivity{
         String imageUrl = localhost + "profilepicture/" + user.uid;
 
         upLoadServerUri = localhost + "UploadToServer.php?uid=" + user.uid;
-        //upLoadServerUri = "http://along.event2007.com/m/UploadToServer.php";
 
-        //account.setText("帳號：" + user.account);
         name.setText(user.name);
         account.setText(user.account);
         mail.setText(user.email);
@@ -94,11 +95,22 @@ public class EditProfile extends AppCompatActivity{
 
     }
 
+    public void EditProfileEvent(View view) {
+        if(haveUploadImg){
+            progressdialog = ProgressDialog.show(EditProfile.this, "", "檔案上傳中...", true);
+            Toast.makeText(EditProfile.this, "上傳圖片" + imagepath, Toast.LENGTH_SHORT).show();
+            new Thread(new Runnable() {
+                public void run() {
+                    uploadFile(imagepath);
+                }
+            }).start();
+        }
+    }
+
 
     private class TransTask extends AsyncTask<String, Void, Bitmap> {
         @Override
         protected Bitmap doInBackground(String... params) {
-            //String url = params[0];
             try {
                 URL url = new URL(params[0]);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -119,24 +131,6 @@ public class EditProfile extends AppCompatActivity{
             super.onPostExecute(result);
         }
     }
-
-    public Bitmap getBitmapFromURL(String imageUrl) {
-        try {
-            URL url = new URL(imageUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap bitmap = BitmapFactory.decodeStream(input);
-            return bitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-
-
 
     private void showHit(String title, String content, final boolean success) {
 
@@ -167,6 +161,7 @@ public class EditProfile extends AppCompatActivity{
         hit_dialog.show();
     }
 
+    //修改暱稱
     public void ChangeName(View view) {
 
         View dialog_view;
@@ -379,6 +374,13 @@ public class EditProfile extends AppCompatActivity{
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (grantResults.length > 0 && grantResults[0] == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            getPic();
+        }
+    }
+
     public void getPic() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -394,13 +396,9 @@ public class EditProfile extends AppCompatActivity{
             tempImgFile.setFileUri(selectedImageUri);
             tempImgFile.uri2tempFile(this);
             imagepath = tempImgFile.getFilePath();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (grantResults.length > 0 && grantResults[0] == android.content.pm.PackageManager.PERMISSION_GRANTED) {
-            getPic();
+            haveUploadImg = true;
+        }else{
+            haveUploadImg = false;
         }
     }
 
@@ -515,10 +513,8 @@ public class EditProfile extends AppCompatActivity{
                 Log.e("Upload file Exception", "Exception : " + e.getMessage(), e);
             }
             progressdialog.dismiss();
-            //tempImgFile.destory();
-            //tempImgFile = null;
+            haveUploadImg = false;
             return serverResponseCode;
-
         }
     }
 

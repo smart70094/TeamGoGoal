@@ -1,33 +1,23 @@
 package com.example.teamgogoal.teamgogoal;
 
 import android.app.ProgressDialog;
-import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
@@ -42,7 +32,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -52,17 +41,13 @@ public class TaskActivity extends AppCompatActivity {
 
     TaskDB db;
     TextView TargetTitle;
-    EditText taskNameTxt, taskContent, remindTimeTxt, cheerEt;
-    Button submit, submitTaskBtn, clearTaskMessageBtn, cannelTaskBtn;
+    EditText cheerEt;
+    Button submit;
     Map<Integer, TaskDB.TaskDetail> taskMap = new HashMap<Integer, TaskDB.TaskDetail>();
-    Spinner spinner;
-    String currTid = "", nextID = "", currID = "",targetName = "";
+    String currTid = "", nextID = "", currID = "", targetName = "";
     LoginActivity.User user;
     AlertDialog.Builder cheerDialog;
-    AlertDialog taskMsg = null, msg = null, dialog = null;   //dialog建興的
-    AlertDialog.Builder msgDialog = null;
-    View addTaskMsg;
-    final String[] list = {"earth", "jupiter", "mars"};
+    AlertDialog msg = null, dialog = null;
     SocketTrans socketTrans = LoginActivity.socketTrans;
     //進度條-建興
     CircularProgressBar circularProgressBar;
@@ -89,32 +74,9 @@ public class TaskActivity extends AppCompatActivity {
             targetName = bundle.getString("targetName");
             db = new TaskDB(LoginActivity.getLocalHost() + "readmission.php");
 
-            LayoutInflater factory = LayoutInflater.from(this);
-            addTaskMsg = factory.inflate(R.layout.activity_task_add_msg, null);
-
             TargetTitle = (TextView) findViewById(R.id.TargetTitle);
             TargetTitle.setText(targetName);
 
-            taskNameTxt = (EditText) addTaskMsg.findViewById(R.id.taskNameTxt);
-
-            taskContent = (EditText) addTaskMsg.findViewById(R.id.taskContent);
-            spinner = (Spinner) addTaskMsg.findViewById(R.id.spinner);
-            ArrayAdapter<String> lunchList = new ArrayAdapter<>(TaskActivity.this,
-                    android.R.layout.simple_spinner_dropdown_item,
-                    list);
-            spinner.setAdapter(lunchList);
-            remindTimeTxt = (EditText) addTaskMsg.findViewById(R.id.remindTimeTxt);
-            submitTaskBtn = (Button) addTaskMsg.findViewById(R.id.submitTaskBtn);
-            cannelTaskBtn = (Button) addTaskMsg.findViewById(R.id.cannelTaskBtn);
-            clearTaskMessageBtn = (Button) addTaskMsg.findViewById(R.id.clearTaskMessageBtn);
-            msgDialog = new AlertDialog.Builder(TaskActivity.this, R.style.Translucent_NoTitle).setView(addTaskMsg);
-            msgDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialogInterface) {
-                    initial();
-                }
-            });
-            //new DbOperationTask().execute("showTargetEvent");
             LayoutInflater factoryCheerMsg = LayoutInflater.from(this);
             View cheerMsg = factoryCheerMsg.inflate(R.layout.activity_cheer_msg, null);
             submit = (Button) cheerMsg.findViewById(R.id.cheerBtn);
@@ -170,10 +132,122 @@ public class TaskActivity extends AppCompatActivity {
         synchronized (this) {
             taskMap.clear();
             taskDate.clear();
-            new DbOperationTask().execute("showTargetEvent");
+            new DbOperationTask().execute("read");
         }
     }
 
+
+    protected void fresh(Map<String, TaskDB.TaskDetail> map) {
+        Iterator it = map.entrySet().iterator();
+
+        while (it.hasNext()) {
+
+            Map.Entry<String, TaskDB.TaskDetail> set = (Map.Entry) it.next();
+
+            String s = set.getValue().mid.trim();
+            Integer key = Integer.parseInt(s);
+
+            if (!taskMap.containsKey(key)) {
+                HashMap<String, String> tk_hashmap = new HashMap<>();
+                tk_hashmap.put("mid", s);
+                tk_hashmap.put("personal_photo", "null");
+                tk_hashmap.put("missionName", set.getValue().missionName);
+                tk_hashmap.put("state", set.getValue().state);
+                tk_hashmap.put("auth", set.getValue().auth);
+                tk_hashmap.put("authID", set.getValue().authID);
+                taskDate.add(tk_hashmap);
+                taskMap.put(key, set.getValue());
+
+                //新增提醒時間
+               /* Intent intent=new Intent(TaskActivity.this,RegisterAlarmService.class);
+                intent.putExtra("cmd","adding");
+                intent.putExtra("mid",s);
+                intent.putExtra("missionName",set.getValue().missionName);
+                intent.putExtra("remindTime",set.getValue().remindTime);
+                startService(intent);*/
+            }
+        }
+
+        task_listAdapter = new Task_ListAdapter(this);
+        task_listAdapter.setData(taskDate);
+
+        task_listview.setAdapter(task_listAdapter);
+
+
+        // 任務項目-短按事件:傳送鼓勵訊息
+        task_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                currID = taskDate.get(i).get("mid");
+                showCheerMsg();
+            }
+        });
+
+
+        // 任務項目-長按事件:任務詳細事項(完成、詳細、修改、刪除)
+        task_listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                map_id = i;
+                final int id = Integer.valueOf(taskDate.get(i).get("mid"));
+                String auth = taskMap.get(id).auth.trim();
+                if (auth.equals(user.account.trim())) {
+
+                    View dialog_view = LayoutInflater.from(TaskActivity.this).inflate(R.layout.task_selector, null);
+
+
+                    Button completeTask = (Button) dialog_view.findViewById(R.id.completeTask);
+                    Button readTask = (Button) dialog_view.findViewById(R.id.readTask);
+                    Button modifyTask = (Button) dialog_view.findViewById(R.id.modifyTask);
+                    Button deleteTask = (Button) dialog_view.findViewById(R.id.deleteTask);
+
+
+                    completeTask.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            completeTask(id);
+                            dialog.dismiss();
+                        }
+                    });
+
+
+                    readTask.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            showTaskEvent(id, "readTask");
+                            dialog.dismiss();
+                        }
+                    });
+
+                    modifyTask.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            showTaskEvent(id, "modifyTask");
+                            dialog.dismiss();
+                        }
+                    });
+
+                    deleteTask.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            delete(id);
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog = new AlertDialog.Builder(TaskActivity.this, R.style.hitStyle).setView(dialog_view).create();
+                    dialog.show();
+
+                } else {
+                    showTaskEvent(id, "readTask");
+                }
+                return true;
+            }
+        });
+
+    }
+
+
+    //------傳送鼓勵訊息------
     protected void showCheerMsg() {
         try {
             if (msg == null) {
@@ -186,33 +260,57 @@ public class TaskActivity extends AppCompatActivity {
         }
     }
 
-    protected void showAddTaskMsg() {
+
+    //------跳轉詳細任務資訊------
+    protected void showTaskEvent(int id, String cmd) {
+        TaskDB.TaskDetail td = taskMap.get(id);
+
+        Intent intent = new Intent();
+        intent.setClass(this, TaskEventActivity.class);
+
+        intent.putExtra("cmd", cmd);
+        intent.putExtra("targetName", targetName);
+        intent.putExtra("tid", currTid);
+        intent.putExtra("mid", Integer.toString(id).trim());
+        intent.putExtra("taskName", td.missionName);
+        intent.putExtra("taskContent", td.missionContent);
+        intent.putExtra("remindTime", td.remindTime);
+
+        startActivity(intent);
+    }
+
+    // ------刪除任務------
+    protected void delete(int id) {
         try {
-            if (taskMsg == null) {
-                taskMsg = msgDialog.show();
-            } else {
-                taskMsg.show();
-            }
+            TaskDB.TaskDetail td = taskMap.get(id);
+            new TaskActivity.DbOperationTask().execute("delete", td.mid);
+            taskMap.remove(id);
+            taskDate.remove(map_id);
+            task_listAdapter.notifyDataSetChanged();
+
+            Intent intent = new Intent(getApplicationContext(), RegisterAlarmService.class);
+            intent.putExtra("cmd", "cancel");
+            intent.putExtra("mid", currID.trim());
+            startService(intent);
         } catch (Exception e) {
-            Log.v("jim_TaskActivity_showAddTaskMsg", e.toString());
+            Log.v("jim1", e.toString());
         }
     }
 
     public void requestMessage(View view) {
         /*String participator="";
         */
-        String participator="456-789";
-        socketTrans.setParams("requestMessage",participator);
+        String participator = "456-789";
+        socketTrans.setParams("requestMessage", participator);
         socketTrans.send();
     }
-
 
 
     private class DbOperationTask extends AsyncTask<String, Void, Void> {
         protected Void doInBackground(String... params) {
             String cmd = params[0];
             switch (cmd) {
-                case "showTargetEvent":
+                case "read":
                     final Map<String, TaskDB.TaskDetail> t;
                     t = db.read(currTid);
                     runOnUiThread(new Runnable() {
@@ -226,244 +324,26 @@ public class TaskActivity extends AppCompatActivity {
                     });
                     nextID = db.taskIndex();
                     break;
-                case "createTask":
-                    db.create(params[1], params[2], params[3], params[4], params[5]);
-                    nextID = db.taskIndex();
-                    break;
                 case "delete":
                     db.delete(params[1]);
-                    break;
-                case "targetCount":
-                    // tempID=db.targetCount();
-                    break;
-                case "updateTask":
-                    db.update(params[1], params[2], params[3], params[4], params[5]);
                     break;
             }
             return null;
         }
-
     }
 
-    protected void delete(int id) {
-        try {
-            TaskDB.TaskDetail td = taskMap.get(id);
-            new TaskActivity.DbOperationTask().execute("delete", td.mid);
-            taskMap.remove(id);
-            taskDate.remove(map_id);
-            task_listAdapter.notifyDataSetChanged();
-
-            Intent intent=new Intent(getApplicationContext(),RegisterAlarmService.class);
-            intent.putExtra("cmd","cancel");
-            intent.putExtra("mid",currID.trim());
-            startService(intent);
-        } catch (Exception e) {
-            Log.v("jim1", e.toString());
-        }
-    }
-
-    protected void update() {
-        Intent intent=new Intent(getApplicationContext(),RegisterAlarmService.class);
-        intent.putExtra("cmd","cancel");
-        intent.putExtra("mid",currID.trim());
-        startService(intent);
-
-        String param1 = taskNameTxt.getText().toString();
-        String param2 = taskContent.getText().toString();
-        String param3 = remindTimeTxt.getText().toString();
-        String param4 = currTid;
-
-        int key = Integer.parseInt(currID.trim());
-        TaskDB.TaskDetail td = taskMap.get(key);
-        td.missionName = param1;
-        td.missionContent = param2;
-        td.remindTime = param3;
-        td.tid = param4;
-
-        new DbOperationTask().execute("updateTask", currID, param1, param2, param3, param4);
-        currID = "";
-
-        taskDate.get(map_id).put("missionName", param1);
-        task_listAdapter.notifyDataSetChanged();
-        taskMsg.dismiss();
-
-        intent.putExtra("cmd","adding");
-        intent.putExtra("mid",currID.trim());
-        intent.putExtra("taskName",param1);
-        intent.putExtra("remindTime",param3);
-        startService(intent);
-    }
-
-    protected void addTask() {
-
-        if (taskNameTxt.getText().toString().equals("") || taskContent.getText().toString().equals("") || remindTimeTxt.getText().toString().equals("")) {
-            Toast.makeText(this, "請輸入完整資料", Toast.LENGTH_SHORT).show();
-        } else {
-
-            String param1 = taskNameTxt.getText().toString().trim();
-            String param2 = taskContent.getText().toString().trim();
-            String param3 = remindTimeTxt.getText().toString().trim();
-            String param4 = currTid.trim();
-            String param5 = "N";
-            String param6 = user.account;
-            String param7 = "";
-
-            nextID = nextID.trim();
-            TaskDB.TaskDetail td = new TaskDB.TaskDetail(nextID, param1, param2, param3, param4, param5, param6, param7);
-
-            new TaskActivity.DbOperationTask().execute("createTask", param1, param2, param3, param4, param6);
-
-            HashMap<String, String> tk_hashmap = new HashMap<>();
-            tk_hashmap.put("mid", nextID);
-            tk_hashmap.put("personal_photo", "null");
-            tk_hashmap.put("missionName", param1);
-
-            taskDate.add(tk_hashmap);
-            task_listAdapter.notifyDataSetChanged();
-
-            int k = Integer.parseInt(nextID.trim());
-
-            taskMap.put(k, td);
-            Toast.makeText(this, "新增任務成功", Toast.LENGTH_SHORT).show();
-            taskMsg.dismiss();
-
-            Intent intent=new Intent(getApplicationContext(),RegisterAlarmService.class);
-            intent.putExtra("cmd","adding");
-            intent.putExtra("mid",nextID.trim());
-            intent.putExtra("taskName",param1);
-            intent.putExtra("remindTime",param3);
-            startService(intent);
-        }
+    //------頁面下方-新增任務------
+    public void addTask(View view) {
+        Intent intent = new Intent();
+        intent.setClass(this, TaskEventActivity.class);
+        intent.putExtra("cmd", "addTask");
+        intent.putExtra("tid", currTid);
+        intent.putExtra("targetName", targetName);
+        startActivity(intent);
     }
 
 
-    protected void fresh(Map<String, TaskDB.TaskDetail> map) {
-        Iterator it = map.entrySet().iterator();
-
-        while (it.hasNext()) {
-
-                  /*------Date:1015 rebuild-----*/
-
-
-            Map.Entry<String, TaskDB.TaskDetail> set = (Map.Entry) it.next();
-
-            String s = set.getValue().mid.trim();
-            Integer key = Integer.parseInt(s);
-
-
-            if (!taskMap.containsKey(key)) {
-                HashMap<String, String> tk_hashmap = new HashMap<>();
-                tk_hashmap.put("mid", s);
-                tk_hashmap.put("personal_photo", "null");
-                tk_hashmap.put("missionName", set.getValue().missionName);
-                tk_hashmap.put("state",set.getValue().state);
-                tk_hashmap.put("auth",set.getValue().auth);
-                taskDate.add(tk_hashmap);
-                taskMap.put(key, set.getValue());
-
-                //新增提醒時間
-               /* Intent intent=new Intent(TaskActivity.this,RegisterAlarmService.class);
-                intent.putExtra("cmd","adding");
-                intent.putExtra("mid",s);
-                intent.putExtra("missionName",set.getValue().missionName);
-                intent.putExtra("remindTime",set.getValue().remindTime);
-                startService(intent);*/
-            }
-
-            /*------Date:1015 rebuild-----*/
-
-        }
-
-        task_listAdapter = new Task_ListAdapter(this);
-        task_listAdapter.setData(taskDate);
-
-        task_listview.setAdapter(task_listAdapter);
-
-        task_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                currID = taskDate.get(i).get("mid");
-                showCheerMsg();
-            }
-        });
-
-        task_listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                map_id = i;
-                int id = Integer.valueOf(taskDate.get(i).get("mid"));
-                String auth = taskMap.get(id).auth.trim();
-                if (auth.equals(user.account.trim())) {
-                    final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"詳細", "修改", "刪除", "撰寫回顧"}, id);
-                    mutiItemDialog.show();
-                } else {
-                    submitTaskBtn.setEnabled(false);
-                    clearTaskMessageBtn.setEnabled(false);
-                    peek(id);
-                }
-                return true;
-            }
-        });
-
-    }
-
-
-    public AlertDialog getMutiItemDialog(final String[] cmd, final int id) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        //設定對話框內的項目
-        builder.setItems(cmd, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int index) {
-                switch (cmd[index]) {
-                    case "詳細":
-                        peek(id);
-                        break;
-                    case "修改":
-                        peek(id);
-                        submitTaskBtn.setText("更新資料");
-                        clearTaskMessageBtn.setEnabled(false);
-                        currID = Integer.toString(id).trim();
-                        break;
-                    case "刪除":
-                        delete(id);
-                        break;
-                }
-            }
-        });
-        return builder.create();
-    }
-
-    protected void peek(int id) {
-        showAddTaskMsg();
-        TaskDB.TaskDetail td = taskMap.get(id);
-        taskNameTxt.setText(td.missionName);
-        taskContent.setText(td.missionContent);
-        remindTimeTxt.setText(td.remindTime);
-    }
-
-    public void onClick(View view) {
-        int id = view.getId();
-        switch (id) {
-            case R.id.showAddTaskBtn:
-                showAddTaskMsg();
-                break;
-            case R.id.selectRemindTime:
-                alarm();
-                break;
-            case R.id.cannelTaskBtn:
-                cancel();
-                break;
-            case R.id.submitTaskBtn:
-                if (currID.equals("")) addTask();
-                else update();
-                break;
-            case R.id.cheerBtn:
-                cheerSubmit();
-                break;
-        }
-    }
-
-    public void cheerSubmit() {
+    public void cheerSubmit(View view) {
         try {
             String msgStr = cheerEt.getText().toString();
             Integer key = Integer.parseInt(currID.trim());
@@ -477,84 +357,32 @@ public class TaskActivity extends AppCompatActivity {
         }
     }
 
-    protected void alarm() {
-        final EditText remindTime = remindTimeTxt;
-        // Use the current time as the default values for the picker
-        final Calendar c = Calendar.getInstance();
-        int hour = c.get(Calendar.HOUR_OF_DAY);
-        int minute = c.get(Calendar.MINUTE);
-        // Create a new instance of TimePickerDialog and return it
-        new TimePickerDialog(TaskActivity.this, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                remindTime.setText(hourOfDay + ":" + minute);
-                Log.v("jim_alarm", hourOfDay + ":" + minute);
-            }
-        }, hour, minute, false).show();
-    }
+    //------完成任務------
 
-    protected void initial() {
-        taskNameTxt.setText("");
-        taskContent.setText("");
-        remindTimeTxt.setText("");
-        spinner.setSelection(0);
-        submitTaskBtn.setEnabled(true);
-        clearTaskMessageBtn.setEnabled(true);
-        cannelTaskBtn.setEnabled(true);
-        submitTaskBtn.setText("新增任務");
-    }
-
-    protected void cancel() {
-        initial();
-        taskMsg.dismiss();
-    }
-
-    protected ImageView toCircleImage(int imgId, ImageView img) {
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imgId);
-        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-        roundedBitmapDrawable.setCircular(true);
-        img.setImageDrawable(roundedBitmapDrawable);
-        return img;
-    }
-
-    //------------帥哥建興的--------------
     private void completeTask(final Integer key) {
-        final View dialog_view;
-        Complete_Task_DialogHolder holder = new Complete_Task_DialogHolder();
 
-        dialog_view = LayoutInflater.from(this).inflate(R.layout.complete_task_dialog, null);
+        Hit hit = new Hit("2", this);
 
-        holder.confirm = (Button) dialog_view.findViewById(R.id.button5);
-        holder.cancel = (Button) dialog_view.findViewById(R.id.button6);
+        hit.set_hitTitle("提示");
+        hit.set_hitContent("確認完成個人任務 ?");
 
 
-        holder.confirm.setOnClickListener(new View.OnClickListener() {
+        hit.get_hitConfirm().setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String mid = Integer.toString(key);
-                Log.d("hhhhhhhhhhh", mid);
-                //String phpurl = LoginActivity.getLocalHost() + "updateTaskState.php?mid=" + mid;
                 String phpurl = LoginActivity.getLocalHost() + "updateTaskState.php?mid=" + mid + "&tid=" + currTid + "&uid=" + LoginActivity.getUser().uid + "&partnerid=" + taskMap.get(key).collaborator;
                 new TransTask().execute(phpurl);
             }
         });
 
-        holder.cancel.setOnClickListener(new View.OnClickListener() {
+        hit.get_hitCancel().setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 dialog.dismiss();
             }
         });
 
-        dialog = new AlertDialog.Builder(this)
-                .setView(dialog_view)
-                .show();
+        dialog = new AlertDialog.Builder(this, R.style.hitStyle).setView(hit.get_view()).show();
     }
-
-    static class Complete_Task_DialogHolder {
-        Button confirm;
-        Button cancel;
-    }
-
-    //--------------資料庫連接 Code   ---------------------//
 
     private class TransTask extends AsyncTask<String, Void, String> {
         @Override
@@ -592,7 +420,7 @@ public class TaskActivity extends AppCompatActivity {
     }
 
 
-    //--------------資料庫連接 Code   進度條搜尋百分比---------------------//
+    //------資料庫連接 Code   進度條搜尋百分比------//
 
     private void initDataBase() {
         String phpurl = LoginActivity.getLocalHost() + "searchPercent.php?tid=" + currTid;
@@ -661,14 +489,12 @@ public class TaskActivity extends AppCompatActivity {
     }
 
 
-    //---------------- 元素搜尋---------------------//
-
+    //------元素搜尋------//
 
     public void checkElement(View view) {
         String phpurl = LoginActivity.getLocalHost() + "searchElement.php?&tid=" + currTid + "&uid=" + LoginActivity.getUser().uid;
         new TransTask_searchElement().execute(phpurl);
     }
-
 
     private class TransTask_searchElement extends AsyncTask<String, Void, String> {
         String mine, mountain, snow, fire, soil;
@@ -758,17 +584,13 @@ public class TaskActivity extends AppCompatActivity {
     }
 
 
-
-    //---------管理成員-------//
+    //------管理成員------//
 
     public void checkMember(View view) {
-        Intent intent = new Intent();
+        Intent intent = new Intent(this,Member.class);
         intent.putExtra("tid", currTid);
         intent.putExtra("targetName",targetName);
-        intent.setClass(this,Member.class);
         startActivity(intent);
-
-
     }
 
 }
