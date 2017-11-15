@@ -46,8 +46,8 @@ public class TaskActivity extends AppCompatActivity {
 
     TaskDB db;
     TextView TargetTitle;
-    EditText taskNameTxt, taskContent, remindTimeTxt, cheerEt;
-    Button submit, submitTaskBtn, clearTaskMessageBtn, cannelTaskBtn;
+    EditText cheerEt;
+    Button submit;
     Map<Integer, TaskDB.TaskDetail> taskMap = new HashMap<Integer, TaskDB.TaskDetail>();
     Spinner spinner;
     String currTid = "", nextID = "", currID = "", targetName = "";
@@ -55,7 +55,6 @@ public class TaskActivity extends AppCompatActivity {
     AlertDialog.Builder cheerDialog;
     AlertDialog taskMsg = null, msg = null, dialog = null;   //dialog建興的
     AlertDialog.Builder msgDialog = null;
-    final String[] list = {"earth", "jupiter", "mars"};
     SocketTrans socketTrans = LoginActivity.socketTrans;
     //進度條-建興
     CircularProgressBar circularProgressBar;
@@ -76,6 +75,9 @@ public class TaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task);
         try {
+
+
+
             Bundle bundle = getIntent().getExtras();
             user = LoginActivity.getUser();
             currTid = bundle.getString("tid");
@@ -166,6 +168,7 @@ public class TaskActivity extends AppCompatActivity {
                 tk_hashmap.put("missionName", set.getValue().missionName);
                 tk_hashmap.put("state", set.getValue().state);
                 tk_hashmap.put("auth", set.getValue().auth);
+                tk_hashmap.put("authID", set.getValue().authID);
                 taskDate.add(tk_hashmap);
 
                 taskMap.put(key, set.getValue());

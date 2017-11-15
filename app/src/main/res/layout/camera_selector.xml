@@ -13,12 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/empty"
-        android:text="選擇照片" />
+        android:text="選擇照片"
+        android:textColor="@color/basicColor" />
 
     <Button
         android:id="@+id/uploadButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/empty"
-        android:text="上傳" />
+        android:text="上傳"
+        android:textColor="@color/basicColor" />
 </LinearLayout>

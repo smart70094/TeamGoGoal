@@ -65,11 +65,14 @@ public class EditProfile extends AppCompatActivity{
     private Dialog personal_photo_selector_dialog;
 
     private tempFileManager tempImgFile = new tempFileManager();
+    private boolean haveUploadImg;
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
+
+        haveUploadImg = false;
 
         user = LoginActivity.getUser();
         name = (TextView) findViewById(R.id.nickName);
@@ -90,6 +93,18 @@ public class EditProfile extends AppCompatActivity{
 
         new TransTask().execute(imageUrl);
 
+    }
+
+    public void EditProfileEvent(View view) {
+        if(haveUploadImg){
+            progressdialog = ProgressDialog.show(EditProfile.this, "", "檔案上傳中...", true);
+            Toast.makeText(EditProfile.this, "上傳圖片" + imagepath, Toast.LENGTH_SHORT).show();
+            new Thread(new Runnable() {
+                public void run() {
+                    uploadFile(imagepath);
+                }
+            }).start();
+        }
     }
 
 
@@ -146,6 +161,7 @@ public class EditProfile extends AppCompatActivity{
         hit_dialog.show();
     }
 
+    //修改暱稱
     public void ChangeName(View view) {
 
         View dialog_view;
@@ -358,6 +374,13 @@ public class EditProfile extends AppCompatActivity{
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (grantResults.length > 0 && grantResults[0] == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            getPic();
+        }
+    }
+
     public void getPic() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -373,13 +396,9 @@ public class EditProfile extends AppCompatActivity{
             tempImgFile.setFileUri(selectedImageUri);
             tempImgFile.uri2tempFile(this);
             imagepath = tempImgFile.getFilePath();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (grantResults.length > 0 && grantResults[0] == android.content.pm.PackageManager.PERMISSION_GRANTED) {
-            getPic();
+            haveUploadImg = true;
+        }else{
+            haveUploadImg = false;
         }
     }
 
@@ -494,10 +513,8 @@ public class EditProfile extends AppCompatActivity{
                 Log.e("Upload file Exception", "Exception : " + e.getMessage(), e);
             }
             progressdialog.dismiss();
-            //tempImgFile.destory();
-            //tempImgFile = null;
+            haveUploadImg = false;
             return serverResponseCode;
-
         }
     }
 
