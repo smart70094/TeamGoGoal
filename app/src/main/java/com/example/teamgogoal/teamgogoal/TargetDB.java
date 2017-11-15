@@ -103,6 +103,12 @@ public class TargetDB {
             }
         }
     }
+    public void requestAddParticipator(String... dataList){
+        String tid=dataList[0];
+        String account=dataList[1];
+        socketTrans.setParams("addParticipator",tid,account);
+        socketTrans.send();
+    }
 
     protected void createParticipator(String tid, String originator, String subject) {
         socketTrans.setParams("register_request", originator, subject, tid);

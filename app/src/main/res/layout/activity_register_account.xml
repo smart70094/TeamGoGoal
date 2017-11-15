@@ -118,7 +118,7 @@
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="4"
+                                android:layout_weight="3.2"
                                 android:gravity="bottom|left"
                                 android:orientation="vertical">
 
@@ -139,6 +139,12 @@
                                     android:onClick="personal_photo_selector"
                                     android:scaleType="fitCenter"
                                     app:srcCompat="@drawable/item_camera" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="0.7"
+                                    android:orientation="vertical"></LinearLayout>
 
                             </LinearLayout>
 
@@ -192,13 +198,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight=".9"
-                        android:background="@color/black"
+                        android:background="@color/top_bg_color"
                         android:ems="1"
                         android:hint="暱稱"
                         android:inputType="textPersonName"
                         android:paddingLeft="5dp"
-                        android:textColor="@android:color/black"
-                        android:textSize="18sp">
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/basicColor2">
 
                     </EditText>
 
@@ -222,13 +228,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight=".9"
-                        android:background="@color/black"
+                        android:background="@color/top_bg_color"
                         android:ems="1"
                         android:hint="帳號"
                         android:inputType="textVisiblePassword"
                         android:paddingLeft="5dp"
-                        android:textColor="@android:color/black"
-                        android:textSize="18sp">
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/basicColor2">
 
                     </EditText>
                 </LinearLayout>
@@ -251,13 +257,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight=".9"
-                        android:background="@color/black"
+                        android:background="@color/top_bg_color"
                         android:ems="1"
                         android:hint="密碼"
                         android:inputType="textPassword"
                         android:paddingLeft="5dp"
-                        android:textColor="@android:color/black"
-                        android:textSize="18sp">
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/basicColor2">
 
                     </EditText>
                 </LinearLayout>
@@ -280,13 +286,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight=".9"
-                        android:background="@color/black"
+                        android:background="@color/top_bg_color"
                         android:ems="1"
                         android:hint="e-mail"
                         android:inputType="textPassword"
                         android:paddingLeft="5dp"
-                        android:textColor="@android:color/black"
-                        android:textSize="18sp">
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/basicColor2">
 
                     </EditText>
                 </LinearLayout>

@@ -18,6 +18,7 @@ import java.util.List;
 
 public class Request_ListAdapter extends BaseAdapter {
     RequestDB db;
+    TargetDB targetDB;
     ViewHolder holder;
     Context context;
     private LayoutInflater myInflater;
@@ -28,6 +29,7 @@ public class Request_ListAdapter extends BaseAdapter {
         myInflater = LayoutInflater.from(context);
         this.context = context;
         this.db = db;
+        targetDB=new TargetDB();
     }
 
     public void setData(List<HashMap<String, String>> list) {
@@ -86,7 +88,7 @@ public class Request_ListAdapter extends BaseAdapter {
 
 
     private void request_ask(final String originator,final String cmdContext, View convertView, final int position) {
-        holder.request_context.setText(originator + "邀請你加入任務" + cmdContext);
+        holder.request_context.setText(cmdContext);
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,7 +97,7 @@ public class Request_ListAdapter extends BaseAdapter {
                 new AlertDialog.Builder(context)
                         .setTitle("TeamGoGoal")//設定視窗標題
                         .setIcon(R.mipmap.ic_launcher)//設定對話視窗圖示
-                        .setMessage(originator + "邀請你加入任務" + cmdContext)//設定顯示的文字
+                        .setMessage(cmdContext)//設定顯示的文字
                         .setPositiveButton("取消", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -108,7 +110,9 @@ public class Request_ListAdapter extends BaseAdapter {
                                 new Thread(new Runnable() {
                                     public void run() {
                                         String rid = id;
+                                        targetDB.requestAddParticipator(cmdContext,LoginActivity.getUser().account);
                                         new DeleteRequest().execute(rid, cmdContext);
+
                                         list.remove(position);
                                         handler.post(new Runnable(){
                                             @Override

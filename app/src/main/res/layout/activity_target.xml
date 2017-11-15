@@ -27,12 +27,6 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal"></LinearLayout>
-
             <ImageButton
                 android:id="@+id/Profile"
                 android:layout_width="0dp"
@@ -92,12 +86,6 @@
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/item_q" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal"></LinearLayout>
-
 
         </LinearLayout>
 
@@ -114,8 +102,9 @@
                 android:layout_weight="9"
                 android:divider="@null"
                 android:dividerHeight="20dp"
-                android:paddingLeft="50dp"
-                android:paddingRight="50dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="30dp"
+                android:paddingTop="20dp"
                 android:scrollbars="none" />
 
             <LinearLayout

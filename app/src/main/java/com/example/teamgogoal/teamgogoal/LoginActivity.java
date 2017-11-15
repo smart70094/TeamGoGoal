@@ -187,8 +187,8 @@ public class LoginActivity extends AppCompatActivity {
         new forgetPasswordThread().execute(account, email);
     }
 
-    private class forgetPasswordThread extends AsyncTask<String, Void, String> {
-        protected String doInBackground(String... params) {
+    private class forgetPasswordThread extends AsyncTask<String, Void, Void> {
+        protected Void doInBackground(String... params) {
             try {
                 String account = params[0];
                 String email = params[1];
@@ -204,11 +204,8 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(String data) {
-            super.onPostExecute(data);
-            if (!data.equals(null)) {
-                Toast.makeText(LoginActivity.this, data, Toast.LENGTH_LONG).show();
-            }
+        protected void onPostExecute(Void aVoid) {
+            Toast.makeText(LoginActivity.this, "帳密已寄到您的信箱！\n請去您的信箱收信", Toast.LENGTH_SHORT).show();
         }
     }
 

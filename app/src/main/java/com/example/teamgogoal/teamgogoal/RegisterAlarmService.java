@@ -4,13 +4,12 @@ import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.icu.util.Calendar;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 /**
@@ -75,7 +74,7 @@ public class RegisterAlarmService extends IntentService {
 
                     int hour=Integer.parseInt(timeArr[0].trim());
                     int min=Integer.parseInt(timeArr[1].trim());
-                    android.icu.util.Calendar calendar = android.icu.util.Calendar.getInstance();
+                    Calendar calendar = Calendar.getInstance();
                     calendar.set(Calendar.HOUR_OF_DAY, hour);
                     calendar.set(Calendar.MINUTE, min);
 

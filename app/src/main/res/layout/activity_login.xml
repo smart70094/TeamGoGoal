@@ -72,7 +72,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="2"
+                    android:layout_weight="2.5"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -95,20 +95,21 @@
                             android:layout_height="0dp"
                             android:layout_weight="1.5"
                             android:autoText="false"
-                            android:background="@color/black"
-                            android:hint="請輸入帳號"
+                            android:background="@color/top_bg_color"
+                            android:hint="帳號"
                             android:inputType="textPersonName"
                             android:paddingLeft="5dp"
                             android:singleLine="true"
                             android:text="123"
-                            android:textColor="@android:color/black" />
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/basicColor2" />
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight=".5"
+                        android:layout_weight=".8"
                         android:orientation="vertical"></LinearLayout>
 
                     <LinearLayout
@@ -124,19 +125,20 @@
                             android:layout_height="0dp"
                             android:layout_gravity="center_horizontal"
                             android:layout_weight="1"
-                            android:background="@color/black"
-                            android:hint="請輸入密碼"
+                            android:background="@color/top_bg_color"
+                            android:hint="密碼"
                             android:inputType="textPassword"
                             android:paddingLeft="5dp"
                             android:text="456"
-                            android:textColor="@android:color/black" />
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/basicColor2" />
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="2"
+                        android:layout_weight="1.5"
                         android:orientation="vertical">
 
                         <Button
@@ -174,7 +176,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="2"
+                        android:layout_weight="1.2"
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -183,7 +185,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="2"
-                            android:gravity="right|center_vertical"
+                            android:gravity="bottom|right|center_vertical"
                             android:text="沒有帳戶嗎? "
                             android:textColor="@color/black"
                             android:textSize="14sp" />
@@ -192,11 +194,12 @@
                             android:id="@+id/button5"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_gravity="center"
+                            android:layout_gravity="center_vertical"
                             android:layout_weight="2"
                             android:background="@color/empty"
+                            android:gravity="bottom"
                             android:onClick="creat"
-                            android:text="按我註冊>"
+                            android:text="按我註冊 >"
                             android:textAlignment="viewStart"
                             android:textColor="@color/black"
                             android:textSize="14sp"
