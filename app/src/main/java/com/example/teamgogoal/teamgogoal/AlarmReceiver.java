@@ -18,6 +18,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         String data="你今天完成了「"+taskName+"」了嘛？";
         Intent nofyIntent=new Intent(context,NofyService.class);
         nofyIntent.putExtra("foo",data);
+        nofyIntent.putExtra("subject","target");
         context.startService(nofyIntent);
     }
 }

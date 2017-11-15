@@ -51,6 +51,12 @@ public class TaskDB {
         }
         return map;
     }
+    protected String readAlarmInfo(String... dataList){
+        String auth=dataList[0];
+        String urlParameters = "auth=" + auth;
+        String php = "readAlarmMission.php";
+        return viaParams(urlParameters, php);
+    }
     protected String taskIndex(){
         String params="table=mission";
         String php="taskIndex.php";

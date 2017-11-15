@@ -359,8 +359,15 @@ public class TaskActivity extends AppCompatActivity {
                 tk_hashmap.put("state",set.getValue().state);
                 tk_hashmap.put("auth",set.getValue().auth);
                 taskDate.add(tk_hashmap);
-
                 taskMap.put(key, set.getValue());
+
+                //新增提醒時間
+               /* Intent intent=new Intent(TaskActivity.this,RegisterAlarmService.class);
+                intent.putExtra("cmd","adding");
+                intent.putExtra("mid",s);
+                intent.putExtra("missionName",set.getValue().missionName);
+                intent.putExtra("remindTime",set.getValue().remindTime);
+                startService(intent);*/
             }
 
             /*------Date:1015 rebuild-----*/
@@ -757,6 +764,7 @@ public class TaskActivity extends AppCompatActivity {
     public void checkMember(View view) {
         Intent intent = new Intent();
         intent.putExtra("tid", currTid);
+        intent.putExtra("targetName",targetName);
         intent.setClass(this,Member.class);
         startActivity(intent);
 

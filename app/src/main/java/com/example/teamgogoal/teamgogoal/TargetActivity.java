@@ -277,10 +277,9 @@ public class TargetActivity extends AppCompatActivity {
             TargetData.remove(map_id);
             target_listAdapter.notifyDataSetChanged();
             if (user.account.equals(td.auth.trim()))
-                new DbOperationTask().execute("deleteParticipator_all", td.tid);
-
-            else
-                new DbOperationTask().execute("deleteParticipator", td.tid, user.account);
+                new DbOperationTask().execute("deleteTarget_all", td.tid,td.targetName);
+            /*else
+                new DbOperationTask().execute("deleteParticipator", td.tid, user.account);*/
         } catch (Exception e) {
             Log.v("jim1", e.toString());
         }
@@ -364,8 +363,8 @@ public class TargetActivity extends AppCompatActivity {
                 case "updateTarget":
                     //db.updateTarget(params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8], params[9]);
                     break;
-                case "deleteParticipator_all":
-                    db.deleteTargetAll(params[1]);
+                case "deleteTarget_all":
+                    db.deleteTargetAll(params[1],params[2]);
                     break;
                 case "deleteParticipator":
                     db.deleteParticipator(params[1], params[2]);

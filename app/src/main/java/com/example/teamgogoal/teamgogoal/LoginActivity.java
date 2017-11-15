@@ -33,7 +33,7 @@ import java.net.URL;
 
 public class LoginActivity extends AppCompatActivity {
     //public static final String localhost="http://169.254.68.146/DB/";
-    public static final String ip = "192.168.0.100";
+    public static final String ip = "36.233.91.221";
     //public static final String ip="111.253.228.128";
     public static final String localhost = "http://" + ip + "/TeamGoGoal/";
     EditText accountTxt, passwordTxt;
@@ -130,6 +130,14 @@ public class LoginActivity extends AppCompatActivity {
             super.onPostExecute(cmd);
             switch (cmd) {
                 case "connectSuccessful":
+
+                    //提醒設定
+
+                    Intent i=new Intent(LoginActivity.this,RegisterAlarmService.class);
+                    i.putExtra("cmd","loading");
+                    startService(i);
+
+
                     intent = new Intent();
                     intent.setClass(LoginActivity.this, TargetActivity.class);
                     startActivity(intent);
@@ -188,7 +196,7 @@ public class LoginActivity extends AppCompatActivity {
                 socket.connection();
                 socket.setParams("register_forgetPassword", account, email);
                 socket.send();
-                return socketTrans.getResult();
+                //return socketTrans.getResult();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -204,42 +212,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private class registerAlarmThread extends AsyncTask<Void, Void, String> {
-        protected String doInBackground(Void... voids) {
-            try {
-                String urlParameters = "table=mission & auth=" + user.account;
-                String php = "readAlarmMission.php";
-                return viaParams(urlParameters, php);
-            } catch (Exception e) {
-                Log.v("jim_registerAlarmThread", e.toString());
-            }
-            return "";
-        }
 
-        @Override
-        protected void onPostExecute(String data) {
-            super.onPostExecute(data);
-            Intent intent = new Intent(LoginActivity.this, RegisterAlarmService.class);
-            try {
-                JSONArray array = new JSONArray(data);
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject obj = array.getJSONObject(i);
-                    //從php取值出來放入intent讓service使用
-                    String mid = obj.getString("mid");
-                    String taskName = obj.getString("missionName").trim();
-                    String remindTime = obj.getString("remindTime").trim();
-                    intent.putExtra("cmd", "adding");
-                    intent.putExtra("mid", mid.trim());
-                    intent.putExtra("taskName", taskName);
-                    intent.putExtra("remindTime", remindTime);
-                    startService(intent);
-                }
-            } catch (Exception e) {
-                Log.v("jim error in showTargetEvent：", e.toString());
-            }
-
-        }
-    }
 
     public class User implements Cloneable {
         String uid, account, password, name, state,email;

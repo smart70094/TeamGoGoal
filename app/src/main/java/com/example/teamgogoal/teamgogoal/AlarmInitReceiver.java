@@ -11,6 +11,8 @@ import android.content.Intent;
 public class AlarmInitReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-
+        Intent i=new Intent(context,RegisterAlarmService.class);
+        i.putExtra("cmd","loading");
+        context.startService(i);
     }
 }

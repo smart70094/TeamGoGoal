@@ -26,14 +26,10 @@ public  class SocketTrans {     //執行緒
     private OutputStream out;            //取得網路輸出串流
     private static BufferedReader br;            //取得網路輸入串流
     private static ArrayList<String> waitDealData=new ArrayList<String>();
-    /*String cmd;
-    String subject;
-    String originator;*/
     String param;
-    //static String result=null;
     public Context context;
     public NotificationManager notificationManager;
-    public MySimpleReceiver receiverForSimple;
+
     protected void setActivity(Context context){
         this.context=context;
     }
@@ -97,20 +93,20 @@ public  class SocketTrans {     //執行緒
             @Override
             public void run() {
                 try{
-                     String s=null;
+                     String str=null;
+                    String strArr[]=null;
                     while (clientSocket.isConnected()) {
                        if(br.ready()){
-                            s = br.readLine().trim();
-                           waitDealData.add(s);
-                            if(!s.equals("")) {
-                                Intent i = new Intent(context,NofyService.class);
-                                // Add extras to the bundle
-                                i.putExtra("foo", s);
-                                i.putExtra("receiver", receiverForSimple);
-                                // Start the service
+                            str = br.readLine().trim();
+                            strArr=str.split(",");
+                           String cmd=strArr[0];
+                           switch (cmd){
+                               case "message":
+                                   message(strArr[1],strArr[2]);
+                                   break;
 
-                                context.startService(i);
-                            }
+
+                           }
                        }
                     }
                 }catch(Exception e){
@@ -120,27 +116,17 @@ public  class SocketTrans {     //執行緒
         });
         t.start();
     }
-
+    public void message(String... dataList){
+        String subject=dataList[0];
+        String text=dataList[1];
+        Intent intent= new Intent(context,NofyService.class);
+        intent.putExtra("foo", text);
+        intent.putExtra("subject",subject);
+        context.startService(intent);
+    }
     public void close() throws IOException {
         br.close();
         out.close();
         clientSocket.close();
-    }
-
-    protected String getResult() {
-        try{
-            String result=null;
-            while(waitDealData.get(0)==null || waitDealData.get(0).equals("")){
-                result=waitDealData.get(0);
-                if(result.equals("") && waitDealData.size()>0) waitDealData.remove(0);
-                Thread.sleep(500);
-             }
-            result=waitDealData.get(0);
-            waitDealData.remove(0);
-            return result.trim();
-        }catch(Exception e){
-            Log.v("jim_getResult",e.toString());
-        }
-        return null;
     }
 }

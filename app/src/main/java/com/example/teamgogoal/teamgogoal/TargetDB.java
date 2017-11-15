@@ -29,7 +29,7 @@ public class TargetDB {
     protected Map<String, TargetDetail> readTarget() {
         Map<String, TargetDetail> map = new HashMap<String, TargetDetail>();
         try {
-            String s = viaParams("user=" + user.uid, "readTarget.php");
+            String s = viaParams("user=" + LoginActivity.getUser().uid, "readTarget.php");
             JSONArray array = new JSONArray(s.toString());
             for (int i = 0; i < array.length(); i++) {
                 JSONObject obj = array.getJSONObject(i);
@@ -68,9 +68,6 @@ public class TargetDB {
         String auth=dataList[4];
         socketTrans.setParams("addTarget",name,context,startTime,endTime,auth);
         socketTrans.send();
-        String result=socketTrans.getResult();
-        socketTrans.setParams("addParticipator",result,auth);
-        socketTrans.send();
         return null;
     }
 
@@ -78,6 +75,8 @@ public class TargetDB {
         String params = "table=target" + " & tid=" + param1 + " & targetName=" + param2 + " & targetContent=" + param3 + " & targetStartTime=" + param4 + " & targetEndTime=" + param5;
         String php = "updateTarget.php";
         String ans = viaParams(params, php);
+        socketTrans.setParams("register_update",user.account,param1,param2);
+        socketTrans.send();
     }
 
     protected void createParticipator(String id, String param1) {
@@ -108,8 +107,6 @@ public class TargetDB {
     protected void createParticipator(String tid, String originator, String subject) {
         socketTrans.setParams("register_request", originator, subject, tid);
         socketTrans.send(socketTrans.getParams());
-        String result = socketTrans.getResult();
-        Log.v("jim_createParticipator", result);
     }
 
 
@@ -120,10 +117,12 @@ public class TargetDB {
         return ans.trim();
     }
 
-    protected void deleteTargetAll(String tid) {
-        String params = "table=target & tid=" + tid.trim();
+    protected void deleteTargetAll(String tid,String targetName) {
+        /*String params = "table=target & tid=" + tid.trim();
         String php = "deleteTargetAll.php";
-        viaParams(params, php);
+        viaParams(params, php);*/
+        socketTrans.setParams("register_deleteAll",user.account,tid,targetName);
+        socketTrans.send();
     }
 
     protected void deleteParticipator(String tid, String account) {
