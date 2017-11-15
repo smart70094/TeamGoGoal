@@ -27,11 +27,18 @@
             android:gravity="center"
             android:orientation="horizontal">
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"></LinearLayout>
+
             <ImageButton
                 android:id="@+id/Profile"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:adjustViewBounds="true"
                 android:background="@color/empty"
                 android:onClick="toEditProfile"
                 android:padding="5dp"
@@ -40,20 +47,22 @@
 
             <ImageButton
                 android:id="@+id/Review"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:adjustViewBounds="true"
                 android:background="@color/empty"
                 android:onClick="checkReview"
                 android:padding="5dp"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/item_memory" />
+                app:srcCompat="@drawable/item_memory_light" />
 
             <ImageButton
                 android:id="@+id/Notice"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:adjustViewBounds="true"
                 android:background="@color/empty"
                 android:onClick="toRequest"
                 android:padding="5dp"
@@ -62,25 +71,32 @@
 
             <ImageButton
                 android:id="@+id/Target"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:adjustViewBounds="false"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:adjustViewBounds="true"
                 android:background="@color/empty"
                 android:onClick="fresh_activity"
                 android:padding="5dp"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/item_edit_light" />
+                app:srcCompat="@drawable/item_foot" />
 
             <ImageButton
                 android:id="@+id/Quest"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:adjustViewBounds="true"
                 android:background="@color/empty"
                 android:padding="5dp"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/item_q" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"></LinearLayout>
 
 
         </LinearLayout>
@@ -88,7 +104,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="10.9"
+            android:layout_weight="9"
             android:orientation="vertical">
 
             <ListView
@@ -100,7 +116,6 @@
                 android:dividerHeight="20dp"
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"
-                android:paddingTop="30dp"
                 android:scrollbars="none" />
 
             <LinearLayout

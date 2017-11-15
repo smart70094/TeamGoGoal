@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/empty"
     android:orientation="vertical"
     android:paddingLeft="10dp"
     android:paddingRight="10dp">
@@ -55,7 +56,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/bg_hit_btn"
+            android:background="@drawable/bg_hit_two_btn_confirm"
+            android:text="確認"
+            android:textColor="@color/basicColor"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/hitCancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_hit_two_btn_cancel"
             android:text="確認"
             android:textColor="@color/basicColor"
             android:textSize="18sp"

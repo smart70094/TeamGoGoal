@@ -5,7 +5,7 @@
 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_record_msg"
+    android:background="@drawable/bg_listitem"
     android:descendantFocusability="blocksDescendants"
     android:gravity="center_vertical|center_horizontal|center"
     android:padding="10dp">

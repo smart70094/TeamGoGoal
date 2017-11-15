@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/empty"
+    android:gravity="center"
+    android:orientation="vertical">
+
+
+    <Button
+        android:id="@+id/completeTask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_operator_btn"
+        android:text="完成任務 "
+        android:textColor="@color/basicColor" />
+
+    <Button
+        android:id="@+id/readTask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_operator_btn"
+        android:text="詳細內容"
+        android:textColor="@color/basicColor" />
+
+    <Button
+        android:id="@+id/modifyTask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_operator_btn"
+        android:text="修改內容"
+        android:textColor="@color/basicColor" />
+
+    <Button
+        android:id="@+id/deleteTask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_operator_btn"
+        android:lineSpacingExtra="8sp"
+        android:text="刪除任務"
+        android:textColor="@color/basicColor" />
+</LinearLayout>

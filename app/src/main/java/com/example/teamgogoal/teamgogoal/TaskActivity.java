@@ -3,13 +3,9 @@ package com.example.teamgogoal.teamgogoal;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,7 +17,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
@@ -49,12 +44,10 @@ public class TaskActivity extends AppCompatActivity {
     EditText cheerEt;
     Button submit;
     Map<Integer, TaskDB.TaskDetail> taskMap = new HashMap<Integer, TaskDB.TaskDetail>();
-    Spinner spinner;
     String currTid = "", nextID = "", currID = "", targetName = "";
     LoginActivity.User user;
     AlertDialog.Builder cheerDialog;
-    AlertDialog taskMsg = null, msg = null, dialog = null;   //dialog建興的
-    AlertDialog.Builder msgDialog = null;
+    AlertDialog msg = null, dialog = null;
     SocketTrans socketTrans = LoginActivity.socketTrans;
     //進度條-建興
     CircularProgressBar circularProgressBar;
@@ -75,7 +68,6 @@ public class TaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task);
         try {
-
 
 
             Bundle bundle = getIntent().getExtras();
@@ -152,14 +144,10 @@ public class TaskActivity extends AppCompatActivity {
 
         while (it.hasNext()) {
 
-                  /*------Date:1015 rebuild-----*/
-
-
             Map.Entry<String, TaskDB.TaskDetail> set = (Map.Entry) it.next();
 
             String s = set.getValue().mid.trim();
             Integer key = Integer.parseInt(s);
-
 
             if (!taskMap.containsKey(key)) {
                 HashMap<String, String> tk_hashmap = new HashMap<>();
@@ -173,9 +161,6 @@ public class TaskActivity extends AppCompatActivity {
 
                 taskMap.put(key, set.getValue());
             }
-
-            /*------Date:1015 rebuild-----*/
-
         }
 
         task_listAdapter = new Task_ListAdapter(this);
@@ -183,6 +168,8 @@ public class TaskActivity extends AppCompatActivity {
 
         task_listview.setAdapter(task_listAdapter);
 
+
+        // 任務項目-短按事件:傳送鼓勵訊息
         task_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -191,15 +178,60 @@ public class TaskActivity extends AppCompatActivity {
             }
         });
 
+
+        // 任務項目-長按事件:任務詳細事項(完成、詳細、修改、刪除)
         task_listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 map_id = i;
-                int id = Integer.valueOf(taskDate.get(i).get("mid"));
+                final int id = Integer.valueOf(taskDate.get(i).get("mid"));
                 String auth = taskMap.get(id).auth.trim();
                 if (auth.equals(user.account.trim())) {
-                    final AlertDialog mutiItemDialog = getMutiItemDialog(new String[]{"詳細", "修改", "刪除", "撰寫回顧"}, id);
-                    mutiItemDialog.show();
+
+                    View dialog_view = LayoutInflater.from(TaskActivity.this).inflate(R.layout.task_selector, null);
+
+
+                    Button completeTask = (Button) dialog_view.findViewById(R.id.completeTask);
+                    Button readTask = (Button) dialog_view.findViewById(R.id.readTask);
+                    Button modifyTask = (Button) dialog_view.findViewById(R.id.modifyTask);
+                    Button deleteTask = (Button) dialog_view.findViewById(R.id.deleteTask);
+
+
+                    completeTask.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            completeTask(id);
+                            dialog.dismiss();
+                        }
+                    });
+
+
+                    readTask.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            showTaskEvent(id, "readTask");
+                            dialog.dismiss();
+                        }
+                    });
+
+                    modifyTask.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            showTaskEvent(id, "modifyTask");
+                            dialog.dismiss();
+                        }
+                    });
+
+                    deleteTask.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            delete(id);
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog = new AlertDialog.Builder(TaskActivity.this, R.style.hitStyle).setView(dialog_view).create();
+                    dialog.show();
+
                 } else {
                     showTaskEvent(id, "readTask");
                 }
@@ -209,6 +241,8 @@ public class TaskActivity extends AppCompatActivity {
 
     }
 
+
+    //------傳送鼓勵訊息------
     protected void showCheerMsg() {
         try {
             if (msg == null) {
@@ -221,40 +255,8 @@ public class TaskActivity extends AppCompatActivity {
         }
     }
 
-    protected void showAddTaskMsg() {
-        try {
-            if (taskMsg == null) {
-                taskMsg = msgDialog.show();
-            } else {
-                taskMsg.show();
-            }
-        } catch (Exception e) {
-            Log.v("jim_TaskActivity_showAddTaskMsg", e.toString());
-        }
-    }
 
-    public AlertDialog getMutiItemDialog(final String[] cmd, final int id) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        //設定對話框內的項目
-        builder.setItems(cmd, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int index) {
-                switch (cmd[index]) {
-                    case "詳細":
-                        showTaskEvent(id, "readTask");
-                        break;
-                    case "修改":
-                        showTaskEvent(id, "modifyTask");
-                        break;
-                    case "刪除":
-                        delete(id);
-                        break;
-                }
-            }
-        });
-        return builder.create();
-    }
-
+    //------跳轉詳細任務資訊------
     protected void showTaskEvent(int id, String cmd) {
         TaskDB.TaskDetail td = taskMap.get(id);
 
@@ -272,8 +274,7 @@ public class TaskActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
-
+    // ------刪除任務------
     protected void delete(int id) {
         try {
             TaskDB.TaskDetail td = taskMap.get(id);
@@ -326,7 +327,7 @@ public class TaskActivity extends AppCompatActivity {
         }
     }
 
-
+    //------頁面下方-新增任務------
     public void addTask(View view) {
         Intent intent = new Intent();
         intent.setClass(this, TaskEventActivity.class);
@@ -351,55 +352,32 @@ public class TaskActivity extends AppCompatActivity {
         }
     }
 
+    //------完成任務------
 
-
-
-    protected ImageView toCircleImage(int imgId, ImageView img) {
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imgId);
-        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-        roundedBitmapDrawable.setCircular(true);
-        img.setImageDrawable(roundedBitmapDrawable);
-        return img;
-    }
-
-    //------------帥哥建興的--------------
     private void completeTask(final Integer key) {
-        final View dialog_view;
-        Complete_Task_DialogHolder holder = new Complete_Task_DialogHolder();
 
-        dialog_view = LayoutInflater.from(this).inflate(R.layout.complete_task_dialog, null);
+        Hit hit = new Hit("2", this);
 
-        holder.confirm = (Button) dialog_view.findViewById(R.id.button5);
-        holder.cancel = (Button) dialog_view.findViewById(R.id.button6);
+        hit.set_hitTitle("提示");
+        hit.set_hitContent("確認完成個人任務 ?");
 
 
-        holder.confirm.setOnClickListener(new View.OnClickListener() {
+        hit.get_hitConfirm().setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String mid = Integer.toString(key);
-                Log.d("hhhhhhhhhhh", mid);
-                //String phpurl = LoginActivity.getLocalHost() + "updateTaskState.php?mid=" + mid;
                 String phpurl = LoginActivity.getLocalHost() + "updateTaskState.php?mid=" + mid + "&tid=" + currTid + "&uid=" + LoginActivity.getUser().uid + "&partnerid=" + taskMap.get(key).collaborator;
                 new TransTask().execute(phpurl);
             }
         });
 
-        holder.cancel.setOnClickListener(new View.OnClickListener() {
+        hit.get_hitCancel().setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 dialog.dismiss();
             }
         });
 
-        dialog = new AlertDialog.Builder(this)
-                .setView(dialog_view)
-                .show();
+        dialog = new AlertDialog.Builder(this, R.style.hitStyle).setView(hit.get_view()).show();
     }
-
-    static class Complete_Task_DialogHolder {
-        Button confirm;
-        Button cancel;
-    }
-
-    //--------------資料庫連接 Code   ---------------------//
 
     private class TransTask extends AsyncTask<String, Void, String> {
         @Override
@@ -437,7 +415,7 @@ public class TaskActivity extends AppCompatActivity {
     }
 
 
-    //--------------資料庫連接 Code   進度條搜尋百分比---------------------//
+    //------資料庫連接 Code   進度條搜尋百分比------//
 
     private void initDataBase() {
         String phpurl = LoginActivity.getLocalHost() + "searchPercent.php?tid=" + currTid;
@@ -506,14 +484,12 @@ public class TaskActivity extends AppCompatActivity {
     }
 
 
-    //---------------- 元素搜尋---------------------//
-
+    //------元素搜尋------//
 
     public void checkElement(View view) {
         String phpurl = LoginActivity.getLocalHost() + "searchElement.php?&tid=" + currTid + "&uid=" + LoginActivity.getUser().uid;
         new TransTask_searchElement().execute(phpurl);
     }
-
 
     private class TransTask_searchElement extends AsyncTask<String, Void, String> {
         String mine, mountain, snow, fire, soil;
@@ -603,7 +579,7 @@ public class TaskActivity extends AppCompatActivity {
     }
 
 
-    //---------管理成員-------//
+    //------管理成員------//
 
     public void checkMember(View view) {
         Intent intent = new Intent();
