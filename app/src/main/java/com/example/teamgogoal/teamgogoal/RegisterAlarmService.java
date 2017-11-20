@@ -9,7 +9,9 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -30,7 +32,8 @@ public class RegisterAlarmService extends IntentService {
         String cmd=intent.getStringExtra("cmd");
         switch (cmd){
             case "loading":
-                loading();
+                String state=intent.getStringExtra("state");
+                loading(state);
                 break;
             case "adding":
                 String mid=intent.getStringExtra("mid");
@@ -41,19 +44,39 @@ public class RegisterAlarmService extends IntentService {
         }
 
     }
-    public void loading(){
+    public void loading(String state){
         TaskDB db=new TaskDB(LoginActivity.getLocalHost());
         String data=db.readAlarmInfo(LoginActivity.getUser().account);
+        Calendar mCal = Calendar.getInstance();
+        java.util.Calendar c1=java.util.Calendar.getInstance();
+        java.util.Calendar c2=java.util.Calendar.getInstance();
 
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         try {
             JSONArray array = new JSONArray(data);
             for (int i = 0; i < array.length(); i++) {
                 JSONObject obj = array.getJSONObject(i);
+                if(state.equals("N")){
+                    String mid = obj.getString("mid");
+                    String taskName = obj.getString("missionName").trim();
+                    String remindTime = obj.getString("remindTime").trim();
+                    registerAlarm("adding",mid,taskName,remindTime);
+                }else{
+                    String remindTime = obj.getString("remindTime").trim();
+                    Date curDate  =new Date();
+                    String curDateStr=sdf.format(curDate);
 
-                String mid = obj.getString("mid");
-                String taskName = obj.getString("missionName").trim();
-                String remindTime = obj.getString("remindTime").trim();
-                registerAlarm("adding",mid,taskName,remindTime);
+                    c1.setTime(sdf.parse(curDateStr));
+                    c2.setTime(sdf.parse(remindTime));
+
+
+                    if((c1. compareTo(c2))<0){
+                        String mid = obj.getString("mid");
+                        String taskName = obj.getString("missionName").trim();
+                        registerAlarm("adding",mid,taskName,remindTime);
+                    }
+                }
+
             }
         } catch (Exception e) {
             Log.v("jim error in showTargetEvent：", e.toString());

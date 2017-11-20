@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,12 +25,13 @@ public class Request_ListAdapter extends BaseAdapter {
     private LayoutInflater myInflater;
     List<HashMap<String, String>> list = new ArrayList<>();
     Handler handler = new Handler();
-
+    SocketTrans socketTrans;
     public Request_ListAdapter(Context context,RequestDB db) {
         myInflater = LayoutInflater.from(context);
         this.context = context;
         this.db = db;
         targetDB=new TargetDB();
+        socketTrans= LoginActivity.socketTrans;
     }
 
     public void setData(List<HashMap<String, String>> list) {
@@ -88,7 +90,10 @@ public class Request_ListAdapter extends BaseAdapter {
 
 
     private void request_ask(final String originator,final String cmdContext, View convertView, final int position) {
-        holder.request_context.setText(cmdContext);
+        String dataArr[]=cmdContext.split("-");
+        final String targetName=dataArr[0];
+        final String tid=dataArr[1];
+        holder.request_context.setText(targetName);
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +102,7 @@ public class Request_ListAdapter extends BaseAdapter {
                 new AlertDialog.Builder(context)
                         .setTitle("TeamGoGoal")//設定視窗標題
                         .setIcon(R.mipmap.ic_launcher)//設定對話視窗圖示
-                        .setMessage(cmdContext)//設定顯示的文字
+                        .setMessage(targetName)//設定顯示的文字
                         .setPositiveButton("取消", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -111,7 +116,7 @@ public class Request_ListAdapter extends BaseAdapter {
                                     public void run() {
                                         String rid = id;
                                         targetDB.requestAddParticipator(cmdContext,LoginActivity.getUser().account);
-                                        new DeleteRequest().execute(rid, cmdContext);
+                                        new DeleteRequest().execute(rid,tid, LoginActivity.getUser().account);
 
                                         list.remove(position);
                                         handler.post(new Runnable(){
@@ -134,10 +139,12 @@ public class Request_ListAdapter extends BaseAdapter {
 
         @Override
         protected Void doInBackground(String... params) {
-            String rid = params[0];
+            String rid=params[0];
             String tid = params[1];
-            TargetDB targetdb = new TargetDB();
-            targetdb.createParticipator(tid, LoginActivity.user.account);
+            String account = params[2];
+            socketTrans.setParams("addParticipator",tid,account);
+            socketTrans.send();
+
             db.deleteRegisterRequest(rid);
             return null;
         }
