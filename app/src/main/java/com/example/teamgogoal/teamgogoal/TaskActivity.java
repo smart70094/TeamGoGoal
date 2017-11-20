@@ -249,6 +249,12 @@ public class TaskActivity extends AppCompatActivity {
     }
 
 
+    //------左上返回鍵------
+    public void cancel(View view){
+        finish();
+    }
+
+
     //------傳送鼓勵訊息------
     protected void showCheerMsg() {
         try {
@@ -344,7 +350,7 @@ public class TaskActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
+    //------傳送鼓勵------
     public void cheerSubmit(View view) {
         try {
             String msgStr = cheerEt.getText().toString();
