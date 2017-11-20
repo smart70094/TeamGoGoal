@@ -79,50 +79,13 @@ public class TargetDB {
         socketTrans.send();
     }
 
-    protected void createParticipator(String id, String param1) {
-        String str[] = param1.split(",");
-        String php, params;
 
-        for (int i = 0; i < str.length; i++) {
-            if (!str[i].equals("")) {
-                if (str[i].equals(user.account)) {
-
-                    php = "createParticipator.php";
-                    params = "table=participator & tid=" + id.trim() + " & account=" + str[i].trim();
-                    String result = viaParams(params, php);
-                    Log.v("jim", result);
-                } else {
-                    php = "createRegisterRequest.php";
-                    params = "table=registerrequest & originator=" + user.account + " & cmd=request_ask & cmdContext=" + id.trim() + " & subject=" + str[i].trim();
-                    String result = viaParams(params, php);
-                    Log.v("jim_TargetDB_createParticipator", result);
-                    socketTrans.setParams("register_request", user.account.trim(), str[i].trim(), id.trim());
-                    socketTrans.send(socketTrans.getParams());
-                    Log.v("jim_createParticipator", result);
-                }
-            }
-        }
-    }
     public void requestAddParticipator(String... dataList){
         String tid=dataList[0];
         String account=dataList[1];
         socketTrans.setParams("addParticipator",tid,account);
         socketTrans.send();
     }
-
-    protected void createParticipator(String tid, String originator, String subject) {
-        socketTrans.setParams("register_request", originator, subject, tid);
-        socketTrans.send(socketTrans.getParams());
-    }
-
-
-    protected String targetIndex() {
-        String params = "table=target";
-        String php = "targetIndex.php";
-        String ans = viaParams(params, php);
-        return ans.trim();
-    }
-
     protected void deleteTargetAll(String tid,String targetName) {
         /*String params = "table=target & tid=" + tid.trim();
         String php = "deleteTargetAll.php";

@@ -44,7 +44,8 @@ public class Member extends AppCompatActivity {
                 //按鈕事件處理
                 String ParticipatorStr=memberID.getText().toString();
                 ParticipatorStr=ParticipatorStr.replace(",","-");
-                socketTrans.setParams("register_request",user.account,ParticipatorStr,targetName);
+                String context=targetName+"-"+currTid;
+                socketTrans.setParams("register_request",user.account,ParticipatorStr,context);
                 socketTrans.send();
                 Toast.makeText(view.getContext(), "邀請成功", Toast.LENGTH_SHORT).show();
             }

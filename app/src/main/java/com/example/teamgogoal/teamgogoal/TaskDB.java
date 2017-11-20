@@ -44,8 +44,9 @@ public class TaskDB {
                 String state = obj.getString("state");
                 String auth = obj.getString("auth");
                 String collaborator = obj.getString("collaborator");
+                String dream=obj.getString("dream");
                 String authID = obj.getString("authID");
-                TaskDB.TaskDetail taskDetail = new TaskDB.TaskDetail(mid, missionName, missionContent, remindTime, tid, state, auth, collaborator, authID);
+                TaskDB.TaskDetail taskDetail = new TaskDB.TaskDetail(mid, missionName, missionContent, remindTime, tid, state, auth, dream ,collaborator, authID);
                 map.put(mid, taskDetail);
             }
         } catch (JSONException e) {
@@ -91,9 +92,9 @@ public class TaskDB {
     }
 
     public static class TaskDetail implements Serializable {
-        String mid, missionName, missionContent, tid, state, auth, remindTime, collaborator, authID;
+        String mid, missionName, missionContent, tid, state, auth, remindTime, collaborator, authID,dream;
 
-        TaskDetail(String param1, String param2, String param3, String param4, String param5, String param6, String param7, String param8, String param9) {
+        TaskDetail(String param1, String param2, String param3, String param4, String param5, String param6, String param7, String param8, String param9,String param10) {
             this.mid = param1;
             this.missionName = param2;
             this.missionContent = param3;
@@ -101,8 +102,9 @@ public class TaskDB {
             this.tid = param5;
             this.state = param6;
             this.auth = param7;
-            this.collaborator = param8;
-            this.authID = param9;
+            this.dream=param8;
+            this.collaborator = param9;
+            this.authID = param10;
         }
     }
 

@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
@@ -139,14 +140,14 @@ public class TaskActivity extends AppCompatActivity {
 
     protected void fresh(Map<String, TaskDB.TaskDetail> map) {
         Iterator it = map.entrySet().iterator();
-
+        boolean hasTask=false;
         while (it.hasNext()) {
 
             Map.Entry<String, TaskDB.TaskDetail> set = (Map.Entry) it.next();
 
             String s = set.getValue().mid.trim();
             Integer key = Integer.parseInt(s);
-
+            if(user.account.equals(set.getValue().auth.trim())) hasTask=true;
             if (!taskMap.containsKey(key)) {
                 HashMap<String, String> tk_hashmap = new HashMap<>();
                 tk_hashmap.put("mid", s);
@@ -158,13 +159,9 @@ public class TaskActivity extends AppCompatActivity {
                 taskDate.add(tk_hashmap);
                 taskMap.put(key, set.getValue());
 
-                //新增提醒時間
-               /* Intent intent=new Intent(TaskActivity.this,RegisterAlarmService.class);
-                intent.putExtra("cmd","adding");
-                intent.putExtra("mid",s);
-                intent.putExtra("missionName",set.getValue().missionName);
-                intent.putExtra("remindTime",set.getValue().remindTime);
-                startService(intent);*/
+                if(set.getValue().equals(user.account)){
+                    if(!set.getValue().dream.equals("NULL")) hasTask=true;
+                }
             }
         }
 
@@ -243,7 +240,12 @@ public class TaskActivity extends AppCompatActivity {
                 return true;
             }
         });
+        if(!hasTask) {
+            Toast.makeText(this,"快去輸入你的夢想藍圖吧！",Toast.LENGTH_LONG).show();
+            //process
 
+            //
+        }
     }
 
 

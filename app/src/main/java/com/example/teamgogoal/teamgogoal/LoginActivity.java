@@ -30,6 +30,9 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class LoginActivity extends AppCompatActivity {
     //public static final String localhost="http://169.254.68.146/DB/";
@@ -52,10 +55,25 @@ public class LoginActivity extends AppCompatActivity {
         settings = getSharedPreferences("account", 0);
         accountTxt.setText(settings.getString("account", ""));
         passwordTxt.setText(settings.getString("password", ""));
+       if(settings.getString("lastDate", "").equals("")) {
+            settings.edit()
+                    .putString("lastDate", "2016-11-20")
+                    .commit();
+        }
+
+
+
+
 
         socketTrans = new SocketTrans();
         socketTrans.setActivity(LoginActivity.this);
         socketTrans.setNotification((NotificationManager) getSystemService(NOTIFICATION_SERVICE));
+
+
+
+        if(!accountTxt.getText().toString().equals("") && !passwordTxt.getText().toString().equals("")){
+            login(null);
+        }
 
 
 
@@ -141,25 +159,58 @@ public class LoginActivity extends AppCompatActivity {
 
                     //提醒設定
 
-                    Intent i=new Intent(LoginActivity.this,RegisterAlarmService.class);
-                    i.putExtra("cmd","loading");
-                    startService(i);
+
 
 
                     intent = new Intent();
                     intent.setClass(LoginActivity.this, TargetActivity.class);
                     startActivity(intent);
                     Toast.makeText(LoginActivity.this, "登入成功", Toast.LENGTH_SHORT).show();
+
+                    settings=getSharedPreferences("account",0);
+
+                    SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+                    String date=sdf.format(new java.util.Date());
+                    Date curDate=null;
+                    try {
+                        Date lastDate = sdf.parse(settings.getString("lastDate",""));
+                        curDate=sdf.parse(date);
+                        Intent i=new Intent(LoginActivity.this,RegisterAlarmService.class);
+                        if(curDate.after(lastDate))
+                            i.putExtra("state","N");
+                        else
+                            i.putExtra("state","Y");
+                        i.putExtra("cmd","loading");
+                        startService(i);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+
+                    settings.edit()
+                            .putString("account",accountTxt.getText().toString())
+                            .putString("password",passwordTxt.getText().toString())
+                            .putString("lastDate",sdf.format(curDate))
+                            .commit();
+
+
                     break;
                 case "ConnectFailure":
                     Toast.makeText(LoginActivity.this, "網路出現問題", Toast.LENGTH_SHORT).show();
+
+                    settings=getSharedPreferences("account",0);
+
+                    settings.edit()
+                            .putString("account","")
+                            .putString("password","")
+                            .commit();
+
                     finish();
                     break;
                 case "loginFailure":
                     Toast.makeText(LoginActivity.this, "帳號或密碼錯誤請重新登入", Toast.LENGTH_SHORT).show();
                     break;
             }
-
         }
 
         private void parseJSON(String s) {
