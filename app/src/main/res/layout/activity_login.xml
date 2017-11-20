@@ -182,9 +182,8 @@
 
                         <TextView
                             android:id="@+id/textView5"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_weight="2"
                             android:gravity="bottom|right|center_vertical"
                             android:text="沒有帳戶嗎? "
                             android:textColor="@color/black"
@@ -192,10 +191,10 @@
 
                         <Button
                             android:id="@+id/button5"
-                            android:layout_width="0dp"
+                            style="@style/Widget.AppCompat.Button.Small"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_gravity="center_vertical"
-                            android:layout_weight="2"
                             android:background="@color/empty"
                             android:gravity="bottom"
                             android:onClick="creat"
@@ -213,7 +212,15 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical"></LinearLayout>
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/button6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="toTestVideo"
+                        android:text="動畫測試" />
+                </LinearLayout>
 
             </LinearLayout>
 

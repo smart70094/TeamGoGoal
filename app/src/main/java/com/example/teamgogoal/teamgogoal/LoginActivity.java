@@ -33,7 +33,7 @@ import java.net.URL;
 
 public class LoginActivity extends AppCompatActivity {
     //public static final String localhost="http://169.254.68.146/DB/";
-    public static final String ip = "192.168.0.101";
+    public static final String ip = "192.168.0.100";
     //public static final String ip="111.253.228.128";
     public static final String localhost = "http://" + ip + "/TeamGoGoal/";
     EditText accountTxt, passwordTxt;
@@ -98,6 +98,14 @@ public class LoginActivity extends AppCompatActivity {
         i.setClass(this, RegisterAccount.class);
         startActivity(i);
         overridePendingTransition(R.transition.slide_in_right, R.transition.animo_no);
+    }
+
+
+    //影片測試
+    public void toTestVideo(View view) {
+        finish();
+        Intent intent = new Intent(this,videoTest.class);
+        startActivity(intent);
     }
 
     //帥哥峻禾的部分結束----------------------------------------------------------------------------------------------------------------------

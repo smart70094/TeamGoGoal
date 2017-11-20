@@ -101,8 +101,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="9"
                 android:divider="@null"
-                android:dividerHeight="20dp"
-                android:paddingLeft="10dp"
+                android:dividerHeight="30dp"
+                android:paddingLeft="20dp"
                 android:paddingRight="30dp"
                 android:paddingTop="20dp"
                 android:scrollbars="none" />

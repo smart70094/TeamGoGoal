@@ -58,7 +58,8 @@
             android:screenOrientation="portrait" />
         <activity android:name=".Member" />
         <activity android:name=".TargetEventActivity" />
-        <activity android:name=".TaskEventActivity"></activity>
+        <activity android:name=".TaskEventActivity" />
+        <activity android:name=".videoTest"></activity>
     </application>
 
 </manifest>
