@@ -3,7 +3,6 @@ package com.example.teamgogoal.teamgogoal;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -42,7 +41,7 @@ import java.util.Map;
 public class TaskActivity extends AppCompatActivity {
 
     TaskDB db;
-    TextView TargetTitle;
+    TextView TargetTitle,dreamContext;
     EditText cheerEt;
     Button submit;
     Map<Integer, TaskDB.TaskDetail> taskMap = new HashMap<Integer, TaskDB.TaskDetail>();
@@ -65,11 +64,6 @@ public class TaskActivity extends AppCompatActivity {
     int map_id;
     /*---Date:1015 rebuild----*/
 
-
-    HashMap<String, String> member_uid;
-    HashMap<String, Drawable> member_photo;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +77,11 @@ public class TaskActivity extends AppCompatActivity {
 
             TargetTitle = (TextView) findViewById(R.id.TargetTitle);
             TargetTitle.setText(targetName);
+
+
+            dreamContext = (TextView) findViewById(R.id.dreamContext);
+            // need to set dreamContext
+
 
             LayoutInflater factoryCheerMsg = LayoutInflater.from(this);
             View cheerMsg = factoryCheerMsg.inflate(R.layout.activity_cheer_msg, null);
@@ -161,6 +160,7 @@ public class TaskActivity extends AppCompatActivity {
                 tk_hashmap.put("state", set.getValue().state);
                 tk_hashmap.put("auth", set.getValue().auth);
                 tk_hashmap.put("authID", set.getValue().authID);
+
                 taskDate.add(tk_hashmap);
                 taskMap.put(key, set.getValue());
 
@@ -248,12 +248,12 @@ public class TaskActivity extends AppCompatActivity {
     }
 
 
-    //------左上返回鍵------
+    //------左上返回鍵------//
     public void cancel(View view){
         finish();
     }
 
-    //------跳轉詳細任務資訊------
+    //------跳轉詳細任務資訊------//
     protected void showTaskEvent(int id, String cmd) {
         TaskDB.TaskDetail td = taskMap.get(id);
 
@@ -271,7 +271,7 @@ public class TaskActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    // ------刪除任務------
+    // ------刪除任務------//
     protected void delete(int id) {
         try {
             TaskDB.TaskDetail td = taskMap.get(id);
@@ -295,6 +295,21 @@ public class TaskActivity extends AppCompatActivity {
         String participator = "456-789";
         socketTrans.setParams("requestMessage", participator,currID);
         socketTrans.send();
+    }
+
+
+    //------編輯藍圖------//
+    public void writeDream(View view) {
+
+
+        //doing something
+        //
+        //
+        //
+
+        //change UI context
+        dreamContext.setText("barbarbar");
+
     }
 
 
@@ -326,16 +341,17 @@ public class TaskActivity extends AppCompatActivity {
 
     //------頁面下方-新增任務------
     public void addTask(View view) {
-       if(hasTask){
-           Toast.makeText(this,"您已經新增過任務了！",Toast.LENGTH_LONG).show();
-       }else{
-           Intent intent = new Intent();
-           intent.setClass(this, TaskEventActivity.class);
-           intent.putExtra("cmd", "addTask");
-           intent.putExtra("tid", currTid);
-           intent.putExtra("targetName", targetName);
-           startActivity(intent);
-       }
+        if (hasTask) {
+            Toast.makeText(this, "您已經新增過任務了！", Toast.LENGTH_LONG).show();
+        } else {
+            Intent intent = new Intent();
+            intent.setClass(this, TaskEventActivity.class);
+            intent.putExtra("cmd", "addTask");
+            intent.putExtra("tid", currTid);
+            intent.putExtra("targetName", targetName);
+            startActivity(intent);
+        }
+    }
 
     //------完成任務------
 

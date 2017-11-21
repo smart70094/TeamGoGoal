@@ -52,19 +52,22 @@ public class TargetDB {
     }
 
     //account
-    protected String readParticipator(String tid) {
+    protected  HashMap<String,String> readParticipator(String tid) throws JSONException {
         String params = "tid=" + tid;
         String php = "readParticipator.php";
+        HashMap<String,String> map=new HashMap<String,String>();
+
         String result = viaParams(params, php);
-        return result.trim();
+        JSONArray array = new JSONArray(result.toString());
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject obj = array.getJSONObject(i);
+            String uid = obj.getString("uid").trim();
+            String account = obj.getString("account").trim();
+            map.put(uid, account);
+        }
+        return map;
     }
-    //uid
-    protected String readUidParticipator(String tid) {
-        String params = "tid=" + tid;
-        String php = "readUidParticipator.php";
-        String result = viaParams(params, php);
-        return result.trim();
-    }
+
 
 
 
