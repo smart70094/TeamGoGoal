@@ -1,22 +1,26 @@
 package com.example.teamgogoal.teamgogoal;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class record_listadapter extends BaseAdapter {
+public class Message_ListAdapter extends BaseAdapter {
     private LayoutInflater myInflater;
     List<HashMap<String, String>> list = new ArrayList<>();
+    HashMap<String,Drawable> originator_photo;
 
-    public record_listadapter(Context context) {
+    public Message_ListAdapter(Context context,HashMap<String,Drawable> originator_photo) {
         myInflater = LayoutInflater.from(context);
+        this.originator_photo = originator_photo;
     }
 
     public void setData(List<HashMap<String, String>> list) {
@@ -30,7 +34,7 @@ public class record_listadapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return list;
     }
 
     @Override
@@ -38,31 +42,30 @@ public class record_listadapter extends BaseAdapter {
         return 0;
     }
 
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 
         if (convertView == null) {
 
-            convertView = myInflater.inflate(R.layout.left, null);
+            convertView = myInflater.inflate(R.layout.message_list, null);
             holder = new ViewHolder();
-            holder.message = (TextView) convertView.findViewById(R.id.message);
-            holder.dateAndTime = (TextView) convertView.findViewById(R.id.dataAndTime);
+            holder.msg_context = (TextView) convertView.findViewById(R.id.msg_context);
+            holder.personal_photo = (ImageView) convertView.findViewById(R.id.personal_photo);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.message.setText(list.get(position).get("recordText"));
-        holder.dateAndTime.setText(list.get(position).get("date"));
-
-
+        holder.msg_context.setText(list.get(position).get("context"));
+        holder.personal_photo.setImageDrawable(originator_photo.get(list.get(position).get("originator")));
         return convertView;
     }
 
     static class ViewHolder {
-        TextView message;
-        TextView dateAndTime;
+        ImageView personal_photo;
+        TextView msg_context;
     }
 
 }

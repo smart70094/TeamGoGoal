@@ -3,6 +3,7 @@ package com.example.teamgogoal.teamgogoal;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -62,6 +63,10 @@ public class TaskActivity extends AppCompatActivity {
     ListView task_listview;
     int map_id;
     /*---Date:1015 rebuild----*/
+
+
+    HashMap<String, String> member_uid;
+    HashMap<String, Drawable> member_photo;
 
 
     @Override
@@ -170,17 +175,6 @@ public class TaskActivity extends AppCompatActivity {
 
         task_listview.setAdapter(task_listAdapter);
 
-
-        // 任務項目-短按事件:傳送鼓勵訊息
-        task_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                currID = taskDate.get(i).get("mid");
-                showCheerMsg();
-            }
-        });
-
-
         // 任務項目-長按事件:任務詳細事項(完成、詳細、修改、刪除)
         task_listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -253,21 +247,6 @@ public class TaskActivity extends AppCompatActivity {
     public void cancel(View view){
         finish();
     }
-
-
-    //------傳送鼓勵訊息------
-    protected void showCheerMsg() {
-        try {
-            if (msg == null) {
-                msg = cheerDialog.show();
-            } else {
-                msg.show();
-            }
-        } catch (Exception e) {
-            Log.v("jim_TaskActivity_showCheerMsg", e.toString());
-        }
-    }
-
 
     //------跳轉詳細任務資訊------
     protected void showTaskEvent(int id, String cmd) {
@@ -348,21 +327,6 @@ public class TaskActivity extends AppCompatActivity {
         intent.putExtra("tid", currTid);
         intent.putExtra("targetName", targetName);
         startActivity(intent);
-    }
-
-    //------傳送鼓勵------
-    public void cheerSubmit(View view) {
-        try {
-            String msgStr = cheerEt.getText().toString();
-            Integer key = Integer.parseInt(currID.trim());
-            TaskDB.TaskDetail td = taskMap.get(key);
-
-            socketTrans.setParams("register_cheer", user.account, td.auth.trim(), msgStr);
-            socketTrans.send(socketTrans.getParams());
-            msg.dismiss();
-        } catch (Exception e) {
-            Log.v("jim_cheerSubmit", e.toString());
-        }
     }
 
     //------完成任務------
@@ -589,6 +553,15 @@ public class TaskActivity extends AppCompatActivity {
             dialog.show();
         }
 
+    }
+
+
+    //------管理訊息------//
+
+    public void checkMessage(View view){
+        Intent intent = new Intent(this, Message.class);
+        intent.putExtra("tid",currTid);
+        startActivity(intent);
     }
 
 

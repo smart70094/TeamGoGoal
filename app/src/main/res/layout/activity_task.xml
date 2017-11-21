@@ -185,13 +185,6 @@
                         android:orientation="horizontal"></LinearLayout>
 
                     <Button
-                        android:id="@+id/button10"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:text="藍圖" />
-
-                    <Button
                         android:id="@+id/button2"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
@@ -218,6 +211,7 @@
                         android:layout_weight="1"
                         android:adjustViewBounds="true"
                         android:background="@color/empty"
+                        android:onClick="checkMessage"
                         android:padding="2dp"
                         android:scaleType="fitCenter"
                         app:srcCompat="@drawable/item_mes" />

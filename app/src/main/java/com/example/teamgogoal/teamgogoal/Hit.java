@@ -39,7 +39,9 @@ public class Hit {
         hitTitle = dialog_view.findViewById(R.id.hitTitle);
         hitContent = dialog_view.findViewById(R.id.hitContent);
         hitConfirm = dialog_view.findViewById(R.id.hitComfirm);
-        hitCancel = dialog_view.findViewById(R.id.hitCancel);
+        if(cmd.equals("2")) {
+            hitCancel = dialog_view.findViewById(R.id.hitCancel);
+        }
     }
 
 

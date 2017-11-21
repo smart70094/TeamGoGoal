@@ -59,7 +59,8 @@
         <activity android:name=".Member" />
         <activity android:name=".TargetEventActivity" />
         <activity android:name=".TaskEventActivity" />
-        <activity android:name=".videoTest"></activity>
+        <activity android:name=".videoTest" />
+        <activity android:name=".Message"></activity>
     </application>
 
 </manifest>

@@ -25,12 +25,11 @@ public class TargetActivity extends AppCompatActivity {
     Intent intent;
 
 
-    /*---Date:1015 rebuild----*/
+    //------ListView----//
     List<HashMap<String, String>> TargetData = new ArrayList<>();
     private Target_ListAdapter target_listAdapter;
     ListView target_listview;
     int map_id;
-    /*---Date:1015 rebuild----*/
 
     SocketTrans socketTrans = LoginActivity.socketTrans;
     static Map<Integer, TargetDB.TargetDetail> targetMap = new HashMap<Integer, TargetDB.TargetDetail>();
