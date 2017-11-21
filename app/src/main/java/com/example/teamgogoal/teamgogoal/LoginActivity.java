@@ -30,12 +30,13 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class LoginActivity extends AppCompatActivity {
     //public static final String localhost="http://169.254.68.146/DB/";
-    public static final String ip = "192.168.0.101";
+    public static final String ip = "192.168.0.100";
     //public static final String ip="111.253.228.128";
     public static final String localhost = "http://" + ip + "/TeamGoGoal/";
     EditText accountTxt, passwordTxt;
@@ -196,18 +197,15 @@ public class LoginActivity extends AppCompatActivity {
                     break;
                 case "ConnectFailure":
                     Toast.makeText(LoginActivity.this, "網路出現問題", Toast.LENGTH_SHORT).show();
-
-                    settings=getSharedPreferences("account",0);
-
-                    settings.edit()
-                            .putString("account","")
-                            .putString("password","")
-                            .commit();
-
                     finish();
                     break;
                 case "loginFailure":
                     Toast.makeText(LoginActivity.this, "帳號或密碼錯誤請重新登入", Toast.LENGTH_SHORT).show();
+                    settings=getSharedPreferences("account",0);
+                    settings.edit()
+                            .putString("account","")
+                            .putString("password","")
+                            .commit();
                     break;
             }
         }

@@ -51,6 +51,7 @@ public class TaskActivity extends AppCompatActivity {
     AlertDialog.Builder cheerDialog;
     AlertDialog msg = null, dialog = null;
     SocketTrans socketTrans = LoginActivity.socketTrans;
+    boolean hasTask=false;
     //進度條-建興
     CircularProgressBar circularProgressBar;
     int percentage;
@@ -145,14 +146,13 @@ public class TaskActivity extends AppCompatActivity {
 
     protected void fresh(Map<String, TaskDB.TaskDetail> map) {
         Iterator it = map.entrySet().iterator();
-        boolean hasTask=false;
+        boolean hasDream=false;
         while (it.hasNext()) {
 
             Map.Entry<String, TaskDB.TaskDetail> set = (Map.Entry) it.next();
 
             String s = set.getValue().mid.trim();
             Integer key = Integer.parseInt(s);
-            if(user.account.equals(set.getValue().auth.trim())) hasTask=true;
             if (!taskMap.containsKey(key)) {
                 HashMap<String, String> tk_hashmap = new HashMap<>();
                 tk_hashmap.put("mid", s);
@@ -164,9 +164,14 @@ public class TaskActivity extends AppCompatActivity {
                 taskDate.add(tk_hashmap);
                 taskMap.put(key, set.getValue());
 
-                if(set.getValue().equals(user.account)){
-                    if(!set.getValue().dream.equals("NULL")) hasTask=true;
-                }
+                if(!hasDream)
+                    if(set.getValue().auth.equals(user.account) && !set.getValue().dream.equals("null") )
+                        hasDream=true;
+
+                if(!hasTask)
+                    if(set.getValue().auth.equals(user.account))
+                        hasTask=true;
+
             }
         }
 
@@ -234,7 +239,7 @@ public class TaskActivity extends AppCompatActivity {
                 return true;
             }
         });
-        if(!hasTask) {
+        if(!hasDream) {
             Toast.makeText(this,"快去輸入你的夢想藍圖吧！",Toast.LENGTH_LONG).show();
             //process
 
@@ -288,7 +293,7 @@ public class TaskActivity extends AppCompatActivity {
         /*String participator="";
         */
         String participator = "456-789";
-        socketTrans.setParams("requestMessage", participator);
+        socketTrans.setParams("requestMessage", participator,currID);
         socketTrans.send();
     }
 
@@ -321,13 +326,16 @@ public class TaskActivity extends AppCompatActivity {
 
     //------頁面下方-新增任務------
     public void addTask(View view) {
-        Intent intent = new Intent();
-        intent.setClass(this, TaskEventActivity.class);
-        intent.putExtra("cmd", "addTask");
-        intent.putExtra("tid", currTid);
-        intent.putExtra("targetName", targetName);
-        startActivity(intent);
-    }
+       if(hasTask){
+           Toast.makeText(this,"您已經新增過任務了！",Toast.LENGTH_LONG).show();
+       }else{
+           Intent intent = new Intent();
+           intent.setClass(this, TaskEventActivity.class);
+           intent.putExtra("cmd", "addTask");
+           intent.putExtra("tid", currTid);
+           intent.putExtra("targetName", targetName);
+           startActivity(intent);
+       }
 
     //------完成任務------
 

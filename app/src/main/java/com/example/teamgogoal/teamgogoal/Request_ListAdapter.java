@@ -116,8 +116,11 @@ public class Request_ListAdapter extends BaseAdapter {
                                     public void run() {
                                         String rid = id;
                                         targetDB.requestAddParticipator(cmdContext,LoginActivity.getUser().account);
-                                        new DeleteRequest().execute(rid,tid, LoginActivity.getUser().account);
 
+
+                                        new DeleteRequest().execute(rid,tid);
+                                        socketTrans.setParams("addParticipator",tid,LoginActivity.getUser().account);
+                                        socketTrans.send();
                                         list.remove(position);
                                         handler.post(new Runnable(){
                                             @Override
@@ -140,11 +143,6 @@ public class Request_ListAdapter extends BaseAdapter {
         @Override
         protected Void doInBackground(String... params) {
             String rid=params[0];
-            String tid = params[1];
-            String account = params[2];
-            socketTrans.setParams("addParticipator",tid,account);
-            socketTrans.send();
-
             db.deleteRegisterRequest(rid);
             return null;
         }
@@ -167,7 +165,7 @@ public class Request_ListAdapter extends BaseAdapter {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 String rid = id;
-                                new DeleteRequest().execute(rid, cmdContext);
+                                new DeleteRequest().execute(rid);
                                 list.remove(position);
                                 handler.post(new Runnable(){
                                     @Override
