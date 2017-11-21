@@ -35,9 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class LoginActivity extends AppCompatActivity {
-    //public static final String localhost="http://169.254.68.146/DB/";
-    public static final String ip = "192.168.0.100";
-    //public static final String ip="111.253.228.128";
+    public static final String ip = "114.26.224.142";
     public static final String localhost = "http://" + ip + "/TeamGoGoal/";
     EditText accountTxt, passwordTxt;
     Intent intent;
@@ -49,6 +47,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
+
 
         accountTxt = (EditText) findViewById(R.id.accountTxt);
         passwordTxt = (EditText) findViewById(R.id.passwordTxt);
@@ -77,7 +78,10 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
+
         /*星球旋轉動畫*/
+
+
         ImageView iv = (ImageView) this.findViewById(R.id.imageView3);
 
         Animation am = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
@@ -95,6 +99,8 @@ public class LoginActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+
     }
 
     public static User getUser() {
@@ -197,18 +203,15 @@ public class LoginActivity extends AppCompatActivity {
                     break;
                 case "ConnectFailure":
                     Toast.makeText(LoginActivity.this, "網路出現問題", Toast.LENGTH_SHORT).show();
-
-                    settings=getSharedPreferences("account",0);
-
-                    settings.edit()
-                            .putString("account","")
-                            .putString("password","")
-                            .commit();
-
                     finish();
                     break;
                 case "loginFailure":
                     Toast.makeText(LoginActivity.this, "帳號或密碼錯誤請重新登入", Toast.LENGTH_SHORT).show();
+                    settings=getSharedPreferences("account",0);
+                    settings.edit()
+                            .putString("account","")
+                            .putString("password","")
+                            .commit();
                     break;
             }
         }

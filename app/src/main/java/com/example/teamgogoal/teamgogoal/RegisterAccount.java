@@ -41,7 +41,7 @@ public class RegisterAccount extends AppCompatActivity {
     EditText nameET;
     EditText emailET;
     Dialog dialog;
-
+    SocketTrans socketTrans;
     //照片
     Dialog personal_photo_selector_dialog;
     ImageView personal_photo;
@@ -56,8 +56,8 @@ public class RegisterAccount extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_register_account);
+        socketTrans=LoginActivity.socketTrans;
         CAresult = null;
         CheckThreadWorking = true;
 
@@ -129,7 +129,11 @@ public class RegisterAccount extends AppCompatActivity {
             }
 
             if (!CAresult.matches(".*\\d+.*")) {
-                new CreateAccount().execute("account=" + account + "&password=" + password + "&name=" + name + "&role=user" +"&email="+email,email);
+
+                socketTrans.setParams("addAccount",account,password,name,email);
+                socketTrans.send();
+
+
                 title = "註冊成功";
                 content = "你的帳號是" + acc.getText().toString() + "\n你的密碼是" + pass.getText().toString() + "\n你的暱稱是" + nameET.getText().toString()+"\n"+"請去信箱開通您的帳號";
 
@@ -358,74 +362,6 @@ public class RegisterAccount extends AppCompatActivity {
             return serverResponseCode;
         }
     }
-
-
-    //帥哥峻禾的部分開始----------------------------------------------------------------------------------------------------------------------
-    class CreateAccount extends AsyncTask<String, Void, Void> {
-
-        @Override
-
-        protected Void doInBackground(String... params) {
-            byte[] postData = new byte[0];
-            String urlParameters = params[0];
-            try {
-                postData = urlParameters.getBytes("UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            int postDataLength = postData.length;
-            String checkurl = localhost + "createAccount.php";
-            Log.v("localhost:", checkurl);
-            StringBuilder sb = null;
-            try {
-                URL connectto = new URL(checkurl);
-                HttpURLConnection conn = (HttpURLConnection) connectto.openConnection();
-                conn.setRequestMethod("POST");
-                conn.setRequestProperty("Content-Length", Integer.toString(postDataLength));
-                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                conn.setRequestProperty("Accept-Charset", "UTF-8");
-                conn.setRequestProperty("Accept-Encoding", "UTF-8");
-                conn.setUseCaches(false);
-                conn.setAllowUserInteraction(false);
-                conn.setInstanceFollowRedirects(false);
-                conn.setDoOutput(true);
-
-
-                DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
-                wr.write(postData);
-                wr.flush();
-                wr.close();
-
-                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                sb = new StringBuilder();
-                String line;
-
-                while ((line = br.readLine()) != null) {
-                    Log.v("HaRuNa", line);
-                    sb.append(line + "\n");
-                }
-                br.close();
-                conn.disconnect();
-            } catch (Exception e) {
-                Log.v("HaRuNa", e.toString());
-            }
-
-            try {
-                String uid=  sb.toString().trim();
-                String email=params[1].trim();
-                SocketTrans socketTrans=new SocketTrans();
-                socketTrans.connection();
-                socketTrans.setParams("register_email",email,uid,localhost+"activeAccount?uid="+uid.trim());
-                socketTrans.send();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-    }
-
     public class CheckAccount extends AsyncTask<String, Void, String> {
         @Override
 

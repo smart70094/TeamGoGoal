@@ -51,13 +51,28 @@ public class TargetDB {
         return map;
     }
 
+    //account
     protected String readParticipator(String tid) {
-        String ans = "";
-        String params = "table=participator & tid=" + tid;
-        String php = "readParticipator";
-        String s = viaParams(params, php);
-        ans = s.substring(2);
-        return ans.trim();
+        String params = "tid=" + tid;
+        String php = "readParticipator.php";
+        String result = viaParams(params, php);
+        return result.trim();
+    }
+    //uid
+    protected String readUidParticipator(String tid) {
+        String params = "tid=" + tid;
+        String php = "readUidParticipator.php";
+        String result = viaParams(params, php);
+        return result.trim();
+    }
+
+
+
+
+    protected void deleteParticipator(String tid, String account) {
+        String params = "table=participator & tid=" + tid.trim() + " & account=" + account.trim();
+        String php = "deleteParticipator";
+        viaParams(params, php);
     }
 
     protected String  createTarget(String... dataList) {
@@ -94,11 +109,7 @@ public class TargetDB {
         socketTrans.send();
     }
 
-    protected void deleteParticipator(String tid, String account) {
-        String params = "table=participator & tid=" + tid.trim() + " & account=" + account.trim();
-        String php = "deleteParticipator";
-        viaParams(params, php);
-    }
+
 
     //Data
     public static class TargetDetail {
