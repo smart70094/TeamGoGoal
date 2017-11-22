@@ -157,7 +157,7 @@ public class EditProfile extends AppCompatActivity{
             }
         });
 
-        hit_dialog = new AlertDialog.Builder(this, R.style.Translucent_NoTitle).setView(dialog_view).create();
+        hit_dialog = new AlertDialog.Builder(this, R.style.hitStyle).setView(dialog_view).create();
         hit_dialog.show();
     }
 

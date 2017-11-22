@@ -63,7 +63,7 @@ public class TargetDB {
             JSONObject obj = array.getJSONObject(i);
             String uid = obj.getString("uid").trim();
             String account = obj.getString("account").trim();
-            map.put(uid, account);
+            map.put(account , uid);
         }
         return map;
     }
@@ -77,6 +77,8 @@ public class TargetDB {
         String php = "deleteParticipator";
         viaParams(params, php);
     }
+
+
 
     protected String  createTarget(String... dataList) {
         String name=dataList[0];

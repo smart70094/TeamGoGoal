@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/empty"
     android:orientation="vertical"
     android:paddingLeft="10dp"
     android:paddingRight="10dp">
@@ -9,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_hit_top"
+        android:background="@drawable/bg_element_top"
         android:orientation="vertical"
         android:paddingBottom="20dp"
         android:paddingLeft="20dp"
@@ -31,33 +32,53 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="10dp"
+        android:background="@color/black"
         android:orientation="horizontal">
 
-        <ToggleButton
-            android:id="@+id/type_normal"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/bg_sendtype"
-            android:textOff="一般鼓勵"
-            android:textOn="一般鼓勵" />
+            android:orientation="horizontal"
+            android:padding="5dp">
 
-        <ToggleButton
-            android:id="@+id/type_anonymous"
+            <ToggleButton
+                android:id="@+id/type_normal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_sendtype"
+                android:textColor="@color/basicColor"
+                android:textOff="一般鼓勵"
+                android:textOn="一般鼓勵" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/bg_sendtype"
-            android:textOff="匿名傳送"
-            android:textOn="匿名傳送" />
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <ToggleButton
+                android:id="@+id/type_anonymous"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_sendtype"
+                android:textColor="@color/basicColor"
+                android:textOff="匿名傳送"
+                android:textOn="匿名傳送" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="5dp"
-        android:orientation="horizontal">
+        android:background="@color/black"
+        android:orientation="horizontal"
+        android:padding="5dp">
 
         <ToggleButton
             android:id="@+id/type_anonymousask"
@@ -65,6 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/bg_sendtype"
+            android:textColor="@color/basicColor"
             android:textOff="匿名要求鼓勵"
             android:textOn="匿名要求鼓勵" />
     </LinearLayout>
@@ -86,7 +108,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/bg_hit_btn"
+            android:background="@drawable/bg_element_bottom"
             android:text="確認"
             android:textColor="@color/basicColor"
             android:textSize="18sp"

@@ -7,23 +7,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Message_ListAdapter extends BaseAdapter {
+public class Member_ListAdapter extends BaseAdapter {
+    Context context;
+    ViewHolder holder;
     private LayoutInflater myInflater;
-    List<HashMap<String, String>> list = new ArrayList<>();
-    HashMap<String,Drawable> originator_photo;
+    List<HashMap<String, Object>> list = new ArrayList<>();
 
-    public Message_ListAdapter(Context context) {
+    public Member_ListAdapter(Context context) {
         myInflater = LayoutInflater.from(context);
-        this.originator_photo = TaskActivity.member_photo;
+        this.context = context;
     }
 
-    public void setData(List<HashMap<String, String>> list) {
+    public void setData(List<HashMap<String, Object>> list) {
         this.list = list;
     }
 
@@ -45,27 +45,25 @@ public class Message_ListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
 
         if (convertView == null) {
 
-            convertView = myInflater.inflate(R.layout.message_list, null);
+            convertView = myInflater.inflate(R.layout.member_item, null);
             holder = new ViewHolder();
-            holder.msg_context = (TextView) convertView.findViewById(R.id.msg_context);
             holder.personal_photo = (ImageView) convertView.findViewById(R.id.personal_photo);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.msg_context.setText(list.get(position).get("context"));
-        holder.personal_photo.setImageDrawable(originator_photo.get(list.get(position).get("originator")));
+        //set Photo
+        holder.personal_photo.setImageDrawable((Drawable) list.get(position).get("personal_photo"));
+
         return convertView;
     }
 
     static class ViewHolder {
         ImageView personal_photo;
-        TextView msg_context;
     }
 
 }

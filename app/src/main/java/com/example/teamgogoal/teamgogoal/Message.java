@@ -1,21 +1,21 @@
 package com.example.teamgogoal.teamgogoal;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.ToggleButton;
 
@@ -25,16 +25,13 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 public class Message extends AppCompatActivity {
     final String localhost = LoginActivity.getLocalHost();
@@ -46,8 +43,12 @@ public class Message extends AppCompatActivity {
     SocketTrans socketTrans = LoginActivity.socketTrans;
     AlertDialog dialog, hit_dialog;
     String send_type_cmd;
-    HashMap<String, String> originator_uid;
-    HashMap<String, Drawable> originator_photo;
+
+    HashMap<String, Drawable> member_photo;
+    List<HashMap<String, Object>> unpick_list = new ArrayList<>();
+    List<HashMap<String, Object>> pick_list = new ArrayList<>();
+    Member_ListAdapter unpick_adapter, pick_adapter;
+    Hit hit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +59,7 @@ public class Message extends AppCompatActivity {
 
         String phpurl = localhost + "searchMessage.php?uid=" + LoginActivity.user.uid + "&tid=" + currTid;
         new TransTask().execute(phpurl);
-
-
-        phpurl = localhost + "searchUid.php?uid=" + LoginActivity.user.uid + "&tid=" + currTid;
-        new UidTransTask().execute(phpurl);
     }
-
 
     private class TransTask extends AsyncTask<String, Void, String> {
         @Override
@@ -92,6 +88,7 @@ public class Message extends AppCompatActivity {
             super.onPostExecute(s);
             Log.d("JSON", s);
             parseJSON(s);
+            initView();
         }
 
         private void parseJSON(String s) {
@@ -111,114 +108,9 @@ public class Message extends AppCompatActivity {
 
     }
 
-    private class UidTransTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... params) {
-            StringBuilder sb = new StringBuilder();
-            try {
-                URL url = new URL(params[0]);
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(url.openStream()));
-                String line = in.readLine();
-                while (line != null) {
-                    Log.d("HTTP", line);
-                    sb.append(line);
-                    line = in.readLine();
-                }
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return sb.toString();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            Log.d("JSON", s);
-            parseJSON(s);
-            try {
-                searhPersonalPhoto();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        private void parseJSON(String s) {
-            originator_uid = new HashMap<>();
-            try {
-                JSONArray array = new JSONArray(s);
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject obj = array.getJSONObject(i);
-                    originator_uid.put(obj.getString("originator"), obj.getString("uid"));
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void searhPersonalPhoto() throws ExecutionException, InterruptedException {
-        originator_photo = new HashMap<>();
-        for (Map.Entry<String, String> entry : originator_uid.entrySet()) {
-            String imageUrl = localhost + "profilepicture/" + entry.getValue();
-            Bitmap result = new PhotoTransTask().execute(imageUrl, entry.getKey()).get();
-            originator_photo.put(entry.getKey(), toCircleImage(result));
-        }
-        initView();
-    }
-
-    private class PhotoTransTask extends AsyncTask<String, Void, Bitmap> {
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            try {
-                URL url = new URL(params[0]);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-                InputStream input = connection.getInputStream();
-                Bitmap bitmap = BitmapFactory.decodeStream(input);
-                return bitmap;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-    }
-
-    protected Drawable toCircleImage(Bitmap bitmap) {
-
-        //原图宽度
-        int bitmapWidth = bitmap.getWidth();
-        //原图高度
-        int bitmapHeight = bitmap.getHeight();
-
-        //转换为正方形后的宽高
-        int bitmapSquareWidth = Math.min(bitmapWidth,bitmapHeight);
-
-        //最终图像的宽高
-        int newBitmapSquareWidth = bitmapSquareWidth;
-
-        Bitmap roundedBitmap = Bitmap.createBitmap(newBitmapSquareWidth,newBitmapSquareWidth,Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(roundedBitmap);
-        int x = bitmapSquareWidth - bitmapWidth;
-        int y = bitmapSquareWidth - bitmapHeight;
-
-        //裁剪后图像,注意X,Y要除以2 来进行一个中心裁剪
-        canvas.drawBitmap(bitmap, x/2, y/2, null);
-
-        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(),roundedBitmap);
-        roundedBitmapDrawable.setCircular(true);
-        return roundedBitmapDrawable;
-
-    }
-
     private void initView() {
         msg_listview = (ListView) findViewById(R.id.msg_listview);
-        msg_listadt = new Message_ListAdapter(this, originator_photo);
+        msg_listadt = new Message_ListAdapter(this);
         msg_listadt.setData(msg_list);
 
         msg_listview.setAdapter(msg_listadt);
@@ -231,6 +123,94 @@ public class Message extends AppCompatActivity {
 
     //------傳送新訊息------//
     public void sendMessage(View view) {
+        unpick_list.clear();
+
+        View dialog_view;
+
+        dialog_view = LayoutInflater.from(this).inflate(R.layout.select_send_member, null);
+
+        GridView unpickMember = dialog_view.findViewById(R.id.unpickMember);
+        GridView pickMember = dialog_view.findViewById(R.id.pickMember);
+        Button memberConfirm = dialog_view.findViewById(R.id.memberConfirm);
+
+        member_photo = TaskActivity.member_photo;
+        for (Map.Entry<String, Drawable> entry : member_photo.entrySet()) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("account", entry.getKey());
+            map.put("personal_photo", entry.getValue());
+            unpick_list.add(map);
+        }
+
+        unpickMember.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                pick_list.add(unpick_list.get(position));
+                unpick_list.remove(position);
+
+                unpick_adapter.notifyDataSetChanged();
+                pick_adapter.notifyDataSetChanged();
+            }
+        });
+
+        pickMember.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                unpick_list.add(pick_list.get(position));
+                pick_list.remove(position);
+
+                unpick_adapter.notifyDataSetChanged();
+                pick_adapter.notifyDataSetChanged();
+            }
+        });
+
+        memberConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (pick_list.isEmpty()) {
+                    hit = new Hit("1", Message.this);
+                    hit.set_hitTitle("提示");
+                    hit.set_hitContent("請選擇要傳送訊息的對象");
+                    hit.get_hitConfirm().setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            hit_dialog.dismiss();
+                        }
+                    });
+                    hit_dialog = new AlertDialog.Builder(Message.this,R.style.hitStyle).setView(hit.get_view()).create();
+                    hit_dialog.show();
+                } else {
+                    dialog.dismiss();
+                    selectType();
+                }
+            }
+        });
+
+        unpick_adapter = new Member_ListAdapter(this);
+        unpick_adapter.setData(unpick_list);
+        unpickMember.setNumColumns(5);
+        unpickMember.setAdapter(unpick_adapter);
+
+
+        pick_adapter = new Member_ListAdapter(this);
+        pick_adapter.setData(pick_list);
+        pickMember.setNumColumns(5);
+        pickMember.setAdapter(pick_adapter);
+
+
+        dialog = new AlertDialog.Builder(this, R.style.hitStyle).setView(dialog_view).create();
+        dialog.show();
+
+        Window dialogWindow = dialog.getWindow();
+        WindowManager m = this.getWindowManager();
+        Display d = m.getDefaultDisplay(); // 获取屏幕宽、高度
+        WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+        p.height = (int) (d.getHeight() * 0.8); // 高度设置为屏幕的0.6，根据实际情况调整
+        p.width = (int) (d.getWidth() * 0.6); // 宽度设置为屏幕的0.65，根据实际情况调整
+        dialogWindow.setAttributes(p);
+    }
+
+    //------選擇傳送類型------//
+    public void selectType() {
         send_type_cmd = "";
 
         View dialog_view;
@@ -296,7 +276,7 @@ public class Message extends AppCompatActivity {
 
 
                 if (send_type_cmd.equals("")) {
-                    Hit hit = new Hit("1", Message.this);
+                    hit = new Hit("1", Message.this);
                     hit.set_hitTitle("提示");
                     hit.set_hitContent("請選擇訊息的傳送方式");
                     hit.get_hitConfirm().setOnClickListener(new View.OnClickListener() {
@@ -305,7 +285,7 @@ public class Message extends AppCompatActivity {
                             hit_dialog.dismiss();
                         }
                     });
-                    hit_dialog = new AlertDialog.Builder(Message.this).setView(hit.get_view()).create();
+                    hit_dialog = new AlertDialog.Builder(Message.this,R.style.hitStyle).setView(hit.get_view()).create();
                     hit_dialog.show();
                 } else {
                     dialog.dismiss();
@@ -315,10 +295,16 @@ public class Message extends AppCompatActivity {
         });
 
 
-        dialog = new AlertDialog.Builder(this).setView(dialog_view).create();
+        dialog = new AlertDialog.Builder(this, R.style.hitStyle).setView(dialog_view).create();
         dialog.show();
+        Window dialogWindow = dialog.getWindow();
+        WindowManager m = this.getWindowManager();
+        Display d = m.getDefaultDisplay(); // 获取屏幕宽、高度
+        WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+        p.height = (int) (d.getHeight() * 0.8); // 高度设置为屏幕的0.6，根据实际情况调整
+        p.width = (int) (d.getWidth() * 0.6); // 宽度设置为屏幕的0.65，根据实际情况调整
+        dialogWindow.setAttributes(p);
     }
-
 
     //------填寫鼓勵訊息------//
     private void inputMessage() {
@@ -334,12 +320,22 @@ public class Message extends AppCompatActivity {
             public void onClick(View view) {
                 try {
                     String msgStr = msg_context.getText().toString();
-                    Integer key = Integer.parseInt(currTid.trim());
-                    //TaskDB.TaskDetail td = taskMap.get(key);
+                    String subject = "";
+                    for (HashMap<String, Object> entry : pick_list) {
+                        subject += entry.get("account") + "-";
+                    }
+                    subject = subject.substring(0, subject.length() - 1);
 
-                    //-------預設送給456------//
-                    socketTrans.setParams("register_cheer", user.account, "456", msgStr);
-                    socketTrans.send(socketTrans.getParams());
+                    switch (send_type_cmd) {
+                        case "normal":
+                            socketTrans.setParams("register_cheer", user.account, subject, msgStr, currTid);
+                            socketTrans.send(socketTrans.getParams());
+                            break;
+                        case "anonymous":
+                            break;
+                        case "anonymousask":
+                            break;
+                    }
                     dialog.dismiss();
                 } catch (Exception e) {
                     Log.v("jim_cheerSubmit", e.toString());
@@ -347,9 +343,15 @@ public class Message extends AppCompatActivity {
             }
         });
 
-        dialog = new AlertDialog.Builder(this).setView(dialog_view).create();
+        dialog = new AlertDialog.Builder(this, R.style.hitStyle).setView(dialog_view).create();
         dialog.show();
-
+        Window dialogWindow = dialog.getWindow();
+        WindowManager m = this.getWindowManager();
+        Display d = m.getDefaultDisplay(); // 获取屏幕宽、高度
+        WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+        p.height = (int) (d.getHeight() * 0.8); // 高度设置为屏幕的0.6，根据实际情况调整
+        p.width = (int) (d.getWidth() * 0.6); // 宽度设置为屏幕的0.65，根据实际情况调整
+        dialogWindow.setAttributes(p);
 
     }
 }

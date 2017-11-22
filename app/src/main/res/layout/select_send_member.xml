@@ -2,16 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/bg_element_top"
         android:orientation="vertical"
-        android:paddingBottom="10dp"
+        android:paddingBottom="20dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:paddingTop="10dp">
@@ -21,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="內容"
+            android:text="點選對象"
             android:textColor="@color/basicColor"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -30,21 +28,41 @@
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView27"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="群組成員"
+            android:textColor="@color/basicColor" />
+
+        <GridView
+            android:id="@+id/unpickMember"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/black"
-        android:orientation="horizontal"
-        android:padding="10dp">
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/msg_context"
+        <TextView
+            android:id="@+id/textView29"
             android:layout_width="wrap_content"
-            android:layout_height="127dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/item_bg_color"
-            android:gravity="top|left"
-            android:inputType="text"
-            android:padding="5dp"
+            android:text="已選擇"
             android:textColor="@color/basicColor" />
+
+        <GridView
+            android:id="@+id/pickMember"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -60,12 +78,12 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/submitCheer"
+            android:id="@+id/memberConfirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/bg_element_bottom"
-            android:text="傳送"
+            android:text="確認"
             android:textColor="@color/basicColor"
             android:textSize="18sp"
             android:textStyle="bold" />

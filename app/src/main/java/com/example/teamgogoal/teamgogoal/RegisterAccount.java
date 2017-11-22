@@ -362,6 +362,7 @@ public class RegisterAccount extends AppCompatActivity {
             return serverResponseCode;
         }
     }
+
     public class CheckAccount extends AsyncTask<String, Void, String> {
         @Override
 

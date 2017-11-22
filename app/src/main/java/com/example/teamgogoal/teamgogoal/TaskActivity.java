@@ -3,9 +3,15 @@ package com.example.teamgogoal.teamgogoal;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -28,7 +34,9 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -37,9 +45,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 public class TaskActivity extends AppCompatActivity {
 
+    TargetDB targetdb;
     TaskDB db;
     TextView TargetTitle,dreamContext;
     EditText cheerEt;
@@ -51,10 +61,12 @@ public class TaskActivity extends AppCompatActivity {
     AlertDialog msg = null, dialog = null;
     SocketTrans socketTrans = LoginActivity.socketTrans;
     boolean hasTask=false;
-    //進度條-建興
+    //進度條
     CircularProgressBar circularProgressBar;
     int percentage;
-    //進度條結束
+    //團隊成員大頭貼
+    public static HashMap<String, Drawable> member_photo;
+
 
 
     /*---Date:1015 rebuild----*/
@@ -68,12 +80,18 @@ public class TaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task);
+
+
         try {
             Bundle bundle = getIntent().getExtras();
             user = LoginActivity.getUser();
             currTid = bundle.getString("tid");
             targetName = bundle.getString("targetName");
             db = new TaskDB(LoginActivity.getLocalHost() + "readmission.php");
+
+            targetdb = new TargetDB();
+            initMemberPhoto();
+
 
             TargetTitle = (TextView) findViewById(R.id.TargetTitle);
             TargetTitle.setText(targetName);
@@ -121,10 +139,87 @@ public class TaskActivity extends AppCompatActivity {
                 }
             });
 
-
         } catch (Exception e) {
             Log.v("jim_Task_onCreate", e.toString());
         }
+    }
+
+
+    //------團隊成員大頭貼載入------//
+
+    private void initMemberPhoto() throws JSONException, ExecutionException, InterruptedException {
+        member_photo = new HashMap<>();
+
+        HashMap<String,String> member = new HashMap<>();
+        member = new MemberTransTask().execute().get();
+
+        for (Map.Entry<String, String> entry : member.entrySet()) {
+            String imageUrl = LoginActivity.getLocalHost() + "profilepicture/" + entry.getValue();
+            Bitmap result = new PhotoTransTask().execute(imageUrl).get();
+            member_photo.put(entry.getKey(), toCircleImage(result));
+        }
+
+    }
+
+    private class MemberTransTask extends AsyncTask<String, Void, HashMap<String,String>> {
+        @Override
+        protected HashMap<String,String> doInBackground(String... params) {
+
+            HashMap<String,String> member = new HashMap<>();
+
+            try {
+                member = targetdb.readParticipator(currTid);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return member;
+        }
+
+    }
+
+    private class PhotoTransTask extends AsyncTask<String, Void, Bitmap> {
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            try {
+                URL url = new URL(params[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                Bitmap bitmap = BitmapFactory.decodeStream(input);
+                return bitmap;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+    }
+
+    protected Drawable toCircleImage(Bitmap bitmap) {
+
+        //原图宽度
+        int bitmapWidth = bitmap.getWidth();
+        //原图高度
+        int bitmapHeight = bitmap.getHeight();
+
+        //转换为正方形后的宽高
+        int bitmapSquareWidth = Math.min(bitmapWidth,bitmapHeight);
+
+        //最终图像的宽高
+        int newBitmapSquareWidth = bitmapSquareWidth;
+
+        Bitmap roundedBitmap = Bitmap.createBitmap(newBitmapSquareWidth,newBitmapSquareWidth,Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(roundedBitmap);
+        int x = bitmapSquareWidth - bitmapWidth;
+        int y = bitmapSquareWidth - bitmapHeight;
+
+        //裁剪后图像,注意X,Y要除以2 来进行一个中心裁剪
+        canvas.drawBitmap(bitmap, x/2, y/2, null);
+
+        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(),roundedBitmap);
+        roundedBitmapDrawable.setCircular(true);
+        return roundedBitmapDrawable;
+
     }
 
 
