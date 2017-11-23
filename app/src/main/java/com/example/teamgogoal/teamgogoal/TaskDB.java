@@ -60,11 +60,17 @@ public class TaskDB {
         String php = "readAlarmMission.php";
         return viaParams(urlParameters, php);
     }
-    protected String taskIndex(){
-        String params="table=mission";
-        String php="taskIndex.php";
-        String ans=viaParams(params,php);
-        return  ans.trim();
+
+    protected String readDream(String tid,String auth){
+        String params="tid="+tid+"&auth="+auth;
+        String php="readDream.php";
+        String result=viaParams(params,php);
+        return result;
+    }
+    protected void updateDream(String tid,String auth,String dream){
+        String params="tid="+tid+"&auth="+auth+"&dream="+dream;
+        String php="updateDream.php";
+        String result=viaParams(params,php);
     }
 
     protected void create(String... dataList) {

@@ -25,13 +25,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,7 +52,7 @@ public class TaskActivity extends AppCompatActivity {
     EditText cheerEt;
     Button submit;
     Map<Integer, TaskDB.TaskDetail> taskMap = new HashMap<Integer, TaskDB.TaskDetail>();
-    String currTid = "", nextID = "", currID = "", targetName = "";
+    String currTid = "", nextID = "", currID = "", targetName = "",dream="";
     LoginActivity.User user;
     AlertDialog.Builder cheerDialog;
     AlertDialog msg = null, dialog = null;
@@ -234,6 +231,7 @@ public class TaskActivity extends AppCompatActivity {
             taskMap.clear();
             taskDate.clear();
             new DbOperationTask().execute("read");
+            new DreamOpeartionThread().execute("loading",currTid,user.account);
         }
     }
 
@@ -395,18 +393,66 @@ public class TaskActivity extends AppCompatActivity {
 
     //------編輯藍圖------//
     public void writeDream(View view) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater li = LayoutInflater.from(this);
+        View promptsView = li.inflate(R.layout.input_message, null);
+        alertDialogBuilder.setView(promptsView);
 
+        final EditText dream_context = (EditText) promptsView.findViewById(R.id.msg_context);
+       //如果沒藍圖，則使用預設文字提醒使用者
+        if(dream.equals(""))
+            dream_context.setText("");
+        else
+            dream_context.setText(dreamContext.getText().toString());
 
-        //doing something
-        //
-        //
-        //
-
-        //change UI context
-        dreamContext.setText("barbarbar");
-
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                //更改介面文字與更新資料庫
+                                dream=dream_context.getText().toString();
+                                dreamContext.setText(dream);
+                                new DreamOpeartionThread().execute("update",currTid,user.account,dreamContext.getText().toString());
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+                            }
+                        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
-
+    private class DreamOpeartionThread extends AsyncTask<String, Void, String> {
+        protected String doInBackground(String... params) {
+            String cmd=params[0];
+            String result="";
+            String tid,auth,dream;
+            switch (cmd){
+                case "loading":
+                    tid=params[1];
+                    auth=params[2];
+                    result=db.readDream(tid,auth);
+                    if (result.equals("")) result="快來輸入你的夢想藍圖吧";
+                    else dream=result;
+                    break;
+                case "update":
+                    tid=params[1];
+                    auth=params[2];
+                    dream=params[3];
+                    db.updateDream(tid,auth,dream);
+                    result=dream;
+                    break;
+            }
+            return result.trim();
+        }
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            dreamContext.setText(s);
+        }
+    }
 
     private class DbOperationTask extends AsyncTask<String, Void, Void> {
         protected Void doInBackground(String... params) {
@@ -424,7 +470,7 @@ public class TaskActivity extends AppCompatActivity {
                             }
                         }
                     });
-                    nextID = db.taskIndex();
+
                     break;
                 case "delete":
                     db.delete(params[1]);

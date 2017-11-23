@@ -67,6 +67,7 @@ public class RequestActivity extends AppCompatActivity {
                     request_hashmap.put("cmd", obj.getString("cmd"));
                     request_hashmap.put("cmdContext", obj.getString("cmdContext"));
                     request_hashmap.put("originator", obj.getString("originator"));
+                    request_hashmap.put("tid", obj.getString("tid"));
                     request_list.add(request_hashmap);
 
                 }

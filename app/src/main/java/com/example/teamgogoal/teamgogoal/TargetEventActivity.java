@@ -12,6 +12,10 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Calendar;
 
 public class TargetEventActivity extends AppCompatActivity {
@@ -43,6 +47,10 @@ public class TargetEventActivity extends AppCompatActivity {
             case "readTarget" :
                 readTarget();
                 initView();
+                break;
+            case "loading":
+                String tid=bundle.getString("tid");
+                new LoadingThread().execute("loading",tid);
                 break;
         }
 
@@ -165,8 +173,6 @@ public class TargetEventActivity extends AppCompatActivity {
 
 
     private class DbOperationTask extends AsyncTask<String, Void, Void> {
-
-
         protected Void doInBackground(String... params) {
             String cmd = params[0];
             String result = cmd + ",";
@@ -184,12 +190,49 @@ public class TargetEventActivity extends AppCompatActivity {
             }
             return null;
         }
-
-
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             finish();
+        }
+    }
+
+    private class LoadingThread extends AsyncTask<String, Void, String> {
+        protected String doInBackground(String... params) {
+            String cmd = params[0];
+            String tid,result="";
+
+            switch (cmd) {
+                case "loading":
+                    tid=params[1];
+                    result=db.readTarget(tid);
+                    break;
+            }
+            return result;
+        }
+        @Override
+        protected void onPostExecute(String  s) {
+            super.onPostExecute(s);
+            try {
+                JSONArray array = null;
+                array = new JSONArray(s.toString());
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject obj = array.getJSONObject(i);
+                    String targetName = obj.getString("targetName");
+                    String targetContent = obj.getString("targetContent");
+                    String startTime = obj.getString("targetStartTime");
+                    String endTime = obj.getString("targetEndTime");
+
+                    targetNameEt.setText(targetName);
+                    targeContentEt.setText(targetContent);
+                    startTimeEt.setText(startTime);
+                    endTimeEt.setText(endTime);
+                    break;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 }

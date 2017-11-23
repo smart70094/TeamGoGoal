@@ -34,6 +34,12 @@ public class NofyService extends IntentService {
             case "target":
                 i=new Intent(this,TargetActivity.class);
                 break;
+            case "targetEvent":
+                i=new Intent(this,TargetEventActivity.class);
+                String tid=intent.getStringExtra("tid");
+                i.putExtra("cmd","loading");
+                i.putExtra("tid",tid);
+                break;
             case "task":
                 i=new Intent(this,TaskActivity.class);
                 break;

@@ -99,13 +99,14 @@ public  class SocketTrans {     //執行緒
                        if(br.ready()){
                             str = br.readLine().trim();
                             strArr=str.split(",");
-                           String cmd=strArr[0];
-                           switch (cmd){
+                               String cmd=strArr[0];
+                               switch (cmd){
                                case "message":
                                    message(strArr[1],strArr[2]);
                                    break;
-
-
+                               case "updateTarget":
+                                   updateTargetMessage(strArr[1],strArr[2]);
+                                   break;
                            }
                        }
                     }
@@ -122,6 +123,15 @@ public  class SocketTrans {     //執行緒
         Intent intent= new Intent(context,NofyService.class);
         intent.putExtra("foo", text);
         intent.putExtra("subject",subject);
+        context.startService(intent);
+    }
+    public void updateTargetMessage(String... dataList){
+        String tid=dataList[0];
+        String text=dataList[1];
+        Intent intent= new Intent(context,NofyService.class);
+        intent.putExtra("foo", text);
+        intent.putExtra("subject","targetEvent");
+        intent.putExtra("tid",tid);
         context.startService(intent);
     }
     public void close() throws IOException {

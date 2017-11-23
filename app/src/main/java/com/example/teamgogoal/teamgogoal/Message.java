@@ -329,13 +329,17 @@ public class Message extends AppCompatActivity {
                     switch (send_type_cmd) {
                         case "normal":
                             socketTrans.setParams("register_cheer", user.account, subject, msgStr, currTid);
-                            socketTrans.send(socketTrans.getParams());
                             break;
                         case "anonymous":
+                            //匿名傳送訊息
+                            socketTrans.setParams("register_cheer", "匿名夥伴", subject, msgStr, currTid);
                             break;
                         case "anonymousask":
+                            //匿名要求訊息
+                            socketTrans.setParams("requestMessage",  subject, msgStr, currTid);
                             break;
                     }
+                    socketTrans.send(socketTrans.getParams());
                     dialog.dismiss();
                 } catch (Exception e) {
                     Log.v("jim_cheerSubmit", e.toString());

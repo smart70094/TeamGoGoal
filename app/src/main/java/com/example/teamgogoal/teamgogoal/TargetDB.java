@@ -51,6 +51,13 @@ public class TargetDB {
         return map;
     }
 
+    protected String readTarget(String tid) {
+        String result = viaParams("tid=" + tid, "readOneTarget.php");
+        return result;
+    }
+
+
+
     //account
     protected  HashMap<String,String> readParticipator(String tid) throws JSONException {
         String params = "tid=" + tid;
@@ -67,6 +74,7 @@ public class TargetDB {
         }
         return map;
     }
+
 
 
 

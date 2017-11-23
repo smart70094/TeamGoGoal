@@ -2,6 +2,7 @@ package com.example.teamgogoal.teamgogoal;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -71,17 +72,18 @@ public class Request_ListAdapter extends BaseAdapter {
         String cmd = list.get(position).get("cmd").trim();
         String cmdContext = list.get(position).get("cmdContext").trim();
         String originator = list.get(position).get("originator").trim();
-
+        String tid=list.get(position).get("tid").trim();
         switch(cmd) {
             case "request_ask":
-                request_ask(originator, cmdContext,convertView,position);
+                request_ask(originator, cmdContext,tid,convertView,position);
                 break;
             case "request_cheer":
                 request_cheer(originator, cmdContext,convertView,position);
                 break;
             case "request_update":
-                request_update(originator, cmdContext,convertView,position);
+                request_update(originator, cmdContext,tid,convertView,position);
                 break;
+
         }
         return convertView;
     }
@@ -89,11 +91,9 @@ public class Request_ListAdapter extends BaseAdapter {
 
 
 
-    private void request_ask(final String originator,final String cmdContext, View convertView, final int position) {
-        String dataArr[]=cmdContext.split("-");
-        final String targetName=dataArr[0];
-        final String tid=dataArr[1];
-        holder.request_context.setText(targetName);
+    private void request_ask(final String originator,final String cmdContext,final String tid, View convertView, final int position) {
+
+        holder.request_context.setText(cmdContext);
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,7 +102,7 @@ public class Request_ListAdapter extends BaseAdapter {
                 new AlertDialog.Builder(context)
                         .setTitle("TeamGoGoal")//設定視窗標題
                         .setIcon(R.mipmap.ic_launcher)//設定對話視窗圖示
-                        .setMessage(targetName)//設定顯示的文字
+                        .setMessage(cmdContext)//設定顯示的文字
                         .setPositiveButton("取消", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -180,7 +180,7 @@ public class Request_ListAdapter extends BaseAdapter {
         });
     }
 
-    private void request_update(final String originator,final String cmdContext, View convertView,final int position) {
+    private void request_update(final String originator,final String cmdContext,final String tid, View convertView,final int position) {
         holder.request_context.setText(originator + "已更新「" + cmdContext + "」目標的資訊");
         convertView.setOnClickListener(new View.OnClickListener() {
 
@@ -203,6 +203,11 @@ public class Request_ListAdapter extends BaseAdapter {
                                         RequestActivity.request_listAdapter.notifyDataSetChanged();
                                     }
                                 });
+                                Intent i=new Intent(context,TargetEventActivity.class);
+
+                                i.putExtra("cmd","loading");
+                                i.putExtra("tid",tid);
+                                context.startActivity(i);
                             }
                         })//設定結束的子視窗
                         .show();//呈現對話視窗
