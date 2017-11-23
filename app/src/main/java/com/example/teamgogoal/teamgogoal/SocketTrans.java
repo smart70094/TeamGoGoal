@@ -1,7 +1,5 @@
 package com.example.teamgogoal.teamgogoal;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -11,11 +9,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.lang.annotation.Target;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by hp on 2017/8/4.
@@ -107,6 +102,9 @@ public  class SocketTrans {     //執行緒
                                case "updateTarget":
                                    updateTargetMessage(strArr[1],strArr[2]);
                                    break;
+                               case "addAccount":
+                                   createDefaultPhoto(strArr[1]);
+                                   break;
                            }
                        }
                     }
@@ -133,6 +131,11 @@ public  class SocketTrans {     //執行緒
         intent.putExtra("subject","targetEvent");
         intent.putExtra("tid",tid);
         context.startService(intent);
+    }
+    public void createDefaultPhoto(String uid){
+
+
+
     }
     public void close() throws IOException {
         br.close();
