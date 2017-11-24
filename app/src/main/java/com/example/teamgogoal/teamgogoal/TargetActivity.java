@@ -192,6 +192,7 @@ public class TargetActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+
     //background run
     private class DbOperationTask extends AsyncTask<String, Void, Void> {
         protected Void doInBackground(String... params) {
@@ -240,19 +241,17 @@ public class TargetActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void toMemory(View view) {
+        Intent intent = new Intent(this, Review.class);
+        startActivity(intent);
+    }
+
+
     public void toRequest(View view) {
         intent = new Intent();
         intent.setClass(TargetActivity.this, RequestActivity.class);
         startActivity(intent);
     }
-
-    public void checkReview(View view) {
-        Intent intent = new Intent();
-        intent.setClass(this, Review.class);
-
-        startActivity(intent);
-    }
-
 
     public void fresh_activity(View view) {
         loading();

@@ -32,7 +32,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/empty"
-            android:onClick="checkReview"
+            android:onClick="toTarget"
             android:padding="5dp"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/item_target" />
@@ -43,6 +43,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/empty"
+            android:onClick="toMemory"
             android:padding="5dp"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/item_memory" />

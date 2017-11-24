@@ -145,12 +145,18 @@ public class Review extends AppCompatActivity {
 
 
     public void toEditProfile(View view) {
+        finish();
         Intent intent = new Intent();
         intent.setClass(this, EditProfile.class);
         startActivity(intent);
     }
 
+    public void toTarget(View view) {
+        finish();
+    }
+
     public void toRequest(View view) {
+        finish();
         Intent intent = new Intent();
         intent.setClass(this, RequestActivity.class);
         startActivity(intent);

@@ -111,6 +111,7 @@ public class EditProfile extends AppCompatActivity{
     }
 
 
+
     private class TransTask extends AsyncTask<String, Void, Bitmap> {
         @Override
         protected Bitmap doInBackground(String... params) {
@@ -542,13 +543,18 @@ public class EditProfile extends AppCompatActivity{
         return roundedBitmapDrawable;
     }
 
-    public void checkReview(View view) {
-        Intent intent = new Intent();
-        intent.setClass(this, Review.class);
+    public void toTarget(View view) {
+        finish();
+    }
+
+    public void toMemory(View view) {
+        finish();
+        Intent intent = new Intent(this, Review.class);
         startActivity(intent);
     }
 
     public void toRequest(View view) {
+        finish();
         Intent intent = new Intent();
         intent.setClass(this, RequestActivity.class);
         startActivity(intent);

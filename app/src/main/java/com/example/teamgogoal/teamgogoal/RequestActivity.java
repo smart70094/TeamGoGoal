@@ -83,12 +83,18 @@ public class RequestActivity extends AppCompatActivity {
     }
 
     public void toEditProfile(View view) {
+        finish();
         Intent intent = new Intent();
         intent.setClass(RequestActivity.this, EditProfile.class);
         startActivity(intent);
     }
 
-    public void checkReview(View view) {
+    public void toTarget(View view) {
+        finish();
+    }
+
+    public void toMemory(View view) {
+        finish();
         Intent intent = new Intent();
         intent.setClass(RequestActivity.this, Review.class);
         startActivity(intent);

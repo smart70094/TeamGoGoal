@@ -37,7 +37,7 @@
                 android:text="成員編輯"
                 android:textAlignment="center"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
 
         </FrameLayout>
 

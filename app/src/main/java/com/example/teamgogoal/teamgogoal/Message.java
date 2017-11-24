@@ -177,7 +177,7 @@ public class Message extends AppCompatActivity {
                             hit_dialog.dismiss();
                         }
                     });
-                    hit_dialog = new AlertDialog.Builder(Message.this,R.style.hitStyle).setView(hit.get_view()).create();
+                    hit_dialog = new AlertDialog.Builder(Message.this, R.style.hitStyle).setView(hit.get_view()).create();
                     hit_dialog.show();
                 } else {
                     dialog.dismiss();
@@ -286,11 +286,15 @@ public class Message extends AppCompatActivity {
                             hit_dialog.dismiss();
                         }
                     });
-                    hit_dialog = new AlertDialog.Builder(Message.this,R.style.hitStyle).setView(hit.get_view()).create();
+                    hit_dialog = new AlertDialog.Builder(Message.this, R.style.hitStyle).setView(hit.get_view()).create();
                     hit_dialog.show();
                 } else {
                     dialog.dismiss();
-                    inputMessage();
+                    if (send_type_cmd.equals("anonymousask")) {
+                        sendAnonymousask();
+                    } else {
+                        inputMessage();
+                    }
                 }
             }
         });
@@ -306,6 +310,8 @@ public class Message extends AppCompatActivity {
         p.width = (int) (d.getWidth() * 0.8); // 宽度设置为屏幕的0.65，根据实际情况调整
         dialogWindow.setAttributes(p);
     }
+
+
 
     //------填寫鼓勵訊息------//
     private void inputMessage() {
@@ -335,10 +341,6 @@ public class Message extends AppCompatActivity {
                             //匿名傳送訊息
                             socketTrans.setParams("register_cheer", "匿名夥伴", subject, msgStr, currTid);
                             break;
-                        case "anonymousask":
-                            //匿名要求訊息
-                            socketTrans.setParams("requestMessage",  subject, msgStr, currTid);
-                            break;
                     }
                     socketTrans.send(socketTrans.getParams());
                     dialog.dismiss();
@@ -357,6 +359,34 @@ public class Message extends AppCompatActivity {
         p.height = (int) (d.getHeight() * 0.7); // 高度设置为屏幕的0.6，根据实际情况调整
         p.width = (int) (d.getWidth() * 0.8); // 宽度设置为屏幕的0.65，根据实际情况调整
         dialogWindow.setAttributes(p);
+
+    }
+
+    //------匿名要求鼓勵------//
+    private void sendAnonymousask() {
+        try {
+            String subject = "";
+            for (HashMap<String, Object> entry : pick_list) {
+                subject += entry.get("account") + "-";
+            }
+            subject = subject.substring(0, subject.length() - 1);
+            socketTrans.setParams("requestMessage", subject, "", currTid,user.account);
+            socketTrans.send(socketTrans.getParams());
+        } catch (Exception e) {
+            Log.v("jim_cheerSubmit", e.toString());
+        }
+
+        Hit hit = new Hit("1",Message.this);
+        hit.set_hitTitle("提示");
+        hit.set_hitContent("傳送成功");
+        hit.get_hitConfirm().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hit_dialog.dismiss();
+            }
+        });
+        hit_dialog = new AlertDialog.Builder(Message.this, R.style.hitStyle).setView(hit.get_view()).create();
+        hit_dialog.show();
 
     }
 }

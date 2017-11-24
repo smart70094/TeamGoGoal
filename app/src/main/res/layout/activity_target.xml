@@ -46,7 +46,6 @@
                 android:layout_weight="2"
                 android:adjustViewBounds="true"
                 android:background="@color/empty"
-                android:onClick="checkReview"
                 android:padding="5dp"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/item_target_light" />
@@ -58,7 +57,7 @@
                 android:layout_weight="2"
                 android:adjustViewBounds="true"
                 android:background="@color/empty"
-                android:onClick="toRequest"
+                android:onClick="toMemory"
                 android:padding="5dp"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/item_memory" />
@@ -70,7 +69,7 @@
                 android:layout_weight="2"
                 android:adjustViewBounds="true"
                 android:background="@color/empty"
-                android:onClick="fresh_activity"
+                android:onClick="toRequest"
                 android:padding="5dp"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/item_message" />

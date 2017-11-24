@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,12 +29,14 @@ public class Request_ListAdapter extends BaseAdapter {
     List<HashMap<String, String>> list = new ArrayList<>();
     Handler handler = new Handler();
     SocketTrans socketTrans;
-    public Request_ListAdapter(Context context,RequestDB db) {
+    AlertDialog dialog;
+
+    public Request_ListAdapter(Context context, RequestDB db) {
         myInflater = LayoutInflater.from(context);
         this.context = context;
         this.db = db;
-        targetDB=new TargetDB();
-        socketTrans= LoginActivity.socketTrans;
+        targetDB = new TargetDB();
+        socketTrans = LoginActivity.socketTrans;
     }
 
     public void setData(List<HashMap<String, String>> list) {
@@ -72,28 +76,28 @@ public class Request_ListAdapter extends BaseAdapter {
         String cmd = list.get(position).get("cmd").trim();
         String cmdContext = list.get(position).get("cmdContext").trim();
         String originator = list.get(position).get("originator").trim();
-        String tid=list.get(position).get("tid").trim();
-        switch(cmd) {
+        String tid = list.get(position).get("tid").trim();
+        switch (cmd) {
             case "request_ask":
-                request_ask(originator, cmdContext,tid,convertView,position);
+                request_ask(originator, cmdContext, tid, convertView, position);
                 break;
             case "request_cheer":
-                request_cheer(originator, cmdContext,convertView,position);
+                request_cheer(originator, cmdContext, convertView, position);
                 break;
             case "request_update":
-                request_update(originator, cmdContext,tid,convertView,position);
+                request_update(originator, cmdContext, tid, convertView, position);
                 break;
             case "request_delete":
-                request_delete(originator, cmdContext,tid,convertView,position);
+                request_delete(originator, cmdContext, tid, convertView, position);
                 break;
+            case "request_getCheer":
+                request_getCheer(originator, cmdContext, tid, convertView, position);
+
         }
         return convertView;
     }
 
-
-
-
-    private void request_ask(final String originator,final String cmdContext,final String tid, View convertView, final int position) {
+    private void request_ask(final String originator, final String cmdContext, final String tid, View convertView, final int position) {
 
         holder.request_context.setText(cmdContext);
 
@@ -117,13 +121,13 @@ public class Request_ListAdapter extends BaseAdapter {
                                 new Thread(new Runnable() {
                                     public void run() {
                                         String rid = id;
-                                        new DeleteRequest().execute(rid,tid);
-                                        socketTrans.setParams("addParticipator",tid,LoginActivity.getUser().account);
+                                        new DeleteRequest().execute(rid, tid);
+                                        socketTrans.setParams("addParticipator", tid, LoginActivity.getUser().account);
                                         socketTrans.send();
                                         list.remove(position);
-                                        handler.post(new Runnable(){
+                                        handler.post(new Runnable() {
                                             @Override
-                                            public void run(){
+                                            public void run() {
                                                 RequestActivity.request_listAdapter.notifyDataSetChanged();
                                             }
                                         });
@@ -141,12 +145,13 @@ public class Request_ListAdapter extends BaseAdapter {
 
         @Override
         protected Void doInBackground(String... params) {
-            String rid=params[0];
+            String rid = params[0];
             db.deleteRegisterRequest(rid);
             return null;
         }
     }
-    private void request_delete(final String originator,final String cmdContext,final String tid, View convertView,final int position){
+
+    private void request_delete(final String originator, final String cmdContext, final String tid, View convertView, final int position) {
         holder.request_context.setText(cmdContext);
 
         convertView.setOnClickListener(new View.OnClickListener() {
@@ -165,9 +170,9 @@ public class Request_ListAdapter extends BaseAdapter {
                                 String rid = id;
                                 new DeleteRequest().execute(rid);
                                 list.remove(position);
-                                handler.post(new Runnable(){
+                                handler.post(new Runnable() {
                                     @Override
-                                    public void run(){
+                                    public void run() {
                                         RequestActivity.request_listAdapter.notifyDataSetChanged();
                                     }
                                 });
@@ -178,7 +183,7 @@ public class Request_ListAdapter extends BaseAdapter {
         });
     }
 
-    private void request_cheer(final String originator,final String cmdContext, View convertView,final int position) {
+    private void request_cheer(final String originator, final String cmdContext, View convertView, final int position) {
         holder.request_context.setText(originator + "寄給你一則訊息");
 
         convertView.setOnClickListener(new View.OnClickListener() {
@@ -197,9 +202,9 @@ public class Request_ListAdapter extends BaseAdapter {
                                 String rid = id;
                                 new DeleteRequest().execute(rid);
                                 list.remove(position);
-                                handler.post(new Runnable(){
+                                handler.post(new Runnable() {
                                     @Override
-                                    public void run(){
+                                    public void run() {
                                         RequestActivity.request_listAdapter.notifyDataSetChanged();
                                     }
                                 });
@@ -210,7 +215,53 @@ public class Request_ListAdapter extends BaseAdapter {
         });
     }
 
-    private void request_update(final String originator,final String cmdContext,final String tid, View convertView,final int position) {
+    private void request_getCheer(final String originator, final String cmdContext, final String tid, View convertView, final int position) {
+
+
+
+        holder.request_context.setText(cmdContext);
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                View dialog_view;
+
+                dialog_view = LayoutInflater.from(context).inflate(R.layout.input_message, null);
+
+                final EditText msg_context = dialog_view.findViewById(R.id.msg_context);
+                Button submitCheer = dialog_view.findViewById(R.id.submitCheer);
+
+                submitCheer.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            final String id = list.get(position).get("rid");
+                            String msgStr = msg_context.getText().toString();
+                            socketTrans.setParams("register_cheer", LoginActivity.user.account, originator, msgStr, tid);
+                            socketTrans.send();
+                            dialog.dismiss();
+                            list.remove(position);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    RequestActivity.request_listAdapter.notifyDataSetChanged();
+                                }
+                            });
+                            new DeleteRequest().execute(id);
+                        } catch (Exception e) {
+                            Log.v("jim_cheerSubmit", e.toString());
+                        }
+                    }
+                });
+
+                dialog = new AlertDialog.Builder(context, R.style.hitStyle).setView(dialog_view).create();
+                dialog.show();
+            }
+        });
+    }
+
+    private void request_update(final String originator, final String cmdContext, final String tid, View convertView, final int position) {
         holder.request_context.setText(originator + "已更新「" + cmdContext + "」目標的資訊");
         convertView.setOnClickListener(new View.OnClickListener() {
 
@@ -227,16 +278,16 @@ public class Request_ListAdapter extends BaseAdapter {
                                 String rid = id;
                                 new DeleteRequest().execute(rid, cmdContext);
                                 list.remove(position);
-                                handler.post(new Runnable(){
+                                handler.post(new Runnable() {
                                     @Override
-                                    public void run(){
+                                    public void run() {
                                         RequestActivity.request_listAdapter.notifyDataSetChanged();
                                     }
                                 });
-                                Intent i=new Intent(context,TargetEventActivity.class);
+                                Intent i = new Intent(context, TargetEventActivity.class);
 
-                                i.putExtra("cmd","loading");
-                                i.putExtra("tid",tid);
+                                i.putExtra("cmd", "loading");
+                                i.putExtra("tid", tid);
                                 context.startActivity(i);
                             }
                         })//設定結束的子視窗

@@ -7,20 +7,73 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight=".91"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:background="@color/top_bg_color"
         android:gravity="center"
         android:orientation="horizontal">
 
 
+        <ImageButton
+            android:id="@+id/imageButton13"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/empty"
+            android:onClick="toEditProfile"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/item_person" />
+
+        <ImageButton
+            android:id="@+id/imageButton14"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/empty"
+            android:onClick="toTarget"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/item_target" />
+
+        <ImageButton
+            android:id="@+id/imageButton15"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/empty"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/item_memory_light" />
+
+        <ImageButton
+            android:id="@+id/imageButton16"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:adjustViewBounds="false"
+            android:background="@color/empty"
+            android:onClick="toRequest"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/item_message" />
+
+        <ImageButton
+            android:id="@+id/imageButton17"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/empty"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/item_q" />
     </LinearLayout>
 
     <com.lukedeighton.wheelview.WheelView
         android:id="@+id/wheelview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.09"
+        android:layout_height="0dp"
+        android:layout_weight="8"
         app:emptyItemColor="#0d5302"
         app:repeatItems="true"
         app:rotatableWheelDrawable="false"
