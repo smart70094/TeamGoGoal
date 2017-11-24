@@ -13,59 +13,6 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/Profile"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:background="@color/empty"
-            android:onClick="toEditProfile"
-            android:padding="5dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/item_person" />
-
-        <ImageButton
-            android:id="@+id/Review"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:background="@color/empty"
-            android:padding="5dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/item_memory_light" />
-
-        <ImageButton
-            android:id="@+id/Notice"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:background="@color/empty"
-            android:onClick="toRequest"
-            android:padding="5dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/item_message" />
-
-        <ImageButton
-            android:id="@+id/Target"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="false"
-            android:background="@color/empty"
-            android:padding="5dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/item_edit" />
-
-        <ImageButton
-            android:id="@+id/Quest"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:background="@color/empty"
-            android:padding="5dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/item_q" />
-
 
     </LinearLayout>
 

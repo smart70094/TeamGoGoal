@@ -15,8 +15,11 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -25,10 +28,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,22 +54,22 @@ public class TaskActivity extends AppCompatActivity {
 
     TargetDB targetdb;
     TaskDB db;
-    TextView TargetTitle,dreamContext;
+    TextView TargetTitle, dreamContext;
     EditText cheerEt;
     Button submit;
     Map<Integer, TaskDB.TaskDetail> taskMap = new HashMap<Integer, TaskDB.TaskDetail>();
-    String currTid = "", nextID = "", currID = "", targetName = "",dream="";
+    String currTid = "", nextID = "", currID = "", targetName = "", dream = "";
     LoginActivity.User user;
     AlertDialog.Builder cheerDialog;
     AlertDialog msg = null, dialog = null;
     SocketTrans socketTrans = LoginActivity.socketTrans;
-    boolean hasTask=false;
+    boolean hasTask = false;
     //進度條
     CircularProgressBar circularProgressBar;
     int percentage;
     //團隊成員大頭貼
     public static HashMap<String, Drawable> member_photo;
-
+    public static HashMap<String, Drawable> invite_member_photo;
 
 
     /*---Date:1015 rebuild----*/
@@ -88,6 +94,7 @@ public class TaskActivity extends AppCompatActivity {
 
             targetdb = new TargetDB();
             initMemberPhoto();
+            initInviteMemberPhoto();
 
 
             TargetTitle = (TextView) findViewById(R.id.TargetTitle);
@@ -147,7 +154,7 @@ public class TaskActivity extends AppCompatActivity {
     private void initMemberPhoto() throws JSONException, ExecutionException, InterruptedException {
         member_photo = new HashMap<>();
 
-        HashMap<String,String> member = new HashMap<>();
+        HashMap<String, String> member = new HashMap<>();
         member = new MemberTransTask().execute().get();
 
         for (Map.Entry<String, String> entry : member.entrySet()) {
@@ -158,11 +165,11 @@ public class TaskActivity extends AppCompatActivity {
 
     }
 
-    private class MemberTransTask extends AsyncTask<String, Void, HashMap<String,String>> {
+    private class MemberTransTask extends AsyncTask<String, Void, HashMap<String, String>> {
         @Override
-        protected HashMap<String,String> doInBackground(String... params) {
+        protected HashMap<String, String> doInBackground(String... params) {
 
-            HashMap<String,String> member = new HashMap<>();
+            HashMap<String, String> member = new HashMap<>();
 
             try {
                 member = targetdb.readParticipator(currTid);
@@ -173,6 +180,59 @@ public class TaskActivity extends AppCompatActivity {
         }
 
     }
+
+    private void initInviteMemberPhoto() throws JSONException, ExecutionException, InterruptedException {
+        invite_member_photo = new HashMap<>();
+
+        String phpurl = LoginActivity.getLocalHost() + "searchInviteMember.php?tid=" + currTid;
+        String invite_result = new InviteMemberTransTask().execute(phpurl).get();
+
+        HashMap<String,String> inviteMember = new HashMap<>();
+        inviteMember = InviteMember_parseJSON(invite_result);
+        for (Map.Entry<String, String> entry : inviteMember.entrySet()) {
+            String imageUrl = LoginActivity.getLocalHost() + "profilepicture/" + entry.getKey();
+            Bitmap result = new PhotoTransTask().execute(imageUrl).get();
+            invite_member_photo.put(entry.getValue(), toCircleImage(result));
+        }
+    }
+
+    private class InviteMemberTransTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            StringBuilder sb = new StringBuilder();
+            try {
+                URL url = new URL(params[0]);
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(url.openStream()));
+                String line = in.readLine();
+                while (line != null) {
+                    Log.d("HTTP", line);
+                    sb.append(line);
+                    line = in.readLine();
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return sb.toString();
+        }
+    }
+
+    private HashMap<String,String> InviteMember_parseJSON(String s) {
+        HashMap<String, String> hashmap = new HashMap<>();
+        try {
+            JSONArray array = new JSONArray(s);
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject obj = array.getJSONObject(i);
+                hashmap.put(obj.getString("uid"), obj.getString("subject"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return hashmap;
+    }
+
 
     private class PhotoTransTask extends AsyncTask<String, Void, Bitmap> {
         @Override
@@ -200,20 +260,20 @@ public class TaskActivity extends AppCompatActivity {
         int bitmapHeight = bitmap.getHeight();
 
         //转换为正方形后的宽高
-        int bitmapSquareWidth = Math.min(bitmapWidth,bitmapHeight);
+        int bitmapSquareWidth = Math.min(bitmapWidth, bitmapHeight);
 
         //最终图像的宽高
         int newBitmapSquareWidth = bitmapSquareWidth;
 
-        Bitmap roundedBitmap = Bitmap.createBitmap(newBitmapSquareWidth,newBitmapSquareWidth,Bitmap.Config.ARGB_8888);
+        Bitmap roundedBitmap = Bitmap.createBitmap(newBitmapSquareWidth, newBitmapSquareWidth, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(roundedBitmap);
         int x = bitmapSquareWidth - bitmapWidth;
         int y = bitmapSquareWidth - bitmapHeight;
 
         //裁剪后图像,注意X,Y要除以2 来进行一个中心裁剪
-        canvas.drawBitmap(bitmap, x/2, y/2, null);
+        canvas.drawBitmap(bitmap, x / 2, y / 2, null);
 
-        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(),roundedBitmap);
+        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), roundedBitmap);
         roundedBitmapDrawable.setCircular(true);
         return roundedBitmapDrawable;
 
@@ -231,14 +291,14 @@ public class TaskActivity extends AppCompatActivity {
             taskMap.clear();
             taskDate.clear();
             new DbOperationTask().execute("read");
-            new DreamOpeartionThread().execute("loading",currTid,user.account);
+            new DreamOpeartionThread().execute("loading", currTid, user.account);
         }
     }
 
 
     protected void fresh(Map<String, TaskDB.TaskDetail> map) {
         Iterator it = map.entrySet().iterator();
-        boolean hasDream=false;
+        boolean hasDream = false;
         while (it.hasNext()) {
 
             Map.Entry<String, TaskDB.TaskDetail> set = (Map.Entry) it.next();
@@ -257,13 +317,13 @@ public class TaskActivity extends AppCompatActivity {
                 taskDate.add(tk_hashmap);
                 taskMap.put(key, set.getValue());
 
-                if(!hasDream)
-                    if(set.getValue().auth.equals(user.account) && !set.getValue().dream.equals("null") )
-                        hasDream=true;
+                if (!hasDream)
+                    if (set.getValue().auth.equals(user.account) && !set.getValue().dream.equals("null"))
+                        hasDream = true;
 
-                if(!hasTask)
-                    if(set.getValue().auth.equals(user.account))
-                        hasTask=true;
+                if (!hasTask)
+                    if (set.getValue().auth.equals(user.account))
+                        hasTask = true;
 
             }
         }
@@ -332,8 +392,8 @@ public class TaskActivity extends AppCompatActivity {
                 return true;
             }
         });
-        if(!hasDream) {
-            Toast.makeText(this,"快去輸入你的夢想藍圖吧！",Toast.LENGTH_LONG).show();
+        if (!hasDream) {
+            Toast.makeText(this, "快去輸入你的夢想藍圖吧！", Toast.LENGTH_LONG).show();
             //process
 
             //
@@ -342,7 +402,7 @@ public class TaskActivity extends AppCompatActivity {
 
 
     //------左上返回鍵------//
-    public void cancel(View view){
+    public void cancel(View view) {
         finish();
     }
 
@@ -386,7 +446,7 @@ public class TaskActivity extends AppCompatActivity {
         /*String participator="";
         */
         String participator = "456-789";
-        socketTrans.setParams("requestMessage", participator,currID);
+        socketTrans.setParams("requestMessage", participator, currID);
         socketTrans.send();
     }
 
@@ -399,8 +459,8 @@ public class TaskActivity extends AppCompatActivity {
         alertDialogBuilder.setView(promptsView);
 
         final EditText dream_context = (EditText) promptsView.findViewById(R.id.msg_context);
-       //如果沒藍圖，則使用預設文字提醒使用者
-        if(dream.equals(""))
+        //如果沒藍圖，則使用預設文字提醒使用者
+        if (dream.equals(""))
             dream_context.setText("");
         else
             dream_context.setText(dreamContext.getText().toString());
@@ -409,45 +469,47 @@ public class TaskActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
+                            public void onClick(DialogInterface dialog, int id) {
                                 //更改介面文字與更新資料庫
-                                dream=dream_context.getText().toString();
+                                dream = dream_context.getText().toString();
                                 dreamContext.setText(dream);
-                                new DreamOpeartionThread().execute("update",currTid,user.account,dreamContext.getText().toString());
+                                new DreamOpeartionThread().execute("update", currTid, user.account, dreamContext.getText().toString());
                             }
                         })
                 .setNegativeButton("Cancel",
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
+                            public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
                         });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
+
     private class DreamOpeartionThread extends AsyncTask<String, Void, String> {
         protected String doInBackground(String... params) {
-            String cmd=params[0];
-            String result="";
-            String tid,auth,dream;
-            switch (cmd){
+            String cmd = params[0];
+            String result = "";
+            String tid, auth, dream;
+            switch (cmd) {
                 case "loading":
-                    tid=params[1];
-                    auth=params[2];
-                    result=db.readDream(tid,auth);
-                    if (result.equals("")) result="快來輸入你的夢想藍圖吧";
-                    else dream=result;
+                    tid = params[1];
+                    auth = params[2];
+                    result = db.readDream(tid, auth);
+                    if (result.equals("")) result = "快來輸入你的夢想藍圖吧";
+                    else dream = result;
                     break;
                 case "update":
-                    tid=params[1];
-                    auth=params[2];
-                    dream=params[3];
-                    db.updateDream(tid,auth,dream);
-                    result=dream;
+                    tid = params[1];
+                    auth = params[2];
+                    dream = params[3];
+                    db.updateDream(tid, auth, dream);
+                    result = dream;
                     break;
             }
             return result.trim();
         }
+
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             dreamContext.setText(s);
@@ -714,8 +776,15 @@ public class TaskActivity extends AppCompatActivity {
                 }
             });
 
-            dialog = new AlertDialog.Builder(TaskActivity.this, R.style.Translucent_NoTitle).setView(dialog_view).create();
+            dialog = new AlertDialog.Builder(TaskActivity.this, R.style.hitStyle).setView(dialog_view).create();
             dialog.show();
+            Window dialogWindow = dialog.getWindow();
+            WindowManager m = TaskActivity.this.getWindowManager();
+            Display d = m.getDefaultDisplay(); // 获取屏幕宽、高度
+            WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+            p.height = (int) (d.getHeight() * 0.7); // 高度设置为屏幕的0.6，根据实际情况调整
+            p.width = (int) (d.getWidth() * 0.8); // 宽度设置为屏幕的0.65，根据实际情况调整
+            dialogWindow.setAttributes(p);
         }
 
     }
@@ -723,9 +792,9 @@ public class TaskActivity extends AppCompatActivity {
 
     //------管理訊息------//
 
-    public void checkMessage(View view){
+    public void checkMessage(View view) {
         Intent intent = new Intent(this, Message.class);
-        intent.putExtra("tid",currTid);
+        intent.putExtra("tid", currTid);
         startActivity(intent);
     }
 
@@ -733,9 +802,9 @@ public class TaskActivity extends AppCompatActivity {
     //------管理成員------//
 
     public void checkMember(View view) {
-        Intent intent = new Intent(this,Member.class);
+        Intent intent = new Intent(this, Member.class);
         intent.putExtra("tid", currTid);
-        intent.putExtra("targetName",targetName);
+        intent.putExtra("targetName", targetName);
         startActivity(intent);
     }
 

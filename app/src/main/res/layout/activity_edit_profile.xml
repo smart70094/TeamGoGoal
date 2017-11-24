@@ -17,54 +17,54 @@
 
         <ImageButton
             android:id="@+id/Profile"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/empty"
-            android:padding="10dp"
+            android:padding="5dp"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/item_person_light" />
 
         <ImageButton
             android:id="@+id/Review"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/empty"
             android:onClick="checkReview"
-            android:padding="10dp"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/item_target" />
+
+        <ImageButton
+            android:id="@+id/Notice"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/empty"
+            android:onClick="toRequest"
+            android:padding="5dp"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/item_memory" />
 
         <ImageButton
-            android:id="@+id/Notice"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:id="@+id/Target"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:adjustViewBounds="false"
             android:background="@color/empty"
-            android:onClick="toRequest"
-            android:padding="10dp"
+            android:padding="5dp"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/item_message" />
 
         <ImageButton
-            android:id="@+id/Target"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="false"
-            android:background="@color/empty"
-            android:padding="10dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/item_edit" />
-
-        <ImageButton
             android:id="@+id/Quest"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/empty"
-            android:padding="10dp"
+            android:padding="5dp"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/item_q" />
 
@@ -81,20 +81,123 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2"
+            android:layout_weight="8"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:orientation="horizontal"></LinearLayout>
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"></LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="7"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"></LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2.5"
+                        android:orientation="horizontal">
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/imageView7"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:srcCompat="@drawable/item_person_photo_light" />
+
+                            <ImageView
+                                android:id="@+id/imageView_pic"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:src="@drawable/item_person_photo" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="6"
+                                    android:orientation="vertical"></LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="4"
+                                    android:gravity="bottom|left"
+                                    android:orientation="vertical">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="8"
+                                        android:orientation="vertical"></LinearLayout>
+
+                                    <ImageButton
+                                        android:id="@+id/imageButton4"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="2"
+                                        android:adjustViewBounds="true"
+                                        android:background="@color/empty"
+                                        android:onClick="personal_photo_selector"
+                                        android:scaleType="fitCenter"
+                                        app:srcCompat="@drawable/item_camera" />
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="0.7"
+                                        android:orientation="vertical"></LinearLayout>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+                        </FrameLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"></LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"></LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="7"
-                android:gravity="center"
+                android:layout_weight="1.4"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -107,64 +210,194 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="2.5"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
-                    <FrameLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/imageView7"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/item_person_photo_light" />
-
-                        <ImageView
-                            android:id="@+id/imageView_pic"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:src="@drawable/item_person_photo" />
+                        <TextView
+                            android:id="@+id/textView10"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="名字"
+                            android:textColor="@color/basicColor2" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1.5"
+                            android:gravity="center"
                             android:orientation="horizontal">
 
-                            <LinearLayout
+                            <TextView
+                                android:id="@+id/nickName"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="6"
-                                android:orientation="vertical"></LinearLayout>
+                                android:layout_weight="7"
+                                android:background="@color/top_bg_color"
+                                android:gravity="center_vertical"
+                                android:paddingLeft="5dp"
+                                android:text="TextView"
+                                android:textColor="@color/black" />
 
-                            <LinearLayout
+                            <ImageButton
+                                android:id="@+id/imageButton5"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="4"
-                                android:gravity="bottom|left"
-                                android:orientation="vertical">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="0dp"
-                                    android:layout_weight="8"
-                                    android:orientation="vertical"></LinearLayout>
-
-                                <ImageButton
-                                    android:id="@+id/imageButton4"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="0dp"
-                                    android:layout_weight="2"
-                                    android:adjustViewBounds="true"
-                                    android:background="@color/empty"
-                                    android:onClick="personal_photo_selector"
-                                    android:scaleType="fitCenter"
-                                    app:srcCompat="@drawable/item_camera" />
-
-                            </LinearLayout>
+                                android:layout_weight="1"
+                                android:adjustViewBounds="true"
+                                android:background="@color/top_bg_color"
+                                android:onClick="ChangeName"
+                                android:padding="5dp"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@drawable/item_pen" />
 
                         </LinearLayout>
-                    </FrameLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textView9"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="帳號"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/basicColor2" />
+
+                        <TextView
+                            android:id="@+id/account"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1.5"
+                            android:background="@color/top_bg_color"
+                            android:gravity="center"
+                            android:paddingLeft="5dp"
+                            android:text="TextView"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textView15"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_gravity="center_vertical|center_horizontal"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="密碼"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/basicColor2" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1.5"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/password"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="7"
+                                android:background="@color/top_bg_color"
+                                android:gravity="center_vertical"
+                                android:paddingLeft="5dp"
+                                android:text="********"
+                                android:textColor="@color/black" />
+
+                            <ImageButton
+                                android:id="@+id/imageButton6"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:adjustViewBounds="true"
+                                android:background="@color/top_bg_color"
+                                android:onClick="ChangePassword"
+                                android:padding="5dp"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@drawable/item_pen" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textView15"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_gravity="center_vertical|center_horizontal"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:text="e-mail"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/basicColor2" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1.5"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/mail"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="7"
+                                android:background="@color/top_bg_color"
+                                android:gravity="center_vertical"
+                                android:paddingLeft="5dp"
+                                android:text="123"
+                                android:textColor="@color/black" />
+
+                            <ImageButton
+                                android:id="@+id/imageButton6"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:adjustViewBounds="true"
+                                android:background="@color/top_bg_color"
+                                android:onClick="ChangeEmail"
+                                android:padding="5dp"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@drawable/item_pen" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight=".5"
+                        android:orientation="vertical"></LinearLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -174,220 +407,6 @@
                     android:orientation="horizontal"></LinearLayout>
 
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal"></LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal"></LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2.5"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView10"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="名字"
-                        android:textColor="@color/basicColor2" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/nickName"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="7"
-                            android:background="@color/top_bg_color"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="5dp"
-                            android:text="TextView"
-                            android:textColor="@color/basicColor2" />
-
-                        <ImageButton
-                            android:id="@+id/imageButton5"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:adjustViewBounds="true"
-                            android:background="@color/top_bg_color"
-                            android:onClick="ChangeName"
-                            android:padding="5dp"
-                            android:scaleType="fitCenter"
-                            app:srcCompat="@drawable/item_pen" />
-
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView9"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="帳號"
-                        android:textAlignment="viewStart"
-                        android:textColor="@color/basicColor2" />
-
-                    <TextView
-                        android:id="@+id/account"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:background="@color/top_bg_color"
-                        android:gravity="center"
-                        android:paddingLeft="5dp"
-                        android:text="TextView"
-                        android:textAlignment="viewStart"
-                        android:textColor="@color/basicColor2" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView15"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_gravity="center_vertical|center_horizontal"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="密碼"
-                        android:textAlignment="viewStart"
-                        android:textColor="@color/basicColor2" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/password"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="7"
-                            android:background="@color/top_bg_color"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="5dp"
-                            android:text="********"
-                            android:textColor="@color/basicColor2" />
-
-                        <ImageButton
-                            android:id="@+id/imageButton6"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:adjustViewBounds="true"
-                            android:background="@color/top_bg_color"
-                            android:onClick="ChangePassword"
-                            android:padding="5dp"
-                            android:scaleType="fitCenter"
-                            app:srcCompat="@drawable/item_pen" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView15"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_gravity="center_vertical|center_horizontal"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="e-mail"
-                        android:textAlignment="viewStart"
-                        android:textColor="@color/basicColor2" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/mail"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="7"
-                            android:background="@color/top_bg_color"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="5dp"
-                            android:text="123"
-                            android:textColor="@color/basicColor2" />
-
-                        <ImageButton
-                            android:id="@+id/imageButton6"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:adjustViewBounds="true"
-                            android:background="@color/top_bg_color"
-                            android:onClick="ChangePassword"
-                            android:padding="5dp"
-                            android:scaleType="fitCenter"
-                            app:srcCompat="@drawable/item_pen" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal"></LinearLayout>
-
         </LinearLayout>
 
         <LinearLayout
@@ -396,12 +415,6 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="vertical"></LinearLayout>
-
             <Button
                 android:id="@+id/button8"
                 android:layout_width="match_parent"
@@ -409,7 +422,8 @@
                 android:layout_weight="1"
                 android:background="@drawable/bg_new_task_btn"
                 android:onClick="EditProfileEvent"
-                android:text="完成" />
+                android:text="完成"
+                android:textSize="18sp" />
         </LinearLayout>
 
     </LinearLayout>

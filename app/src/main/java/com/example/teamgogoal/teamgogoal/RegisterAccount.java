@@ -131,6 +131,7 @@ public class RegisterAccount extends AppCompatActivity {
             if (!CAresult.matches(".*\\d+.*")) {
 
                 socketTrans.setParams("addAccount",account,password,name,email);
+                socketTrans.setActivity(this);
                 socketTrans.send();
 
 

@@ -124,6 +124,7 @@ public class Message extends AppCompatActivity {
     //------傳送新訊息------//
     public void sendMessage(View view) {
         unpick_list.clear();
+        pick_list.clear();
 
         View dialog_view;
 
@@ -204,8 +205,8 @@ public class Message extends AppCompatActivity {
         WindowManager m = this.getWindowManager();
         Display d = m.getDefaultDisplay(); // 获取屏幕宽、高度
         WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
-        p.height = (int) (d.getHeight() * 0.8); // 高度设置为屏幕的0.6，根据实际情况调整
-        p.width = (int) (d.getWidth() * 0.6); // 宽度设置为屏幕的0.65，根据实际情况调整
+        p.height = (int) (d.getHeight() * 0.7); // 高度设置为屏幕的0.6，根据实际情况调整
+        p.width = (int) (d.getWidth() * 0.8); // 宽度设置为屏幕的0.65，根据实际情况调整
         dialogWindow.setAttributes(p);
     }
 
@@ -301,8 +302,8 @@ public class Message extends AppCompatActivity {
         WindowManager m = this.getWindowManager();
         Display d = m.getDefaultDisplay(); // 获取屏幕宽、高度
         WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
-        p.height = (int) (d.getHeight() * 0.8); // 高度设置为屏幕的0.6，根据实际情况调整
-        p.width = (int) (d.getWidth() * 0.6); // 宽度设置为屏幕的0.65，根据实际情况调整
+        p.height = (int) (d.getHeight() * 0.7); // 高度设置为屏幕的0.6，根据实际情况调整
+        p.width = (int) (d.getWidth() * 0.8); // 宽度设置为屏幕的0.65，根据实际情况调整
         dialogWindow.setAttributes(p);
     }
 
@@ -353,8 +354,8 @@ public class Message extends AppCompatActivity {
         WindowManager m = this.getWindowManager();
         Display d = m.getDefaultDisplay(); // 获取屏幕宽、高度
         WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
-        p.height = (int) (d.getHeight() * 0.8); // 高度设置为屏幕的0.6，根据实际情况调整
-        p.width = (int) (d.getWidth() * 0.6); // 宽度设置为屏幕的0.65，根据实际情况调整
+        p.height = (int) (d.getHeight() * 0.7); // 高度设置为屏幕的0.6，根据实际情况调整
+        p.width = (int) (d.getWidth() * 0.8); // 宽度设置为屏幕的0.65，根据实际情况调整
         dialogWindow.setAttributes(p);
 
     }

@@ -14,9 +14,12 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -159,6 +162,14 @@ public class EditProfile extends AppCompatActivity{
 
         hit_dialog = new AlertDialog.Builder(this, R.style.hitStyle).setView(dialog_view).create();
         hit_dialog.show();
+
+        Window dialogWindow = hit_dialog.getWindow();
+        WindowManager m = this.getWindowManager();
+        Display d = m.getDefaultDisplay(); // 获取屏幕宽、高度
+        WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+        p.height = (int) (d.getHeight() * 0.7); // 高度设置为屏幕的0.6，根据实际情况调整
+        p.width = (int) (d.getWidth() * 0.8); // 宽度设置为屏幕的0.65，根据实际情况调整
+        dialogWindow.setAttributes(p);
     }
 
     //修改暱稱
@@ -186,6 +197,13 @@ public class EditProfile extends AppCompatActivity{
 
         dialog = new AlertDialog.Builder(this, R.style.Translucent_NoTitle).setView(dialog_view).create();
         dialog.show();
+        Window dialogWindow = dialog.getWindow();
+        WindowManager m = this.getWindowManager();
+        Display d = m.getDefaultDisplay(); // 获取屏幕宽、高度
+        WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+        p.height = (int) (d.getHeight() * 0.7); // 高度设置为屏幕的0.6，根据实际情况调整
+        p.width = (int) (d.getWidth() * 0.8); // 宽度设置为屏幕的0.65，根据实际情况调整
+        dialogWindow.setAttributes(p);
     }
 
     public class ChangeNameTask extends AsyncTask<String, Void, Void> {
@@ -277,6 +295,13 @@ public class EditProfile extends AppCompatActivity{
 
         dialog = new AlertDialog.Builder(this, R.style.Translucent_NoTitle).setView(dialog_view).create();
         dialog.show();
+        Window dialogWindow = dialog.getWindow();
+        WindowManager m = this.getWindowManager();
+        Display d = m.getDefaultDisplay(); // 获取屏幕宽、高度
+        WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+        p.height = (int) (d.getHeight() * 0.7); // 高度设置为屏幕的0.6，根据实际情况调整
+        p.width = (int) (d.getWidth() * 0.8); // 宽度设置为屏幕的0.65，根据实际情况调整
+        dialogWindow.setAttributes(p);
     }
 
     public class ChangePasswordTask extends AsyncTask<String, Void, Void> {
@@ -338,7 +363,6 @@ public class EditProfile extends AppCompatActivity{
         dialog_view = LayoutInflater.from(this).inflate(R.layout.camera_selector, null);
 
         Button button_selectpic = (Button) dialog_view.findViewById(R.id.button_selectpic);
-        Button uploadButton = (Button) dialog_view.findViewById(R.id.uploadButton);
 
         button_selectpic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -356,22 +380,15 @@ public class EditProfile extends AppCompatActivity{
             }
         });
 
-        uploadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                progressdialog = ProgressDialog.show(EditProfile.this, "", "檔案上傳中...", true);
-                new Thread(new Runnable() {
-                    public void run() {
-                        uploadFile(imagepath);
-                    }
-                }).start();
-            }
-        });
-
-        personal_photo_selector_dialog = new AlertDialog.Builder(this, R.style.Translucent_NoTitle).setView(dialog_view).create();
+        personal_photo_selector_dialog = new AlertDialog.Builder(this, R.style.hitStyle).setView(dialog_view).create();
         personal_photo_selector_dialog.show();
-
-
+        Window dialogWindow = dialog.getWindow();
+        WindowManager m = this.getWindowManager();
+        Display d = m.getDefaultDisplay(); // 获取屏幕宽、高度
+        WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+        p.height = (int) (d.getHeight() * 0.3); // 高度设置为屏幕的0.6，根据实际情况调整
+        p.width = (int) (d.getWidth() * 0.5); // 宽度设置为屏幕的0.65，根据实际情况调整
+        dialogWindow.setAttributes(p);
     }
 
     @Override

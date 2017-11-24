@@ -35,7 +35,7 @@ import java.util.Date;
 
 public class LoginActivity extends AppCompatActivity {
     //public static final String localhost="http://169.254.68.146/DB/";
-    public static final String ip = "192.168.0.100";
+    public static final String ip = "192.168.0.101";
     //public static final String ip="111.253.228.128";
     public static final String localhost = "http://" + ip + "/TeamGoGoal/";
     EditText accountTxt, passwordTxt;
@@ -263,8 +263,6 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(LoginActivity.this, "帳密已寄到您的信箱！\n請去您的信箱收信", Toast.LENGTH_SHORT).show();
         }
     }
-
-
 
     public class User implements Cloneable {
         String uid, account, password, name, state,email;

@@ -21,6 +21,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <ImageButton
+                android:id="@+id/imageButton9"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:background="@color/empty"
+                android:onClick="cancel"
+                android:padding="13dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/item_arrow" />
+
             <TextView
                 android:id="@+id/TargetTitle"
                 android:layout_width="match_parent"
@@ -29,18 +40,7 @@
                 android:text="TargetTitele"
                 android:textAlignment="center"
                 android:textColor="@color/black"
-                android:textSize="24sp" />
-
-            <ImageButton
-                android:id="@+id/imageButton9"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:adjustViewBounds="true"
-                android:background="@color/empty"
-                android:onClick="cancel"
-                android:padding="7dp"
-                android:scaleType="fitCenter"
-                app:srcCompat="@drawable/item_item_arrow" />
+                android:textSize="20sp" />
 
         </FrameLayout>
 
@@ -49,7 +49,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="10.9"
+        android:layout_weight="8"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
@@ -57,19 +57,61 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1.8"
+            android:layout_weight="8"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal"></LinearLayout>
+                android:layout_weight="3"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"></LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="7"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"></LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/imageView8"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/item_empty_planet" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"></LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.5"
+                    android:orientation="horizontal"></LinearLayout>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="7"
+                android:layout_weight="5"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -78,183 +120,146 @@
                     android:layout_weight="1"
                     android:orientation="vertical"></LinearLayout>
 
-                <ImageView
-                    android:id="@+id/imageView8"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/item_empty_planet" />
-
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical"></LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal"></LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"></LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2.5"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_weight="2.5"
                     android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView24"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="任務名稱"
-                        android:textColor="@color/basicColor2" />
-
-                    <EditText
-                        android:id="@+id/taskNameEt"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:background="@color/top_bg_color"
-                        android:ems="10"
-                        android:hint="請輸入任務名稱"
-                        android:inputType="textPersonName"
-                        android:paddingLeft="5dp"
-                        android:textColor="@color/basicColor2"
-                        android:textColorHint="@color/spearate_line" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1.5"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView25"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="任務內容"
-                        android:textColor="@color/basicColor2" />
-
-                    <EditText
-                        android:id="@+id/taskContentEt"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="2"
-                        android:background="@color/top_bg_color"
-                        android:gravity="top"
-                        android:hint="請輸入任務內容"
-                        android:inputType="textPersonName"
-                        android:paddingLeft="5dp"
-                        android:textColor="@color/basicColor2"
-                        android:textColorHint="@color/spearate_line" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView26"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="提醒時間"
-                        android:textColor="@color/basicColor2" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textView24"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="任務名稱"
+                            android:textColor="@color/basicColor2" />
 
                         <EditText
-                            android:id="@+id/remindTimeEt"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="5"
+                            android:id="@+id/taskNameEt"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
                             android:background="@color/top_bg_color"
-                            android:enabled="false"
-                            android:hint="請選取時間"
+                            android:ems="10"
+                            android:hint="請輸入任務名稱"
                             android:inputType="textPersonName"
                             android:paddingLeft="5dp"
-                            android:textColor="@color/basicColor2"
-                            android:textColorHint="@color/spearate_line" />
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/basicColor2"
+                            android:textSize="14sp" />
+                    </LinearLayout>
 
-                        <ImageButton
-                            android:id="@+id/imageButton8"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1.5"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textView25"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
                             android:layout_weight="1"
-                            android:adjustViewBounds="true"
+                            android:gravity="center"
+                            android:text="任務內容"
+                            android:textColor="@color/basicColor2" />
+
+                        <EditText
+                            android:id="@+id/taskContentEt"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2"
                             android:background="@color/top_bg_color"
-                            android:onClick="selectRemindTime"
-                            android:padding="3dp"
-                            android:scaleType="fitCenter"
-                            app:srcCompat="@drawable/item_clock" />
+                            android:gravity="top"
+                            android:hint="請輸入任務內容"
+                            android:inputType="textPersonName"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="5dp"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/basicColor2"
+                            android:textSize="14sp" />
 
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textView26"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="提醒時間"
+                            android:textColor="@color/basicColor2" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/remindTimeEt"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="5"
+                                android:background="@color/top_bg_color"
+                                android:enabled="false"
+                                android:hint="請選取時間"
+                                android:inputType="textPersonName"
+                                android:paddingLeft="5dp"
+                                android:textColor="@color/black"
+                                android:textColorHint="@color/basicColor2"
+                                android:textSize="14sp" />
+
+                            <ImageButton
+                                android:id="@+id/imageButton8"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:adjustViewBounds="true"
+                                android:background="@color/top_bg_color"
+                                android:onClick="selectRemindTime"
+                                android:padding="6dp"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@drawable/item_clock" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical"></LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical"></LinearLayout>
+
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"></LinearLayout>
-
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight=".75"
+            android:layout_weight="1"
             android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight=".25"
-                android:orientation="vertical"></LinearLayout>
 
             <Button
                 android:id="@+id/TaskEventBtn"
@@ -267,4 +272,5 @@
         </LinearLayout>
 
     </LinearLayout>
+
 </LinearLayout>

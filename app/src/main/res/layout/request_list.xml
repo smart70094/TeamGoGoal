@@ -8,7 +8,10 @@
     android:background="@drawable/bg_record_msg"
     android:descendantFocusability="blocksDescendants"
     android:gravity="center_vertical|center_horizontal|center"
-    android:padding="10dp">
+    android:paddingBottom="5dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="5dp">
 
     <ImageView
         android:id="@+id/personal_photo"
@@ -26,7 +29,6 @@
         android:gravity="center_vertical"
         android:text="TextView"
         android:textColor="@color/basicColor"
-        android:textSize="18sp"
         android:textStyle="bold" />
 
 </LinearLayout>

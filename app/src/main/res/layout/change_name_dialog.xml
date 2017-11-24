@@ -23,19 +23,21 @@
             android:gravity="center"
             android:text="更改暱稱 "
             android:textColor="@color/basicColor"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/nameET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:background="@color/item_bg_color"
             android:ems="10"
             android:inputType="textPersonName"
+            android:padding="5dp"
             android:text="Name"
-            android:textColor="@color/basicColor" />
+            android:textColor="@color/basicColor"
+            android:textSize="14sp" />
 
     </LinearLayout>
 

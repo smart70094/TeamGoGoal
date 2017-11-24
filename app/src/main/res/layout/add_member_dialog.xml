@@ -12,7 +12,8 @@
         android:background="@drawable/bg_hit_top"
         android:orientation="vertical"
         android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+        android:paddingRight="20dp"
+        android:paddingTop="20dp">
 
         <TextView
             android:id="@+id/hitTitle"
@@ -21,16 +22,16 @@
             android:gravity="center"
             android:text="邀請"
             android:textColor="@color/basicColor"
-            android:textSize="30sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/memberID"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Name" />
+            android:layout_marginBottom="25dp"
+            android:layout_marginTop="25dp"
+            android:inputType="text" />
 
     </LinearLayout>
 
@@ -54,7 +55,7 @@
             android:background="@drawable/bg_hit_btn"
             android:text="確認"
             android:textColor="@color/basicColor"
-            android:textSize="24sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
     </LinearLayout>
 

@@ -17,7 +17,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.25"
+            android:layout_weight="1"
             android:background="@color/top_bg_color"
             android:orientation="horizontal">
 
@@ -29,9 +29,9 @@
                 android:adjustViewBounds="true"
                 android:background="@color/empty"
                 android:onClick="cancel"
-                android:padding="7dp"
+                android:padding="13dp"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/item_item_arrow" />
+                app:srcCompat="@drawable/item_arrow" />
 
             <TextView
                 android:id="@+id/textView14"
@@ -55,317 +55,324 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight="9"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal"></LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="7"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"></LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2.5"
-                    android:orientation="horizontal">
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:id="@+id/imageView6"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:adjustViewBounds="true"
-                            android:scaleType="fitCenter"
-                            app:srcCompat="@drawable/item_person_photo_light" />
-
-                        <ImageView
-                            android:id="@+id/personal_photo"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center"
-                            android:adjustViewBounds="true"
-                            android:cropToPadding="false"
-                            android:scaleType="fitCenter"
-                            app:srcCompat="@drawable/item_person_photo" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal">
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="6"
-                                android:orientation="vertical"></LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="3.2"
-                                android:gravity="bottom|left"
-                                android:orientation="vertical">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="0dp"
-                                    android:layout_weight="8"
-                                    android:orientation="vertical"></LinearLayout>
-
-                                <ImageButton
-                                    android:id="@+id/imageButton10"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="0dp"
-                                    android:layout_gravity="left"
-                                    android:layout_weight="2"
-                                    android:adjustViewBounds="true"
-                                    android:background="@color/empty"
-                                    android:onClick="personal_photo_selector"
-                                    android:scaleType="fitCenter"
-                                    app:srcCompat="@drawable/item_camera" />
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="0dp"
-                                    android:layout_weight="0.7"
-                                    android:orientation="vertical"></LinearLayout>
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                    </FrameLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"></LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal"></LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.1"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"></LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2.5"
+                android:layout_weight="2"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <EditText
-                        android:id="@+id/Name"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".9"
-                        android:background="@color/top_bg_color"
-                        android:ems="1"
-                        android:hint="暱稱"
-                        android:inputType="textPersonName"
-                        android:paddingLeft="5dp"
-                        android:textColor="@color/black"
-                        android:textColorHint="@color/basicColor2">
-
-                    </EditText>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="0.25"
+                    android:layout_weight=".5"
                     android:orientation="horizontal"></LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical|center_horizontal|center"
+                    android:layout_weight="7"
                     android:orientation="horizontal">
 
-                    <EditText
-                        android:id="@+id/Account"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".9"
-                        android:background="@color/top_bg_color"
-                        android:ems="1"
-                        android:hint="帳號"
-                        android:inputType="textVisiblePassword"
-                        android:paddingLeft="5dp"
-                        android:textColor="@color/black"
-                        android:textColorHint="@color/basicColor2">
-
-                    </EditText>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="0.25"
-                    android:orientation="horizontal"></LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <EditText
-                        android:id="@+id/Password"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".9"
-                        android:background="@color/top_bg_color"
-                        android:ems="1"
-                        android:hint="密碼"
-                        android:inputType="textPassword"
-                        android:paddingLeft="5dp"
-                        android:textColor="@color/black"
-                        android:textColorHint="@color/basicColor2">
-
-                    </EditText>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="0.25"
-                    android:orientation="horizontal"></LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <EditText
-                        android:id="@+id/emailET"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".9"
-                        android:background="@color/top_bg_color"
-                        android:ems="1"
-                        android:hint="e-mail"
-                        android:inputType="textPassword"
-                        android:paddingLeft="5dp"
-                        android:textColor="@color/black"
-                        android:textColorHint="@color/basicColor2">
-
-                    </EditText>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="0.25"
-                    android:orientation="horizontal"></LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/button3"
-                        android:layout_width="match_parent"
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_login_btn"
-                        android:onClick="creat"
-                        android:text="註冊"
-                        android:textColor="@color/black"
-                        android:textSize="18sp" />
+                        android:orientation="horizontal"></LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2.5"
+                        android:orientation="horizontal">
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/imageView6"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:adjustViewBounds="true"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@drawable/item_person_photo_light" />
+
+                            <ImageView
+                                android:id="@+id/personal_photo"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:adjustViewBounds="true"
+                                android:cropToPadding="false"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@drawable/item_person_photo" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="6"
+                                    android:orientation="vertical"></LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="3.2"
+                                    android:gravity="bottom|left"
+                                    android:orientation="vertical">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="8"
+                                        android:orientation="vertical"></LinearLayout>
+
+                                    <ImageButton
+                                        android:id="@+id/imageButton10"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="0dp"
+                                        android:layout_gravity="left"
+                                        android:layout_weight="2"
+                                        android:adjustViewBounds="true"
+                                        android:background="@color/empty"
+                                        android:onClick="personal_photo_selector"
+                                        android:scaleType="fitCenter"
+                                        app:srcCompat="@drawable/item_camera" />
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="0.7"
+                                        android:orientation="vertical"></LinearLayout>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </FrameLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"></LinearLayout>
 
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight=".5"
+                    android:orientation="horizontal"></LinearLayout>
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"></LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="20dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
-
-        <ScrollView
-            android:id="@+id/scrollView1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="false"
-            android:focusableInTouchMode="false"
-            android:scrollbarAlwaysDrawHorizontalTrack="false"
-            android:scrollbarAlwaysDrawVerticalTrack="false"
-            android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="2"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:cropToPadding="false"
-                    android:scaleType="fitXY"
-                    app:srcCompat="@drawable/item_moon" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"></LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2.5"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/Name"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".9"
+                            android:background="@color/top_bg_color"
+                            android:ems="1"
+                            android:hint="暱稱"
+                            android:inputType="textPersonName"
+                            android:paddingLeft="5dp"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/basicColor2">
+
+                        </EditText>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.3"
+                        android:orientation="horizontal"></LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical|center_horizontal|center"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/Account"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".9"
+                            android:background="@color/top_bg_color"
+                            android:ems="1"
+                            android:hint="帳號"
+                            android:inputType="textVisiblePassword"
+                            android:paddingLeft="5dp"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/basicColor2">
+
+                        </EditText>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.3"
+                        android:orientation="horizontal"></LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/Password"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".9"
+                            android:background="@color/top_bg_color"
+                            android:ems="1"
+                            android:hint="密碼"
+                            android:inputType="textPassword"
+                            android:paddingLeft="5dp"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/basicColor2">
+
+                        </EditText>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.3"
+                        android:orientation="horizontal"></LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/emailET"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".9"
+                            android:background="@color/top_bg_color"
+                            android:ems="1"
+                            android:hint="e-mail"
+                            android:inputType="textEmailAddress"
+                            android:paddingLeft="5dp"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/basicColor2">
+
+                        </EditText>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.3"
+                        android:orientation="horizontal"></LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/button3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_login_btn"
+                            android:onClick="creat"
+                            android:text="註冊"
+                            android:textColor="@color/black"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"></LinearLayout>
+
             </LinearLayout>
-        </ScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ScrollView
+                    android:id="@+id/scrollView1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fillViewport="false"
+                    android:focusableInTouchMode="false"
+                    android:scrollbarAlwaysDrawHorizontalTrack="false"
+                    android:scrollbarAlwaysDrawVerticalTrack="false"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imageView3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:cropToPadding="false"
+                            android:scaleType="fitXY"
+                            app:srcCompat="@drawable/item_moon" />
+                    </LinearLayout>
+                </ScrollView>
+            </LinearLayout>
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

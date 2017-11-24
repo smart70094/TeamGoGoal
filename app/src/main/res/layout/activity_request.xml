@@ -17,54 +17,54 @@
 
         <ImageButton
             android:id="@+id/Profile"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/empty"
             android:onClick="toEditProfile"
-            android:padding="10dp"
+            android:padding="5dp"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/item_person" />
 
         <ImageButton
             android:id="@+id/Review"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/empty"
             android:onClick="checkReview"
-            android:padding="10dp"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/item_target" />
+
+        <ImageButton
+            android:id="@+id/Notice"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/empty"
+            android:padding="5dp"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/item_memory" />
 
         <ImageButton
-            android:id="@+id/Notice"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:id="@+id/Target"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:adjustViewBounds="false"
             android:background="@color/empty"
-            android:padding="10dp"
+            android:padding="5dp"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/item_message_light" />
 
         <ImageButton
-            android:id="@+id/Target"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="false"
-            android:background="@color/empty"
-            android:padding="10dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/item_edit" />
-
-        <ImageButton
             android:id="@+id/Quest"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/empty"
-            android:padding="10dp"
+            android:padding="5dp"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/item_q" />
 
@@ -74,7 +74,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="10.9"
+        android:layout_weight="8"
         android:background="@drawable/bg_empty"
         android:orientation="vertical">
 
@@ -82,12 +82,15 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp">
 
             <ListView
                 android:id="@+id/request_list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:dividerHeight="10dp" />
         </LinearLayout>
     </LinearLayout>
 
