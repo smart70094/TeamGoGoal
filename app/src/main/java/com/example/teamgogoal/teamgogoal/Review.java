@@ -104,14 +104,20 @@ public class Review extends AppCompatActivity {
         Log.d("DDDD", Integer.toString(completetarget.size()));
         for (CompleteTarget cTarget : completetarget) {
             switch (cTarget.getPlanet()) {
+                case "gold":
+                    list.add(new GalleryModel(R.drawable.planet_gold, cTarget.getTarget(), ResourcesCompat.getDrawable(getResources(), R.drawable.planet_gold, null)));
+                    break;
+                case "tree":
+                    list.add(new GalleryModel(R.drawable.planet_tree, cTarget.getTarget(), ResourcesCompat.getDrawable(getResources(), R.drawable.planet_tree, null)));
+                    break;
+                case "water":
+                    list.add(new GalleryModel(R.drawable.planet_water, cTarget.getTarget(), ResourcesCompat.getDrawable(getResources(), R.drawable.planet_water, null)));
+                    break;
+                case "fire":
+                    list.add(new GalleryModel(R.drawable.planet_fire, cTarget.getTarget(), ResourcesCompat.getDrawable(getResources(), R.drawable.planet_fire, null)));
+                    break;
                 case "earth":
-                    list.add(new GalleryModel(R.drawable.earth_item, cTarget.getTarget(), ResourcesCompat.getDrawable(getResources(), R.drawable.planet_earth, null)));
-                    break;
-                case "mars":
-                    list.add(new GalleryModel(R.drawable.mars_item, cTarget.getTarget(), ResourcesCompat.getDrawable(getResources(), R.drawable.mars, null)));
-                    break;
-                case "jupiter":
-                    list.add(new GalleryModel(R.drawable.jupiter_item, cTarget.getTarget(), ResourcesCompat.getDrawable(getResources(), R.drawable.jupiter, null)));
+                    list.add(new GalleryModel(R.drawable.planet_earth, cTarget.getTarget(), ResourcesCompat.getDrawable(getResources(), R.drawable.planet_earth, null)));
                     break;
             }
         }

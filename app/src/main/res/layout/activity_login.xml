@@ -215,12 +215,6 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <Button
-                        android:id="@+id/button6"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:onClick="toTestVideo"
-                        android:text="動畫測試" />
                 </LinearLayout>
 
             </LinearLayout>

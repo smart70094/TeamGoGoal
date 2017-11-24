@@ -187,7 +187,7 @@ public class TaskActivity extends AppCompatActivity {
         String phpurl = LoginActivity.getLocalHost() + "searchInviteMember.php?tid=" + currTid;
         String invite_result = new InviteMemberTransTask().execute(phpurl).get();
 
-        HashMap<String,String> inviteMember = new HashMap<>();
+        HashMap<String, String> inviteMember = new HashMap<>();
         inviteMember = InviteMember_parseJSON(invite_result);
         for (Map.Entry<String, String> entry : inviteMember.entrySet()) {
             String imageUrl = LoginActivity.getLocalHost() + "profilepicture/" + entry.getKey();
@@ -219,7 +219,7 @@ public class TaskActivity extends AppCompatActivity {
         }
     }
 
-    private HashMap<String,String> InviteMember_parseJSON(String s) {
+    private HashMap<String, String> InviteMember_parseJSON(String s) {
         HashMap<String, String> hashmap = new HashMap<>();
         try {
             JSONArray array = new JSONArray(s);
@@ -354,8 +354,8 @@ public class TaskActivity extends AppCompatActivity {
                     completeTask.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            completeTask(id);
                             dialog.dismiss();
+                            completeTask(id);
                         }
                     });
 
@@ -363,24 +363,24 @@ public class TaskActivity extends AppCompatActivity {
                     readTask.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            showTaskEvent(id, "readTask");
                             dialog.dismiss();
+                            showTaskEvent(id, "readTask");
                         }
                     });
 
                     modifyTask.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            showTaskEvent(id, "modifyTask");
                             dialog.dismiss();
+                            showTaskEvent(id, "modifyTask");
                         }
                     });
 
                     deleteTask.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            delete(id);
                             dialog.dismiss();
+                            delete(id);
                         }
                     });
                     dialog = new AlertDialog.Builder(TaskActivity.this, R.style.hitStyle).setView(dialog_view).create();
@@ -571,6 +571,7 @@ public class TaskActivity extends AppCompatActivity {
                 String mid = Integer.toString(key);
                 String phpurl = LoginActivity.getLocalHost() + "updateTaskState.php?mid=" + mid + "&tid=" + currTid + "&uid=" + LoginActivity.getUser().uid + "&partnerid=" + taskMap.get(key).collaborator;
                 new TransTask().execute(phpurl);
+
             }
         });
 
@@ -615,7 +616,44 @@ public class TaskActivity extends AppCompatActivity {
             super.onPostExecute(s);
             Log.d("JSON", s);
             dialog.dismiss();
+            writeRecord();
         }
+    }
+
+    private void writeRecord() {
+        /*View dialog_view;
+
+        dialog_view = LayoutInflater.from(this).inflate(R.layout.write_record, null);
+
+
+        EditText memberID = dialog_view.findViewById(R.id.recordContext);
+        Button save = dialog_view.findViewById(R.id.addMemberBtn);
+        Button cancel = dialog_view.findViewById(R.id.addMemberBtn);
+
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog = new AlertDialog.Builder(this, R.style.hitStyle).setView(dialog_view).create();
+        dialog.show();
+        Window dialogWindow = dialog.getWindow();
+        WindowManager m = this.getWindowManager();
+        Display d = m.getDefaultDisplay(); // 获取屏幕宽、高度
+        WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+        p.height = (int) (d.getHeight() * 0.7); // 高度设置为屏幕的0.6，根据实际情况调整
+        p.width = (int) (d.getWidth() * 0.8); // 宽度设置为屏幕的0.65，根据实际情况调整
+        dialogWindow.setAttributes(p);*/
+
     }
 
 

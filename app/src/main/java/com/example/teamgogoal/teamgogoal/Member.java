@@ -114,4 +114,8 @@ public class Member extends AppCompatActivity {
     public void requestParticipator(View view){
 
     }
+
+    public void cancel(View view) {
+        finish();
+    }
 }
