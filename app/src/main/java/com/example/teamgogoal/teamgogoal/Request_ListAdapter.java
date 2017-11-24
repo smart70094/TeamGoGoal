@@ -83,7 +83,9 @@ public class Request_ListAdapter extends BaseAdapter {
             case "request_update":
                 request_update(originator, cmdContext,tid,convertView,position);
                 break;
-
+            case "request_delete":
+                request_delete(originator, cmdContext,tid,convertView,position);
+                break;
         }
         return convertView;
     }
@@ -115,9 +117,6 @@ public class Request_ListAdapter extends BaseAdapter {
                                 new Thread(new Runnable() {
                                     public void run() {
                                         String rid = id;
-                                        targetDB.requestAddParticipator(cmdContext,LoginActivity.getUser().account);
-
-
                                         new DeleteRequest().execute(rid,tid);
                                         socketTrans.setParams("addParticipator",tid,LoginActivity.getUser().account);
                                         socketTrans.send();
@@ -146,6 +145,37 @@ public class Request_ListAdapter extends BaseAdapter {
             db.deleteRegisterRequest(rid);
             return null;
         }
+    }
+    private void request_delete(final String originator,final String cmdContext,final String tid, View convertView,final int position){
+        holder.request_context.setText(cmdContext);
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                //產生視窗物件
+                final String id = list.get(position).get("rid");
+                new AlertDialog.Builder(context)
+                        .setTitle("TeamGoGoal")//設定視窗標題
+                        .setIcon(R.mipmap.ic_launcher)//設定對話視窗圖示
+                        .setMessage(cmdContext)//設定顯示的文字
+                        .setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String rid = id;
+                                new DeleteRequest().execute(rid);
+                                list.remove(position);
+                                handler.post(new Runnable(){
+                                    @Override
+                                    public void run(){
+                                        RequestActivity.request_listAdapter.notifyDataSetChanged();
+                                    }
+                                });
+                            }
+                        })//設定結束的子視窗
+                        .show();//呈現對話視窗
+            }
+        });
     }
 
     private void request_cheer(final String originator,final String cmdContext, View convertView,final int position) {
