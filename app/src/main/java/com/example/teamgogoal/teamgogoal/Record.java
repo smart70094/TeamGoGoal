@@ -5,8 +5,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TabHost;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -29,7 +32,8 @@ public class Record extends AppCompatActivity {
     private String userID, tid, target;
     private int planet_imv;
     private ImageView imageview;
-    private TextView textview;
+    private TextView recordTitle;
+    private TabHost tabhost;
     List<HashMap<String, String>> list = new ArrayList<>();
     String localhost = LoginActivity.getLocalHost();
     @Override
@@ -38,7 +42,17 @@ public class Record extends AppCompatActivity {
         setContentView(R.layout.activity_record);
 
         imageview = (ImageView) findViewById(R.id.imageView);
-        textview = (TextView) findViewById(R.id.textView);
+        recordTitle = (TextView) findViewById(R.id.RecordTitle);
+
+        tabhost = (TabHost)findViewById(R.id.tabHost);
+        tabhost.setup();
+
+        tabhost.addTab(setupTab("tab1","心情日記",R.id.tab1));
+        tabhost.addTab(setupTab("tab2","蒐集鼓勵",R.id.tab2));
+
+
+
+
         Intent intent = getIntent();
         //取得傳遞過來的資料
         userID = intent.getStringExtra("userID");
@@ -47,7 +61,7 @@ public class Record extends AppCompatActivity {
         planet_imv = intent.getIntExtra("planet_imv", 0);
 
         imageview.setImageResource(planet_imv);
-        textview.setText(target);
+        recordTitle.setText(target);
         //step1:找出回顧資料
         String phpurl = localhost + "searchRecord.php?userName=" + userID + "&targetID=" + tid;
         new TransTask().execute(phpurl);
@@ -59,6 +73,17 @@ public class Record extends AppCompatActivity {
 
         listview.setAdapter(listAdapter);
     }
+
+    private TabHost.TabSpec setupTab(String name, String label, int content) {
+
+        View tab = LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+        TextView text = (TextView) tab.findViewById(R.id.text);
+        text.setText(label);
+
+        TabHost.TabSpec spec = tabhost.newTabSpec(name).setIndicator(tab).setContent(content);
+        return spec;
+    }
+
 
     private class TransTask extends AsyncTask<String, Void, String> {
         @Override
