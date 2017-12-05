@@ -102,6 +102,7 @@ public class TaskActivity extends AppCompatActivity {
 
 
             dreamContext = (TextView) findViewById(R.id.dreamContext);
+            dream = dreamContext.getText().toString();
             // need to set dreamContext
 
 
@@ -453,37 +454,60 @@ public class TaskActivity extends AppCompatActivity {
 
     //------編輯藍圖------//
     public void writeDream(View view) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        LayoutInflater li = LayoutInflater.from(this);
-        View promptsView = li.inflate(R.layout.input_message, null);
-        alertDialogBuilder.setView(promptsView);
 
-        final EditText dream_context = (EditText) promptsView.findViewById(R.id.msg_context);
-        //如果沒藍圖，則使用預設文字提醒使用者
-        if (dream.equals(""))
+        View dialog_view;
+
+        dialog_view = LayoutInflater.from(this).inflate(R.layout.dream_dialog, null);
+
+
+        final EditText dream_context = dialog_view.findViewById(R.id.dream_context);
+        Button confirmDream = dialog_view.findViewById(R.id.confirmDream);
+
+        if (dream.equals("")) {
             dream_context.setText("");
-        else
+        } else {
             dream_context.setText(dreamContext.getText().toString());
+        }
 
-        alertDialogBuilder
-                .setCancelable(false)
-                .setPositiveButton("OK",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                //更改介面文字與更新資料庫
-                                dream = dream_context.getText().toString();
-                                dreamContext.setText(dream);
-                                new DreamOpeartionThread().execute("update", currTid, user.account, dreamContext.getText().toString());
-                            }
-                        })
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        confirmDream.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dream = dream_context.getText().toString();
+                dreamContext.setText(dream);
+                new DreamOpeartionThread().execute("update", currTid, user.account, dreamContext.getText().toString());
+                dialog.dismiss();
+                showHit("1","藍圖修改成功！");
+            }
+        });
+
+        dialog = new AlertDialog.Builder(this, R.style.hitStyle).setView(dialog_view).create();
+        dialog.show();
+        Window dialogWindow = dialog.getWindow();
+        WindowManager m = this.getWindowManager();
+        Display d = m.getDefaultDisplay(); // 获取屏幕宽、高度
+        WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+        p.height = (int) (d.getHeight() * 0.7); // 高度设置为屏幕的0.6，根据实际情况调整
+        p.width = (int) (d.getWidth() * 0.8); // 宽度设置为屏幕的0.65，根据实际情况调整
+        dialogWindow.setAttributes(p);
+    }
+
+    //------顯示提示窗------//
+    private void showHit(String numBtn,String context) {
+        Hit hit = new Hit(numBtn, this);
+
+        hit.set_hitTitle("提示");
+        hit.set_hitContent(context);
+
+
+        hit.get_hitConfirm().setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog = new AlertDialog.Builder(this, R.style.hitStyle).setView(hit.get_view()).show();
     }
 
     private class DreamOpeartionThread extends AsyncTask<String, Void, String> {

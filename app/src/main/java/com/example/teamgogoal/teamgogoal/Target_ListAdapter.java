@@ -68,7 +68,7 @@ public class Target_ListAdapter extends BaseAdapter {
         holder.completeBar.setProgress((int) (percent*100 + 0.5));
 
         //圖片
-        //holder.dateAndTime.setText(list.get(position).get("date"));
+        //holder.dateAndTime.setText(record_list.get(position).get("date"));
 
 
         return convertView;

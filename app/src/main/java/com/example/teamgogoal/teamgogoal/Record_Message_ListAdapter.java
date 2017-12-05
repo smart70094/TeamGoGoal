@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class record_listadapter extends BaseAdapter {
+public class Record_Message_ListAdapter extends BaseAdapter {
     private LayoutInflater myInflater;
     List<HashMap<String, String>> list = new ArrayList<>();
 
-    public record_listadapter(Context context) {
+    public Record_Message_ListAdapter(Context context) {
         myInflater = LayoutInflater.from(context);
     }
 
@@ -44,17 +44,17 @@ public class record_listadapter extends BaseAdapter {
 
         if (convertView == null) {
 
-            convertView = myInflater.inflate(R.layout.left, null);
+            convertView = myInflater.inflate(R.layout.record_message_list, null);
             holder = new ViewHolder();
             holder.message = (TextView) convertView.findViewById(R.id.message);
-            holder.dateAndTime = (TextView) convertView.findViewById(R.id.dataAndTime);
+            holder.date = (TextView) convertView.findViewById(R.id.date);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.message.setText(list.get(position).get("recordText"));
-        holder.dateAndTime.setText(list.get(position).get("date"));
+        holder.message.setText(list.get(position).get("context"));
+        holder.date.setText(list.get(position).get("date"));
 
 
         return convertView;
@@ -62,7 +62,7 @@ public class record_listadapter extends BaseAdapter {
 
     static class ViewHolder {
         TextView message;
-        TextView dateAndTime;
+        TextView date;
     }
 
 }

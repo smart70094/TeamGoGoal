@@ -95,7 +95,7 @@ public class Task_ListAdapter extends BaseAdapter {
         holder.missionName.setText(list.get(position).get("missionName"));
 
         //圖片
-        //holder.dateAndTime.setText(list.get(position).get("date"));
+        //holder.dateAndTime.setText(record_list.get(position).get("date"));
 
 
         return convertView;

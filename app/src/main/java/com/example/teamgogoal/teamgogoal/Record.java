@@ -24,18 +24,22 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class Record extends AppCompatActivity {
-    ListView listview;
+    ListView recordListview,messageListView;
     private List<String> RecordData = new ArrayList<String>();
-    private record_listadapter listAdapter;
+    private Record_ListAdapter record_listAdapter;
+    private Record_Message_ListAdapter record_message_listAdapter;
     private String userID, tid, target;
     private int planet_imv;
     private ImageView imageview;
     private TextView recordTitle;
     private TabHost tabhost;
-    List<HashMap<String, String>> list = new ArrayList<>();
+    List<HashMap<String, String>> record_list = new ArrayList<>();
+    List<HashMap<String, String>> record_message_list = new ArrayList<>();
     String localhost = LoginActivity.getLocalHost();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,14 +48,11 @@ public class Record extends AppCompatActivity {
         imageview = (ImageView) findViewById(R.id.imageView);
         recordTitle = (TextView) findViewById(R.id.RecordTitle);
 
-        tabhost = (TabHost)findViewById(R.id.tabHost);
+        tabhost = (TabHost) findViewById(R.id.tabHost);
         tabhost.setup();
 
-        tabhost.addTab(setupTab("tab1","心情日記",R.id.tab1));
-        tabhost.addTab(setupTab("tab2","蒐集鼓勵",R.id.tab2));
-
-
-
+        tabhost.addTab(setupTab("tab1", "心情日記", R.id.tab1));
+        tabhost.addTab(setupTab("tab2", "蒐集鼓勵", R.id.tab2));
 
         Intent intent = getIntent();
         //取得傳遞過來的資料
@@ -63,16 +64,30 @@ public class Record extends AppCompatActivity {
         imageview.setImageResource(planet_imv);
         recordTitle.setText(target);
         //step1:找出回顧資料
-        String phpurl = localhost + "searchRecord.php?userName=" + userID + "&targetID=" + tid;
-        new TransTask().execute(phpurl);
-
-        listview = (ListView) findViewById(R.id.listview1);
-
-        listAdapter = new record_listadapter(this);
-        listAdapter.setData(list);
-
-        listview.setAdapter(listAdapter);
+        String phpurl = localhost + "searchRecord.php?uid=" + userID + "&tid=" + tid;
+        String result = null;
+        try {
+            result = new TransTask().execute(phpurl).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        initRecordListView(result);
+        //step2:找出訊息資料
+        phpurl = localhost + "searchMessage.php?uid=" + userID + "&tid=" + tid;
+        result = null;
+        try {
+            result = new TransTask().execute(phpurl).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        initMessageListView(result);
     }
+
+
 
     private TabHost.TabSpec setupTab(String name, String label, int content) {
 
@@ -83,7 +98,6 @@ public class Record extends AppCompatActivity {
         TabHost.TabSpec spec = tabhost.newTabSpec(name).setIndicator(tab).setContent(content);
         return spec;
     }
-
 
     private class TransTask extends AsyncTask<String, Void, String> {
         @Override
@@ -106,31 +120,59 @@ public class Record extends AppCompatActivity {
             }
             return sb.toString();
         }
+    }
 
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            Log.d("JSON", s);
-            parseJSON(s);
-        }
+    private void initRecordListView(String s) {
+        try {
+            JSONArray array = new JSONArray(s);
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject obj = array.getJSONObject(i);
+                HashMap<String, String> hashmap = new HashMap<>();
+                hashmap.put("date", "2017/07/12");
+                hashmap.put("recordText", obj.getString("record"));
+                record_list.add(hashmap);
+                String text = obj.getString("record");
 
-        private void parseJSON(String s) {
-            try {
-                JSONArray array = new JSONArray(s);
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject obj = array.getJSONObject(i);
-                    HashMap<String, String> hashmap = new HashMap<>();
-                    hashmap.put("date", "2017/07/12");
-                    hashmap.put("recordText", obj.getString("record"));
-                    list.add(hashmap);
-                    String text = obj.getString("record");
-
-                    Log.d("JSON:", text + "/");
-                    RecordData.add(text);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
+                Log.d("JSON:", text + "/");
+                RecordData.add(text);
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+
+        recordListview = (ListView) findViewById(R.id.listview1);
+
+        record_listAdapter = new Record_ListAdapter(this);
+        record_listAdapter.setData(record_list);
+
+        recordListview.setAdapter(record_listAdapter);
+
+    }
+
+    private void initMessageListView(String s) {
+        try {
+            JSONArray array = new JSONArray(s);
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject obj = array.getJSONObject(i);
+                HashMap<String, String> hashmap = new HashMap<>();
+                hashmap.put("context",obj.getString("context"));
+                hashmap.put("originator",obj.getString("originator"));
+                hashmap.put("date", obj.getString("date"));
+                record_message_list.add(hashmap);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        messageListView = (ListView) findViewById(R.id.listview2);
+
+        record_message_listAdapter = new Record_Message_ListAdapter(this);
+        record_message_listAdapter.setData(record_message_list);
+
+        messageListView.setAdapter(record_message_listAdapter);
+    }
+
+    public void cancel(View view) {
+        finish();
     }
 }

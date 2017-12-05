@@ -35,7 +35,7 @@ import java.util.Date;
 
 public class LoginActivity extends AppCompatActivity {
     //public static final String localhost="http://169.254.68.146/DB/";
-    public static final String ip = "192.168.0.100";
+    public static final String ip = "192.168.0.101";
     //public static final String ip="111.253.228.128";
     public static final String localhost = "http://" + ip + "/TeamGoGoal/";
     EditText accountTxt, passwordTxt;
@@ -108,8 +108,8 @@ public class LoginActivity extends AppCompatActivity {
         return ip;
     }
 
-    //帥哥峻禾的部分開始----------------------------------------------------------------------------------------------------------------------
 
+    //------註冊帳號------//
     public void creat(View view) {
         Intent i = new Intent();
         i.setClass(this, RegisterAccount.class);
@@ -125,7 +125,39 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    //帥哥峻禾的部分結束----------------------------------------------------------------------------------------------------------------------
+
+
+    //------忘記密碼------//
+    public void forgetPassword(View view) {
+        Intent intent = new Intent(this,ForgetPassword.class);
+        startActivity(intent);
+    }
+
+    //----Class User------//
+    public class User implements Cloneable {
+        String uid, account, password, name, state,email;
+
+        public User(String uid, String account, String password, String name, String email,String state) {
+            this.uid = uid;
+            this.account = account;
+            this.password = password;
+            this.name = name;
+            this.email=email;
+            this.state = state;
+        }
+
+        protected User clone() throws CloneNotSupportedException {
+            return (User) super.clone();
+        }
+    }
+
+    //------登入-----//
+    public void login(View view) {
+
+        String account = accountTxt.getText().toString();
+        String password = passwordTxt.getText().toString();
+        new TransTask().execute(account, password);
+    }
 
     private class TransTask extends AsyncTask<String, Void, String> {
         @Override
@@ -229,65 +261,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void forgetPassword(View view) {
-        //Test Data
-        String account = "123";
-        String email = "smart70094@yahoo.com.tw";
-
-        /*
-        from interface get data
-        String account=view.getAccount();
-        String email=view.getEmail();
-        */
-        new forgetPasswordThread().execute(account, email);
-    }
-
-    private class forgetPasswordThread extends AsyncTask<String, Void, Void> {
-        protected Void doInBackground(String... params) {
-            try {
-                String account = params[0];
-                String email = params[1];
-                SocketTrans socket = new SocketTrans();
-                socket.connection();
-                socket.setParams("register_forgetPassword", account, email);
-                socket.send();
-                //return socketTrans.getResult();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            Toast.makeText(LoginActivity.this, "帳密已寄到您的信箱！\n請去您的信箱收信", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public class User implements Cloneable {
-        String uid, account, password, name, state,email;
-
-        public User(String uid, String account, String password, String name, String email,String state) {
-            this.uid = uid;
-            this.account = account;
-            this.password = password;
-            this.name = name;
-            this.email=email;
-            this.state = state;
-        }
-
-        protected User clone() throws CloneNotSupportedException {
-            return (User) super.clone();
-        }
-    }
-
-    public void login(View view) {
-
-        String account = accountTxt.getText().toString();
-        String password = passwordTxt.getText().toString();
-        new TransTask().execute(account, password);
-    }
-
+    //------退出應用程式詢問------//
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // TODO Auto-generated method stub
 
