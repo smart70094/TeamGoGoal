@@ -2,6 +2,7 @@ package com.example.teamgogoal.teamgogoal;
 
 import android.app.Dialog;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -28,7 +30,9 @@ public class Member extends AppCompatActivity {
     GridView attendgridView,invitegridView;
 
     List<HashMap<String, Object>> member_list = new ArrayList<>();
+    Member_ListAdapter attend_adapter;
     List<HashMap<String, Object>> invite_member_list = new ArrayList<>();
+    Invite_Member_ListAdapter invite_adapter;
     HashMap<String,Drawable> member_photo,invite_photo;
 
     @Override
@@ -47,6 +51,8 @@ public class Member extends AppCompatActivity {
     }
 
     private void initView() {
+
+        //---目前加入成員---//
         member_photo = TaskActivity.member_photo;
         for (Map.Entry<String, Drawable> entry : member_photo.entrySet()) {
             HashMap<String, Object> map = new HashMap<>();
@@ -54,11 +60,19 @@ public class Member extends AppCompatActivity {
             map.put("personal_photo" , entry.getValue());
             member_list.add(map);
         }
-        Member_ListAdapter attend_adapter = new Member_ListAdapter(this);
+        attend_adapter = new Member_ListAdapter(this);
         attend_adapter.setData(member_list);
         attendgridView.setNumColumns(5);
         attendgridView.setAdapter(attend_adapter);
 
+        attendgridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                deleteMember(i);
+            }
+        });
+
+        //---邀請中成員---//
         invite_photo = TaskActivity.invite_member_photo;
         for (Map.Entry<String, Drawable> entry : invite_photo.entrySet()) {
             HashMap<String, Object> map = new HashMap<>();
@@ -66,13 +80,54 @@ public class Member extends AppCompatActivity {
             map.put("personal_photo" , entry.getValue());
             invite_member_list.add(map);
         }
-        Invite_Member_ListAdapter invite_adapter = new Invite_Member_ListAdapter(this);
+        invite_adapter = new Invite_Member_ListAdapter(this);
         invite_adapter.setData(invite_member_list);
         invitegridView.setNumColumns(5);
         invitegridView.setAdapter(invite_adapter);
-
     }
 
+    //------刪除成員------//
+    private void deleteMember(final int position) {
+        View dialog_view;
+
+        dialog_view = LayoutInflater.from(this).inflate(R.layout.member_selector, null);
+
+        final Button button_delete_member = (Button) dialog_view.findViewById(R.id.button_delete_member);
+        if(member_list.get(position).get("account").toString().equals(LoginActivity.user.account)){
+            button_delete_member.setText("退出目標");
+        }
+        button_delete_member.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                new DeleteMemberTransTask().execute(member_list.get(position).get("account").toString());
+                member_list.remove(position);
+                attend_adapter.notifyDataSetChanged();
+            }
+        });
+
+        dialog = new AlertDialog.Builder(this, R.style.hitStyle).setView(dialog_view).create();
+        dialog.show();
+        Window dialogWindow = dialog.getWindow();
+        WindowManager m = this.getWindowManager();
+        Display d = m.getDefaultDisplay(); // 获取屏幕宽、高度
+        WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+        p.height = (int) (d.getHeight() * 0.3); // 高度设置为屏幕的0.6，根据实际情况调整
+        p.width = (int) (d.getWidth() * 0.5); // 宽度设置为屏幕的0.65，根据实际情况调整
+        dialogWindow.setAttributes(p);
+    }
+
+
+    private class DeleteMemberTransTask extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... strings) {
+            TargetDB targetdb = new TargetDB();
+            targetdb.deleteParticipator(currTid,strings[0]);
+            return null;
+        }
+    }
+
+    //------邀請新成員------//
     public void addMember(View view) {
 
         View dialog_view;
@@ -106,16 +161,10 @@ public class Member extends AppCompatActivity {
         p.height = (int) (d.getHeight() * 0.7); // 高度设置为屏幕的0.6，根据实际情况调整
         p.width = (int) (d.getWidth() * 0.8); // 宽度设置为屏幕的0.65，根据实际情况调整
         dialogWindow.setAttributes(p);
-
-
-
-    }
-
-    public void requestParticipator(View view){
-
     }
 
     public void cancel(View view) {
         finish();
     }
+
 }

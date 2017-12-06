@@ -54,6 +54,7 @@ public class TaskDB {
         }
         return map;
     }
+
     protected String readAlarmInfo(String... dataList){
         String auth=dataList[0];
         String urlParameters = "auth=" + auth;
@@ -67,6 +68,7 @@ public class TaskDB {
         String result=viaParams(params,php);
         return result;
     }
+
     protected void updateDream(String tid,String auth,String dream){
         String params="tid="+tid+"&auth="+auth+"&dream="+dream;
         String php="updateDream.php";

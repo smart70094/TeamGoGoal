@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +52,7 @@ public class Member_ListAdapter extends BaseAdapter {
             convertView = myInflater.inflate(R.layout.member_item, null);
             holder = new ViewHolder();
             holder.personal_photo = (ImageView) convertView.findViewById(R.id.personal_photo);
+            holder.member_name = (TextView)convertView.findViewById(R.id.member_name);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -58,12 +60,14 @@ public class Member_ListAdapter extends BaseAdapter {
 
         //set Photo
         holder.personal_photo.setImageDrawable((Drawable) list.get(position).get("personal_photo"));
+        holder.member_name.setText(list.get(position).get("account").toString());
 
         return convertView;
     }
 
     static class ViewHolder {
         ImageView personal_photo;
+        TextView member_name;
     }
 
 }
