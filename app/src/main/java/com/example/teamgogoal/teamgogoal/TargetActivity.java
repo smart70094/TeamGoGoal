@@ -30,9 +30,10 @@ public class TargetActivity extends AppCompatActivity {
     private Target_ListAdapter target_listAdapter;
     ListView target_listview;
     int map_id;
+    static Map<Integer, TargetDB.TargetDetail> targetMap = new HashMap<Integer, TargetDB.TargetDetail>();
 
     SocketTrans socketTrans = LoginActivity.socketTrans;
-    static Map<Integer, TargetDB.TargetDetail> targetMap = new HashMap<Integer, TargetDB.TargetDetail>();
+
 
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -40,7 +41,6 @@ public class TargetActivity extends AppCompatActivity {
             setContentView(R.layout.activity_target);
             db = new TargetDB();
             user = LoginActivity.getUser();
-
         } catch (Exception e) {
             Log.v("jim", e.toString());
         }
@@ -60,12 +60,33 @@ public class TargetActivity extends AppCompatActivity {
         }
     }
 
-    //下方按鈕-新增目標
-    public void addTarget(View view) {
-        Intent intent = new Intent();
-        intent.setClass(this, TargetEventActivity.class);
-        intent.putExtra("cmd", "addTarget");
-        startActivity(intent);
+    //------初始化介面------//
+    private class DbOperationTask extends AsyncTask<String, Void, Void> {
+        protected Void doInBackground(String... params) {
+            String cmd = params[0];
+            switch (cmd) {
+                case "readTarget":
+                    final Map<String, TargetDB.TargetDetail> t;
+                    t = db.readTarget();
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            try {
+                                fresh(t);
+                            } catch (Exception e) {
+                                Log.v("jim_DbOperationTask", e.toString());
+                            }
+                        }
+                    });
+                    break;
+                case "deleteTarget_all":
+                    db.deleteTargetAll(params[1],params[2]);
+                    break;
+                case "deleteParticipator":
+                    db.deleteParticipator(params[1], params[2]);
+                    break;
+            }
+            return null;
+        }
     }
 
     protected void fresh(Map<String, TargetDB.TargetDetail> map) {
@@ -161,6 +182,17 @@ public class TargetActivity extends AppCompatActivity {
 
     }
 
+    //下方按鈕-新增目標
+    public void addTarget(View view) {
+        Intent intent = new Intent();
+        intent.setClass(this, TargetEventActivity.class);
+        intent.putExtra("cmd", "addTarget");
+        startActivity(intent);
+    }
+
+
+
+    //------刪除目標------//
     protected void delete(int id) {
         try {
             TargetDB.TargetDetail td = targetMap.get(id);
@@ -192,36 +224,6 @@ public class TargetActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
-    //background run
-    private class DbOperationTask extends AsyncTask<String, Void, Void> {
-        protected Void doInBackground(String... params) {
-            String cmd = params[0];
-            switch (cmd) {
-                case "readTarget":
-                    final Map<String, TargetDB.TargetDetail> t;
-                    t = db.readTarget();
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            try {
-                                fresh(t);
-                            } catch (Exception e) {
-                                Log.v("jim_DbOperationTask", e.toString());
-                            }
-                        }
-                    });
-                    break;
-                case "deleteTarget_all":
-                    db.deleteTargetAll(params[1],params[2]);
-                    break;
-                case "deleteParticipator":
-                    db.deleteParticipator(params[1], params[2]);
-                    break;
-            }
-            return null;
-        }
-    }
-
     public void enterTaskActivity(int tid, String targetName) {
         try {
             Intent intent = new Intent();
@@ -234,7 +236,6 @@ public class TargetActivity extends AppCompatActivity {
         }
     }
 
-    //帥哥峻禾部分
     public void toEditProfile(View view) {
         intent = new Intent();
         intent.setClass(TargetActivity.this, EditProfile.class);
@@ -245,7 +246,6 @@ public class TargetActivity extends AppCompatActivity {
         Intent intent = new Intent(this, Review.class);
         startActivity(intent);
     }
-
 
     public void toRequest(View view) {
         intent = new Intent();

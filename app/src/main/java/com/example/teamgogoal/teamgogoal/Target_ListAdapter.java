@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -53,9 +52,6 @@ public class Target_ListAdapter extends BaseAdapter {
             holder.targetName = (TextView) convertView.findViewById(R.id.targetName);
             holder.targetDate = (TextView) convertView.findViewById(R.id.targetDate);
             holder.completeBar = (ProgressBar) convertView.findViewById(R.id.completeBar);
-
-            //圖片區
-            //holder.dateAndTime = (TextView) convertView.findViewById(R.id.dataAndTime);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -75,7 +71,6 @@ public class Target_ListAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        ImageView targetPlanet;
         TextView targetName;
         TextView targetDate;
         ProgressBar completeBar;
