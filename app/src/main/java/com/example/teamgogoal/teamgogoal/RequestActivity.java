@@ -101,4 +101,12 @@ public class RequestActivity extends AppCompatActivity {
     }
 
 
+    public void toQuestion(View view) {
+        finish();
+        Intent intent = new Intent();
+        intent.setClass(RequestActivity.this, Question.class);
+        startActivity(intent);
+    }
+
+
 }

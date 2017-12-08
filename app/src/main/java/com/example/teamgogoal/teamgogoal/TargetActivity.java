@@ -253,6 +253,12 @@ public class TargetActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void toQuestion(View view) {
+        intent = new Intent();
+        intent.setClass(TargetActivity.this, Question.class);
+        startActivity(intent);
+    }
+
     public void fresh_activity(View view) {
         loading();
     }

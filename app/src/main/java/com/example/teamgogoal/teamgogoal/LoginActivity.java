@@ -333,4 +333,9 @@ public class LoginActivity extends AppCompatActivity {
         conn.disconnect();
         return sb.toString();
     }
+
+    public void aa(View view) {
+        Intent i = new Intent(this,Question.class);
+        startActivity(i);
+    }
 }

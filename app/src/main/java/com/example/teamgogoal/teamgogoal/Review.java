@@ -168,5 +168,12 @@ public class Review extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void toQuestion(View view) {
+        finish();
+        Intent intent = new Intent();
+        intent.setClass(this, Question.class);
+        startActivity(intent);
+    }
+
 
 }

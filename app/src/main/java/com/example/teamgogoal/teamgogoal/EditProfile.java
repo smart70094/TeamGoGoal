@@ -559,4 +559,11 @@ public class EditProfile extends AppCompatActivity{
         intent.setClass(this, RequestActivity.class);
         startActivity(intent);
     }
+
+    public void toQuestion(View view) {
+        finish();
+        Intent intent = new Intent();
+        intent.setClass(this, Question.class);
+        startActivity(intent);
+    }
 }

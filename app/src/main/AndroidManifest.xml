@@ -61,7 +61,8 @@
         <activity android:name=".TaskEventActivity" />
         <activity android:name=".videoTest" />
         <activity android:name=".Message" />
-        <activity android:name=".ForgetPassword"></activity>
+        <activity android:name=".ForgetPassword" />
+        <activity android:name=".Question"></activity>
     </application>
 
 </manifest>
