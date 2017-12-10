@@ -236,6 +236,8 @@ public class TargetActivity extends AppCompatActivity {
         }
     }
 
+
+    //------跳轉------//
     public void toEditProfile(View view) {
         intent = new Intent();
         intent.setClass(TargetActivity.this, EditProfile.class);

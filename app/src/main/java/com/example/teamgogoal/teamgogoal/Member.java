@@ -1,26 +1,26 @@
 package com.example.teamgogoal.teamgogoal;
 
-import android.app.Dialog;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Display;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.GridView;
-import android.widget.Toast;
+        import android.app.Dialog;
+        import android.graphics.drawable.Drawable;
+        import android.os.AsyncTask;
+        import android.os.Bundle;
+        import android.support.v7.app.AlertDialog;
+        import android.support.v7.app.AppCompatActivity;
+        import android.view.Display;
+        import android.view.LayoutInflater;
+        import android.view.View;
+        import android.view.Window;
+        import android.view.WindowManager;
+        import android.widget.AdapterView;
+        import android.widget.Button;
+        import android.widget.EditText;
+        import android.widget.GridView;
+        import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+        import java.util.ArrayList;
+        import java.util.HashMap;
+        import java.util.List;
+        import java.util.Map;
 
 public class Member extends AppCompatActivity {
     Dialog dialog;
@@ -117,12 +117,11 @@ public class Member extends AppCompatActivity {
         dialogWindow.setAttributes(p);
     }
 
-
     private class DeleteMemberTransTask extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... strings) {
-            TargetDB targetdb = new TargetDB();
-            targetdb.deleteParticipator(currTid,strings[0]);
+            socketTrans.setParams("register_delete",user.account,currTid,strings[0],targetName);
+            socketTrans.send();
             return null;
         }
     }

@@ -645,12 +645,12 @@ public class TaskActivity extends AppCompatActivity {
     }
 
     private void writeRecord() {
-        /*View dialog_view;
+        View dialog_view;
 
         dialog_view = LayoutInflater.from(this).inflate(R.layout.write_record, null);
 
 
-        EditText memberID = dialog_view.findViewById(R.id.recordContext);
+        final EditText recordContext = dialog_view.findViewById(R.id.recordContext);
         Button save = dialog_view.findViewById(R.id.addMemberBtn);
         Button cancel = dialog_view.findViewById(R.id.addMemberBtn);
 
@@ -658,7 +658,7 @@ public class TaskActivity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                socketTrans.setParams("addRecord",user.uid,currTid,recordContext.getText().toString());
             }
         });
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -676,7 +676,7 @@ public class TaskActivity extends AppCompatActivity {
         WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
         p.height = (int) (d.getHeight() * 0.7); // 高度设置为屏幕的0.6，根据实际情况调整
         p.width = (int) (d.getWidth() * 0.8); // 宽度设置为屏幕的0.65，根据实际情况调整
-        dialogWindow.setAttributes(p);*/
+        dialogWindow.setAttributes(p);
 
     }
 
