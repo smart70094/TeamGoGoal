@@ -4,27 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="bottom|center_horizontal"
     android:orientation="vertical"
-    android:weightSum="1"
     tools:context="com.example.teamgogoal.teamgogoal.gallery_item">
 
     <ImageView
-        android:id="@+id/imageview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/planet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:adjustViewBounds="false"
         android:focusable="true"
         android:focusableInTouchMode="true"
+        android:scaleType="fitXY"
         android:src="@drawable/earth_item" />
 
     <TextView
-        android:id="@+id/text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/targetName"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:gravity="center"
         android:includeFontPadding="false"
         android:text="aa"
         android:textColor="@color/black"
-        android:textSize="16dp"
+        android:textSize="24sp"
         android:textStyle="italic" />
 
 </LinearLayout>

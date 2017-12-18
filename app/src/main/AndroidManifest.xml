@@ -62,7 +62,8 @@
         <activity android:name=".videoTest" />
         <activity android:name=".Message" />
         <activity android:name=".ForgetPassword" />
-        <activity android:name=".Question"></activity>
+        <activity android:name=".Question" />
+        <activity android:name=".test"></activity>
     </application>
 
 </manifest>

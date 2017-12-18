@@ -334,7 +334,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void aa(View view) {
-        Intent i = new Intent(this,Question.class);
+        Intent i = new Intent(this,test.class);
         startActivity(i);
     }
 }

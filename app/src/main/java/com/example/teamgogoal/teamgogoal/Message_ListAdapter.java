@@ -16,9 +16,11 @@ import java.util.List;
 public class Message_ListAdapter extends BaseAdapter {
     private LayoutInflater myInflater;
     List<HashMap<String, String>> list = new ArrayList<>();
-    HashMap<String,Drawable> originator_photo;
+    HashMap<String, Drawable> originator_photo;
+    Context context;
 
     public Message_ListAdapter(Context context) {
+        this.context = context;
         myInflater = LayoutInflater.from(context);
         this.originator_photo = TaskActivity.member_photo;
     }
@@ -59,7 +61,11 @@ public class Message_ListAdapter extends BaseAdapter {
         }
 
         holder.msg_context.setText(list.get(position).get("context"));
-        holder.personal_photo.setImageDrawable(originator_photo.get(list.get(position).get("originator")));
+        if (list.get(position).get("originator").equals("system")) {
+            holder.personal_photo.setImageDrawable(context.getResources().getDrawable(R.drawable.item_mes,null));
+        } else {
+            holder.personal_photo.setImageDrawable(originator_photo.get(list.get(position).get("originator")));
+        }
         return convertView;
     }
 

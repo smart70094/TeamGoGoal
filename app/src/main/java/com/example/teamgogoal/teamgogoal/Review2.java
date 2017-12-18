@@ -3,10 +3,12 @@ package com.example.teamgogoal.teamgogoal;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.lukedeighton.wheelview.WheelView;
 
@@ -22,8 +24,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Review extends AppCompatActivity {
-
+public class Review2 extends Fragment {
+    View v;
     //private Gallery gallery;
     private List<GalleryModel> list;
     private ArrayList<CompleteTarget> completetarget;
@@ -32,17 +34,23 @@ public class Review extends AppCompatActivity {
     String localhost = LoginActivity.getLocalHost();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_review);
-        Intent intent = getIntent();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_review, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        v = getView();
         userID = user.uid;
         completetarget = new ArrayList<CompleteTarget>();
         intiDataBase();
     }
 
     private void intiDataBase() {
-        //step1:找出回顧資料
+        //step1:找出回顧資料String phpurl = "http://106.107.161.179/android/searchCompleteTarget.php?userID=" + userID;
+        //String phpurl = "http://106.107.161.179/android/searchCompleteTarget.php?userID=" + userID;
+
         String phpurl = localhost + "searchCompleteTarget.php?userID=" + userID;
         new TransTask().execute(phpurl);
 
@@ -123,8 +131,8 @@ public class Review extends AppCompatActivity {
     }
 
     private void initView() {
-        final WheelView wheelView = (WheelView) findViewById(R.id.wheelview);
-        wheelView.setAdapter(new Review_ListAdapter(list, this));
+        final WheelView wheelView = (WheelView) v.findViewById(R.id.wheelview);
+        wheelView.setAdapter(new Review_ListAdapter(list, v.getContext()));
 
 
         wheelView.setOnWheelItemClickListener(new WheelView.OnWheelItemClickListener() {
@@ -134,7 +142,7 @@ public class Review extends AppCompatActivity {
 
                 if (isSelected) {
                     Intent intent = new Intent();
-                    intent.setClass(Review.this, Record.class);
+                    intent.setClass(v.getContext(), Record.class);
                     intent.putExtra("tid", completetarget.get(position).getTid());
                     intent.putExtra("userID", userID);
                     intent.putExtra("target", completetarget.get(position).getTarget());
@@ -146,32 +154,5 @@ public class Review extends AppCompatActivity {
 
         });
     }
-
-
-    public void toEditProfile(View view) {
-        finish();
-        Intent intent = new Intent();
-        intent.setClass(this, EditProfile.class);
-        startActivity(intent);
-    }
-
-    public void toTarget(View view) {
-        finish();
-    }
-
-    public void toRequest(View view) {
-        finish();
-        Intent intent = new Intent();
-        intent.setClass(this, RequestActivity.class);
-        startActivity(intent);
-    }
-
-    public void toQuestion(View view) {
-        finish();
-        Intent intent = new Intent();
-        intent.setClass(this, Question.class);
-        startActivity(intent);
-    }
-
 
 }

@@ -3,11 +3,12 @@ package com.example.teamgogoal.teamgogoal;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -18,12 +19,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class TargetActivity extends AppCompatActivity {
+public class TargetActivity2 extends Fragment {
     AlertDialog dialog;
     LoginActivity.User user;
     TargetDB db;
     Intent intent;
-
+    View v;
 
     //------ListView----//
     List<HashMap<String, String>> TargetData = new ArrayList<>();
@@ -34,22 +35,22 @@ public class TargetActivity extends AppCompatActivity {
 
     SocketTrans socketTrans = LoginActivity.socketTrans;
 
-
-    protected void onCreate(Bundle savedInstanceState) {
-        try {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_target);
-            db = new TargetDB();
-            user = LoginActivity.getUser();
-        } catch (Exception e) {
-            Log.v("jim", e.toString());
-        }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_target, container, false);
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        loading();
+    public void onActivityCreated(Bundle savedInstanceState) {
+        try {
+            super.onActivityCreated(savedInstanceState);
+            db = new TargetDB();
+            user = LoginActivity.getUser();
+            v = getView();
+            loading();
+        } catch (Exception e) {
+            Log.v("jim", e.toString());
+        }
     }
 
     protected void loading() {
@@ -68,15 +69,7 @@ public class TargetActivity extends AppCompatActivity {
                 case "readTarget":
                     final Map<String, TargetDB.TargetDetail> t;
                     t = db.readTarget();
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            try {
-                                fresh(t);
-                            } catch (Exception e) {
-                                Log.v("jim_DbOperationTask", e.toString());
-                            }
-                        }
-                    });
+                    fresh(t);
                     break;
                 case "deleteTarget_all":
                     db.deleteTargetAll(params[1],params[2]);
@@ -114,8 +107,8 @@ public class TargetActivity extends AppCompatActivity {
             /*------Date:1015 rebuild-----*/
         }
 
-        target_listview = (ListView) findViewById(R.id.listview_target);
-        target_listAdapter = new Target_ListAdapter(this);
+        target_listview = (ListView) v.findViewById(R.id.listview_target);
+        target_listAdapter = new Target_ListAdapter(v.getContext());
         target_listAdapter.setData(TargetData);
         target_listview.setAdapter(target_listAdapter);
         target_listAdapter.notifyDataSetChanged();
@@ -138,7 +131,7 @@ public class TargetActivity extends AppCompatActivity {
                 String auth = targetMap.get(id).auth.trim();
                 if (auth.equals(user.account)) {
 
-                    View dialog_view = LayoutInflater.from(TargetActivity.this).inflate(R.layout.target_selector, null);
+                    View dialog_view = LayoutInflater.from(v.getContext()).inflate(R.layout.target_selector, null);
 
 
                     Button readTarget = (Button) dialog_view.findViewById(R.id.readTarget);
@@ -169,7 +162,7 @@ public class TargetActivity extends AppCompatActivity {
                             dialog.dismiss();
                         }
                     });
-                    dialog = new AlertDialog.Builder(TargetActivity.this, R.style.hitStyle).setView(dialog_view).create();
+                    dialog = new AlertDialog.Builder(v.getContext(), R.style.hitStyle).setView(dialog_view).create();
                     dialog.show();
 
                 } else {
@@ -185,7 +178,7 @@ public class TargetActivity extends AppCompatActivity {
     //下方按鈕-新增目標
     public void addTarget(View view) {
         Intent intent = new Intent();
-        intent.setClass(this, TargetEventActivity.class);
+        intent.setClass(v.getContext(), TargetEventActivity.class);
         intent.putExtra("cmd", "addTarget");
         startActivity(intent);
     }
@@ -220,7 +213,7 @@ public class TargetActivity extends AppCompatActivity {
         intent.putExtra("startTime", td.startTime);
         intent.putExtra("endTime", td.endTime);
 
-        intent.setClass(TargetActivity.this, TargetEventActivity.class);
+        intent.setClass(v.getContext(), TargetEventActivity.class);
         startActivity(intent);
     }
 
@@ -229,7 +222,7 @@ public class TargetActivity extends AppCompatActivity {
             Intent intent = new Intent();
             intent.putExtra("tid", Integer.toString(tid));
             intent.putExtra("targetName", targetName);
-            intent.setClass(TargetActivity.this, TaskActivity.class);
+            intent.setClass(v.getContext(), TaskActivity.class);
             startActivity(intent);
         } catch (Exception e) {
             Log.v("jim_enterTaskActivity", e.toString());
@@ -238,9 +231,9 @@ public class TargetActivity extends AppCompatActivity {
 
 
     //------跳轉------//
-    public void toEditProfile(View view) {
+    /*public void toEditProfile(View view) {
         intent = new Intent();
-        intent.setClass(TargetActivity.this, EditProfile.class);
+        intent.setClass(TargetActivity2.this, EditProfile.class);
         startActivity(intent);
     }
 
@@ -251,22 +244,17 @@ public class TargetActivity extends AppCompatActivity {
 
     public void toRequest(View view) {
         intent = new Intent();
-        intent.setClass(TargetActivity.this, RequestActivity.class);
+        intent.setClass(TargetActivity2.this, RequestActivity.class);
         startActivity(intent);
     }
 
     public void toQuestion(View view) {
         intent = new Intent();
-        intent.setClass(TargetActivity.this, Question.class);
+        intent.setClass(TargetActivity2.this, Question.class);
         startActivity(intent);
-    }
+    }*/
 
     public void fresh_activity(View view) {
         loading();
-    }
-
-    public void testTab(View view) {
-        Intent i = new Intent(this,test.class);
-        startActivity(i);
     }
 }
