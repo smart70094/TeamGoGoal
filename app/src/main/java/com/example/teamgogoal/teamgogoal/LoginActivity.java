@@ -193,7 +193,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
                     intent = new Intent();
-                    intent.setClass(LoginActivity.this, TargetActivity.class);
+                    intent.setClass(LoginActivity.this, Index.class);
                     startActivity(intent);
                     Toast.makeText(LoginActivity.this, "登入成功", Toast.LENGTH_SHORT).show();
 
@@ -334,7 +334,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void aa(View view) {
-        Intent i = new Intent(this,test.class);
+        Intent i = new Intent(this,Index.class);
         startActivity(i);
     }
 }

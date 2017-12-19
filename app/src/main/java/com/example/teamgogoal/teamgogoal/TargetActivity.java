@@ -41,6 +41,7 @@ public class TargetActivity extends AppCompatActivity {
             setContentView(R.layout.activity_target);
             db = new TargetDB();
             user = LoginActivity.getUser();
+            loading();
         } catch (Exception e) {
             Log.v("jim", e.toString());
         }
@@ -266,7 +267,7 @@ public class TargetActivity extends AppCompatActivity {
     }
 
     public void testTab(View view) {
-        Intent i = new Intent(this,test.class);
+        Intent i = new Intent(this,Index.class);
         startActivity(i);
     }
 }

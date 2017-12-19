@@ -91,7 +91,7 @@ public class Record extends AppCompatActivity {
 
     private TabHost.TabSpec setupTab(String name, String label, int content) {
 
-        View tab = LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+        View tab = LayoutInflater.from(this).inflate(R.layout.review_custom_tab, null);
         TextView text = (TextView) tab.findViewById(R.id.text);
         text.setText(label);
 
