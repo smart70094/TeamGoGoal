@@ -89,11 +89,13 @@ public class Member extends AppCompatActivity {
     //------刪除成員------//
     private void deleteMember(final int position) {
         View dialog_view;
+        final Boolean isUser = member_list.get(position).get("account").toString().equals(LoginActivity.user.account);
+
 
         dialog_view = LayoutInflater.from(this).inflate(R.layout.member_selector, null);
 
         final Button button_delete_member = (Button) dialog_view.findViewById(R.id.button_delete_member);
-        if(member_list.get(position).get("account").toString().equals(LoginActivity.user.account)){
+        if(isUser){
             button_delete_member.setText("退出目標");
         }
         button_delete_member.setOnClickListener(new View.OnClickListener() {
@@ -103,6 +105,10 @@ public class Member extends AppCompatActivity {
                 new DeleteMemberTransTask().execute(member_list.get(position).get("account").toString());
                 member_list.remove(position);
                 attend_adapter.notifyDataSetChanged();
+                if(isUser){
+                    setResult(RESULT_OK);
+                    Member.this.finish();
+                }
             }
         });
 
@@ -120,6 +126,8 @@ public class Member extends AppCompatActivity {
     private class DeleteMemberTransTask extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... strings) {
+            TargetDB db = new TargetDB();
+            db.deleteParticipator(currTid,strings[0]);
             socketTrans.setParams("register_delete",user.account,currTid,strings[0],targetName);
             socketTrans.send();
             return null;
@@ -163,6 +171,7 @@ public class Member extends AppCompatActivity {
     }
 
     public void cancel(View view) {
+        setResult(RESULT_CANCELED);
         finish();
     }
 

@@ -64,6 +64,7 @@ public class TaskActivity extends AppCompatActivity {
     AlertDialog msg = null, dialog = null;
     SocketTrans socketTrans = LoginActivity.socketTrans;
     boolean hasTask = false;
+    final int FUNC_MEMBER = 1;
     //進度條
     CircularProgressBar circularProgressBar;
     int percentage;
@@ -71,13 +72,10 @@ public class TaskActivity extends AppCompatActivity {
     public static HashMap<String, Drawable> member_photo;
     public static HashMap<String, Drawable> invite_member_photo;
 
-
-    /*---Date:1015 rebuild----*/
     List<HashMap<String, String>> taskDate = new ArrayList<>();
     private Task_ListAdapter task_listAdapter;
     ListView task_listview;
     int map_id;
-    /*---Date:1015 rebuild----*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -867,7 +865,16 @@ public class TaskActivity extends AppCompatActivity {
         Intent intent = new Intent(this, Member.class);
         intent.putExtra("tid", currTid);
         intent.putExtra("targetName", targetName);
-        startActivity(intent);
+        startActivityForResult(intent,FUNC_MEMBER);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==FUNC_MEMBER){
+            if(resultCode==RESULT_OK){
+                finish();
+            }
+        }
+    }
 }
