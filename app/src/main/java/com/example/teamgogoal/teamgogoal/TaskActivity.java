@@ -649,14 +649,16 @@ public class TaskActivity extends AppCompatActivity {
 
 
         final EditText recordContext = dialog_view.findViewById(R.id.recordContext);
-        Button save = dialog_view.findViewById(R.id.addMemberBtn);
-        Button cancel = dialog_view.findViewById(R.id.addMemberBtn);
+        Button save = dialog_view.findViewById(R.id.save);
+        Button cancel = dialog_view.findViewById(R.id.cancel);
 
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 socketTrans.setParams("addRecord",user.uid,currTid,recordContext.getText().toString());
+                socketTrans.send();
+                dialog.dismiss();
             }
         });
         cancel.setOnClickListener(new View.OnClickListener() {
