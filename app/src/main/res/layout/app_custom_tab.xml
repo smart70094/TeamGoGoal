@@ -10,5 +10,5 @@
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/item_q" />
+        app:srcCompat="@drawable/item_q_unselect" />
 </LinearLayout>

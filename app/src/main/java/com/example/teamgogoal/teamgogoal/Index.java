@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Index extends AppCompatActivity {
+    final int FUNC_ADDTARGET = 1;
     Context context = null;
     LocalActivityManager manager = null;
     private android.support.design.widget.TabLayout mTabs;
@@ -37,11 +38,11 @@ public class Index extends AppCompatActivity {
 
         mTabs = (android.support.design.widget.TabLayout) findViewById(R.id.tabs);
 
-        addTab(getResources().getDrawable(R.drawable.item_person,null));
-        addTab(getResources().getDrawable(R.drawable.item_target,null));
-        addTab(getResources().getDrawable(R.drawable.item_memory,null));
-        addTab(getResources().getDrawable(R.drawable.item_message,null));
-        addTab(getResources().getDrawable(R.drawable.item_q,null));
+        addTab(getResources().getDrawable(R.drawable.item_person, null));
+        addTab(getResources().getDrawable(R.drawable.item_target, null));
+        addTab(getResources().getDrawable(R.drawable.item_memory, null));
+        addTab(getResources().getDrawable(R.drawable.item_message_unselect, null));
+        addTab(getResources().getDrawable(R.drawable.item_q, null));
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabs));
         mTabs.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
@@ -81,8 +82,7 @@ public class Index extends AppCompatActivity {
         }
 
         @Override
-        public void destroyItem(ViewGroup container, int position,
-                                Object object) {
+        public void destroyItem(ViewGroup container, int position, Object object) {
             ViewPager pViewPager = ((ViewPager) container);
             pViewPager.removeView(list.get(position));
         }
@@ -119,18 +119,17 @@ public class Index extends AppCompatActivity {
         }
     }
 
-
     private void initPagerViewer() {
 
         final ArrayList<View> list = new ArrayList<View>();
         Intent intent_profile = new Intent(context, EditProfile.class);
         list.add(getView("A", intent_profile));
         Intent intent_target = new Intent(context, TargetActivity.class);
-        list.add(getView("A", intent_target));
+        list.add(getView("B", intent_target));
         Intent intent_review = new Intent(context, Review.class);
-        list.add(getView("A", intent_review));
+        list.add(getView("C", intent_review));
         Intent intent_request = new Intent(context, RequestActivity.class);
-        list.add(getView("A", intent_request));
+        list.add(getView("D", intent_request));
         Intent intent_question = new Intent(context, Question.class);
         list.add(getView("E", intent_question));
 
@@ -142,4 +141,5 @@ public class Index extends AppCompatActivity {
     private View getView(String id, Intent intent) {
         return manager.startActivity(id, intent).getDecorView();
     }
+
 }

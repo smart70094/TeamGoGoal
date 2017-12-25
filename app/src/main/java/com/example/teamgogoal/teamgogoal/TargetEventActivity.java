@@ -171,7 +171,6 @@ public class TargetEventActivity extends AppCompatActivity {
                 + String.valueOf(dayOfMonth);
     }
 
-
     private class DbOperationTask extends AsyncTask<String, Void, Void> {
         protected Void doInBackground(String... params) {
             String cmd = params[0];
@@ -193,6 +192,7 @@ public class TargetEventActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            setResult(RESULT_OK);
             finish();
         }
     }
@@ -234,5 +234,11 @@ public class TargetEventActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    //------返回鍵------//
+    public void cancel(View view) {
+        setResult(RESULT_CANCELED);
+        finish();
     }
 }

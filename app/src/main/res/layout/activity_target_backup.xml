@@ -37,7 +37,7 @@
                 android:onClick="toEditProfile"
                 android:padding="5dp"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/item_person" />
+                app:srcCompat="@drawable/item_person_unselect" />
 
             <ImageButton
                 android:id="@+id/Review"
@@ -60,7 +60,7 @@
                 android:onClick="toMemory"
                 android:padding="5dp"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/item_memory" />
+                app:srcCompat="@drawable/item_memory_unselect" />
 
             <ImageButton
                 android:id="@+id/Target"
@@ -72,7 +72,7 @@
                 android:onClick="toRequest"
                 android:padding="5dp"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/item_message" />
+                app:srcCompat="@drawable/item_message_unselect" />
 
             <ImageButton
                 android:id="@+id/Quest"
@@ -84,7 +84,7 @@
                 android:onClick="toQuestion"
                 android:padding="5dp"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/item_q" />
+                app:srcCompat="@drawable/item_q_unselect" />
 
             <Button
                 android:id="@+id/button9"

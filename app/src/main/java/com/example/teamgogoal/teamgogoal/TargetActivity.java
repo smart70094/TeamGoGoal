@@ -3,6 +3,7 @@ package com.example.teamgogoal.teamgogoal;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 
 public class TargetActivity extends AppCompatActivity {
+
+    final int FUNC_ADDTARGET = 1;
     AlertDialog dialog;
     LoginActivity.User user;
     TargetDB db;
@@ -26,6 +29,7 @@ public class TargetActivity extends AppCompatActivity {
 
 
     //------ListView----//
+    SwipeRefreshLayout srl;
     List<HashMap<String, String>> TargetData = new ArrayList<>();
     private Target_ListAdapter target_listAdapter;
     ListView target_listview;
@@ -41,15 +45,28 @@ public class TargetActivity extends AppCompatActivity {
             setContentView(R.layout.activity_target);
             db = new TargetDB();
             user = LoginActivity.getUser();
+            initView();
             loading();
         } catch (Exception e) {
             Log.v("jim", e.toString());
         }
     }
 
+    private void initView() {
+        srl = (SwipeRefreshLayout) findViewById(R.id.srl);
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loading();
+            }
+        });
+    }
+
+
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d("Gary","resume");
         loading();
     }
 
@@ -80,7 +97,7 @@ public class TargetActivity extends AppCompatActivity {
                     });
                     break;
                 case "deleteTarget_all":
-                    db.deleteTargetAll(params[1],params[2]);
+                    db.deleteTargetAll(params[1], params[2]);
                     break;
                 case "deleteParticipator":
                     db.deleteParticipator(params[1], params[2]);
@@ -120,6 +137,7 @@ public class TargetActivity extends AppCompatActivity {
         target_listAdapter.setData(TargetData);
         target_listview.setAdapter(target_listAdapter);
         target_listAdapter.notifyDataSetChanged();
+        srl.setRefreshing(false);
 
 
         // 目標項目-短按事件:瀏覽任務
@@ -188,9 +206,8 @@ public class TargetActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setClass(this, TargetEventActivity.class);
         intent.putExtra("cmd", "addTarget");
-        startActivity(intent);
+        startActivityForResult(intent,FUNC_ADDTARGET);
     }
-
 
 
     //------刪除目標------//
@@ -201,7 +218,7 @@ public class TargetActivity extends AppCompatActivity {
             TargetData.remove(map_id);
             target_listAdapter.notifyDataSetChanged();
             if (user.account.equals(td.auth.trim()))
-                new DbOperationTask().execute("deleteTarget_all", td.tid,td.targetName);
+                new DbOperationTask().execute("deleteTarget_all", td.tid, td.targetName);
             /*else
                 new DbOperationTask().execute("deleteParticipator", td.tid, user.account);*/
         } catch (Exception e) {
@@ -237,37 +254,4 @@ public class TargetActivity extends AppCompatActivity {
         }
     }
 
-
-    //------跳轉------//
-    public void toEditProfile(View view) {
-        intent = new Intent();
-        intent.setClass(TargetActivity.this, EditProfile.class);
-        startActivity(intent);
-    }
-
-    public void toMemory(View view) {
-        Intent intent = new Intent(this, Review.class);
-        startActivity(intent);
-    }
-
-    public void toRequest(View view) {
-        intent = new Intent();
-        intent.setClass(TargetActivity.this, RequestActivity.class);
-        startActivity(intent);
-    }
-
-    public void toQuestion(View view) {
-        intent = new Intent();
-        intent.setClass(TargetActivity.this, Question.class);
-        startActivity(intent);
-    }
-
-    public void fresh_activity(View view) {
-        loading();
-    }
-
-    public void testTab(View view) {
-        Intent i = new Intent(this,Index.class);
-        startActivity(i);
-    }
 }
