@@ -3,6 +3,7 @@ package com.example.teamgogoal.teamgogoal;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class Request_ListAdapter extends BaseAdapter {
     RequestDB db;
@@ -67,10 +69,31 @@ public class Request_ListAdapter extends BaseAdapter {
 
             convertView = myInflater.inflate(R.layout.request_list, null);
             holder = new ViewHolder();
+
+            holder.personal_photo = (ImageView) convertView.findViewById(R.id.personal_photo);
             holder.request_context = (TextView) convertView.findViewById(R.id.request_context);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
+        }
+
+
+        if(list.get(position).get("originator").equals("匿名夥伴")){
+            holder.personal_photo.setImageDrawable(context.getResources().getDrawable(R.drawable.item_message_unselect,null));
+        }else{
+            try {
+                Drawable photo = TargetActivity.photo_handle.getPhotoByID(list.get(position).get("authID"));
+                if(photo==null){
+                    holder.personal_photo.setImageDrawable(context.getResources().getDrawable(R.drawable.item_message_unselect,null));
+                }else{
+                    holder.personal_photo.setImageDrawable(photo);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         String cmd = list.get(position).get("cmd").trim();

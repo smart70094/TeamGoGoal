@@ -41,7 +41,7 @@ public class Index extends AppCompatActivity {
         addTab(getResources().getDrawable(R.drawable.item_person, null));
         addTab(getResources().getDrawable(R.drawable.item_target, null));
         addTab(getResources().getDrawable(R.drawable.item_memory, null));
-        addTab(getResources().getDrawable(R.drawable.item_message_unselect, null));
+        addTab(getResources().getDrawable(R.drawable.item_message, null));
         addTab(getResources().getDrawable(R.drawable.item_q, null));
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabs));

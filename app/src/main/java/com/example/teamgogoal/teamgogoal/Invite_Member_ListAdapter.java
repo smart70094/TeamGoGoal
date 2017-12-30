@@ -7,23 +7,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class Invite_Member_ListAdapter extends BaseAdapter {
     Context context;
     ViewHolder holder;
     private LayoutInflater myInflater;
-    List<HashMap<String, Object>> list = new ArrayList<>();
+    List<HashMap<String, String>> list = new ArrayList<>();
 
     public Invite_Member_ListAdapter(Context context) {
         myInflater = LayoutInflater.from(context);
         this.context = context;
     }
 
-    public void setData(List<HashMap<String, Object>> list) {
+    public void setData(List<HashMap<String, String>> list) {
         this.list = list;
     }
 
@@ -57,13 +59,28 @@ public class Invite_Member_ListAdapter extends BaseAdapter {
         }
 
         //set Photo
-        holder.personal_photo.setImageDrawable((Drawable) list.get(position).get("personal_photo"));
+        try {
+            Drawable photo = TargetActivity.photo_handle.getPhotoByID(list.get(position).get("uid"));
+            if (photo == null) {
+                holder.personal_photo.setImageDrawable(context.getResources().getDrawable(R.drawable.item_member,null));
+            } else {
+                holder.personal_photo.setImageDrawable(photo);
+            }
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        holder.member_name.setText(list.get(position).get("account").toString());
+
 
         return convertView;
     }
 
     static class ViewHolder {
         ImageView personal_photo;
+        TextView member_name;
     }
 
 }

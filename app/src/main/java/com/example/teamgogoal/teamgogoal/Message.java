@@ -1,6 +1,5 @@
 package com.example.teamgogoal.teamgogoal;
 
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -44,9 +43,9 @@ public class Message extends AppCompatActivity {
     AlertDialog dialog, hit_dialog;
     String send_type_cmd;
 
-    HashMap<String, Drawable> member_photo;
-    List<HashMap<String, Object>> unpick_list = new ArrayList<>();
-    List<HashMap<String, Object>> pick_list = new ArrayList<>();
+    HashMap<String, String> member;
+    List<HashMap<String, String>> unpick_list = new ArrayList<>();
+    List<HashMap<String, String>> pick_list = new ArrayList<>();
     Member_ListAdapter unpick_adapter, pick_adapter;
     Hit hit;
 
@@ -99,6 +98,7 @@ public class Message extends AppCompatActivity {
                     HashMap<String, String> hashmap = new HashMap<>();
                     hashmap.put("context", obj.getString("context"));
                     hashmap.put("originator", obj.getString("originator"));
+                    hashmap.put("authID", obj.getString("authID"));
                     msg_list.add(hashmap);
                 }
             } catch (JSONException e) {
@@ -134,11 +134,11 @@ public class Message extends AppCompatActivity {
         GridView pickMember = dialog_view.findViewById(R.id.pickMember);
         Button memberConfirm = dialog_view.findViewById(R.id.memberConfirm);
 
-        member_photo = TaskActivity.member_photo;
-        for (Map.Entry<String, Drawable> entry : member_photo.entrySet()) {
-            HashMap<String, Object> map = new HashMap<>();
+        member = TaskActivity.member;
+        for (Map.Entry<String, String> entry : member.entrySet()) {
+            HashMap<String, String> map = new HashMap<>();
             map.put("account", entry.getKey());
-            map.put("personal_photo", entry.getValue());
+            map.put("uid", entry.getValue());
             unpick_list.add(map);
         }
 
@@ -328,7 +328,7 @@ public class Message extends AppCompatActivity {
                 try {
                     String msgStr = msg_context.getText().toString();
                     String subject = "";
-                    for (HashMap<String, Object> entry : pick_list) {
+                    for (HashMap<String, String> entry : pick_list) {
                         subject += entry.get("account") + "-";
                     }
                     subject = subject.substring(0, subject.length() - 1);
@@ -366,7 +366,7 @@ public class Message extends AppCompatActivity {
     private void sendAnonymousask() {
         try {
             String subject = "";
-            for (HashMap<String, Object> entry : pick_list) {
+            for (HashMap<String, String> entry : pick_list) {
                 subject += entry.get("account") + "-";
             }
             subject = subject.substring(0, subject.length() - 1);

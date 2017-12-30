@@ -69,8 +69,8 @@ public class TaskActivity extends AppCompatActivity {
     CircularProgressBar circularProgressBar;
     int percentage;
     //團隊成員大頭貼
-    public static HashMap<String, Drawable> member_photo;
-    public static HashMap<String, Drawable> invite_member_photo;
+    public static HashMap<String, String> member;
+    public static HashMap<String, String> inviteMember;
 
     List<HashMap<String, String>> taskDate = new ArrayList<>();
     private Task_ListAdapter task_listAdapter;
@@ -151,17 +151,8 @@ public class TaskActivity extends AppCompatActivity {
     //------團隊成員大頭貼載入------//
 
     private void initMemberPhoto() throws JSONException, ExecutionException, InterruptedException {
-        member_photo = new HashMap<>();
-
-        HashMap<String, String> member = new HashMap<>();
+        member = new HashMap<>();
         member = new MemberTransTask().execute().get();
-
-        for (Map.Entry<String, String> entry : member.entrySet()) {
-            String imageUrl = LoginActivity.getLocalHost() + "profilepicture/" + entry.getValue();
-            Bitmap result = new PhotoTransTask().execute(imageUrl).get();
-            member_photo.put(entry.getKey(), toCircleImage(result));
-        }
-
     }
 
     private class MemberTransTask extends AsyncTask<String, Void, HashMap<String, String>> {
@@ -181,18 +172,10 @@ public class TaskActivity extends AppCompatActivity {
     }
 
     private void initInviteMemberPhoto() throws JSONException, ExecutionException, InterruptedException {
-        invite_member_photo = new HashMap<>();
-
         String phpurl = LoginActivity.getLocalHost() + "searchInviteMember.php?tid=" + currTid;
         String invite_result = new InviteMemberTransTask().execute(phpurl).get();
-
-        HashMap<String, String> inviteMember = new HashMap<>();
+        inviteMember = new HashMap<>();
         inviteMember = InviteMember_parseJSON(invite_result);
-        for (Map.Entry<String, String> entry : inviteMember.entrySet()) {
-            String imageUrl = LoginActivity.getLocalHost() + "profilepicture/" + entry.getKey();
-            Bitmap result = new PhotoTransTask().execute(imageUrl).get();
-            invite_member_photo.put(entry.getValue(), toCircleImage(result));
-        }
     }
 
     private class InviteMemberTransTask extends AsyncTask<String, Void, String> {
@@ -224,7 +207,7 @@ public class TaskActivity extends AppCompatActivity {
             JSONArray array = new JSONArray(s);
             for (int i = 0; i < array.length(); i++) {
                 JSONObject obj = array.getJSONObject(i);
-                hashmap.put(obj.getString("uid"), obj.getString("subject"));
+                hashmap.put(obj.getString("subject"),obj.getString("uid"));
             }
         } catch (JSONException e) {
             e.printStackTrace();

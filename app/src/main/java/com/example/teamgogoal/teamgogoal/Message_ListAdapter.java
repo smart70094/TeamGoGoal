@@ -12,17 +12,16 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class Message_ListAdapter extends BaseAdapter {
     private LayoutInflater myInflater;
     List<HashMap<String, String>> list = new ArrayList<>();
-    HashMap<String, Drawable> originator_photo;
     Context context;
 
     public Message_ListAdapter(Context context) {
         this.context = context;
         myInflater = LayoutInflater.from(context);
-        this.originator_photo = TaskActivity.member_photo;
     }
 
     public void setData(List<HashMap<String, String>> list) {
@@ -61,11 +60,28 @@ public class Message_ListAdapter extends BaseAdapter {
         }
 
         holder.msg_context.setText(list.get(position).get("context"));
-        if (list.get(position).get("originator").equals("system")) {
+        if (list.get(position).get("originator").equals("匿名夥伴")) {
             holder.personal_photo.setImageDrawable(context.getResources().getDrawable(R.drawable.item_mes,null));
         } else {
-            holder.personal_photo.setImageDrawable(originator_photo.get(list.get(position).get("originator")));
+            //set Photo
+            try {
+                Drawable photo = TargetActivity.photo_handle.getPhotoByID(list.get(position).get("authID"));
+                if (photo == null) {
+                    holder.personal_photo.setImageDrawable(context.getResources().getDrawable(R.drawable.item_mes,null));
+                } else {
+                    holder.personal_photo.setImageDrawable(photo);
+                }
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+
+
+
+
+
         return convertView;
     }
 

@@ -1,11 +1,9 @@
 package com.example.teamgogoal.teamgogoal;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.ListView;
 
 import org.json.JSONArray;
@@ -68,6 +66,7 @@ public class RequestActivity extends AppCompatActivity {
                     request_hashmap.put("cmdContext", obj.getString("cmdContext"));
                     request_hashmap.put("originator", obj.getString("originator"));
                     request_hashmap.put("tid", obj.getString("tid"));
+                    request_hashmap.put("authID", obj.getString("authID"));
                     request_list.add(request_hashmap);
 
                 }
@@ -81,32 +80,5 @@ public class RequestActivity extends AppCompatActivity {
             }
         }
     }
-
-    public void toEditProfile(View view) {
-        finish();
-        Intent intent = new Intent();
-        intent.setClass(RequestActivity.this, EditProfile.class);
-        startActivity(intent);
-    }
-
-    public void toTarget(View view) {
-        finish();
-    }
-
-    public void toMemory(View view) {
-        finish();
-        Intent intent = new Intent();
-        intent.setClass(RequestActivity.this, Review.class);
-        startActivity(intent);
-    }
-
-
-    public void toQuestion(View view) {
-        finish();
-        Intent intent = new Intent();
-        intent.setClass(RequestActivity.this, Question.class);
-        startActivity(intent);
-    }
-
 
 }

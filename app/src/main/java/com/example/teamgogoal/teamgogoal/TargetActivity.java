@@ -26,6 +26,7 @@ public class TargetActivity extends AppCompatActivity {
     LoginActivity.User user;
     TargetDB db;
     Intent intent;
+    public static Photo_Handle photo_handle;
 
 
     //------ListView----//
@@ -44,6 +45,7 @@ public class TargetActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_target);
             db = new TargetDB();
+            photo_handle = new Photo_Handle(this);
             user = LoginActivity.getUser();
             initView();
             loading();

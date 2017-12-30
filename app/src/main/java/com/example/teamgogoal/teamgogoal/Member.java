@@ -1,26 +1,25 @@
 package com.example.teamgogoal.teamgogoal;
 
         import android.app.Dialog;
-        import android.graphics.drawable.Drawable;
-        import android.os.AsyncTask;
-        import android.os.Bundle;
-        import android.support.v7.app.AlertDialog;
-        import android.support.v7.app.AppCompatActivity;
-        import android.view.Display;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.Window;
-        import android.view.WindowManager;
-        import android.widget.AdapterView;
-        import android.widget.Button;
-        import android.widget.EditText;
-        import android.widget.GridView;
-        import android.widget.Toast;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Display;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.Toast;
 
-        import java.util.ArrayList;
-        import java.util.HashMap;
-        import java.util.List;
-        import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Member extends AppCompatActivity {
     Dialog dialog;
@@ -29,11 +28,13 @@ public class Member extends AppCompatActivity {
     LoginActivity.User user;
     GridView attendgridView,invitegridView;
 
-    List<HashMap<String, Object>> member_list = new ArrayList<>();
+    List<HashMap<String, String>> member_list = new ArrayList<>();
     Member_ListAdapter attend_adapter;
-    List<HashMap<String, Object>> invite_member_list = new ArrayList<>();
+
+    List<HashMap<String, String>> invite_member_list = new ArrayList<>();
     Invite_Member_ListAdapter invite_adapter;
-    HashMap<String,Drawable> member_photo,invite_photo;
+
+    HashMap<String,String> member,inviteMember;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +54,11 @@ public class Member extends AppCompatActivity {
     private void initView() {
 
         //---目前加入成員---//
-        member_photo = TaskActivity.member_photo;
-        for (Map.Entry<String, Drawable> entry : member_photo.entrySet()) {
-            HashMap<String, Object> map = new HashMap<>();
+        member = TaskActivity.member;
+        for (Map.Entry<String, String> entry : member.entrySet()) {
+            HashMap<String, String> map = new HashMap<>();
             map.put("account" , entry.getKey());
-            map.put("personal_photo" , entry.getValue());
+            map.put("uid" , entry.getValue());
             member_list.add(map);
         }
         attend_adapter = new Member_ListAdapter(this);
@@ -73,11 +74,11 @@ public class Member extends AppCompatActivity {
         });
 
         //---邀請中成員---//
-        invite_photo = TaskActivity.invite_member_photo;
-        for (Map.Entry<String, Drawable> entry : invite_photo.entrySet()) {
-            HashMap<String, Object> map = new HashMap<>();
+        inviteMember = TaskActivity.inviteMember;
+        for (Map.Entry<String, String> entry : inviteMember.entrySet()) {
+            HashMap<String, String> map = new HashMap<>();
             map.put("account" , entry.getKey());
-            map.put("personal_photo" , entry.getValue());
+            map.put("uid" , entry.getValue());
             invite_member_list.add(map);
         }
         invite_adapter = new Invite_Member_ListAdapter(this);

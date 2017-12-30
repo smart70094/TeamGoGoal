@@ -15,18 +15,17 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class Task_ListAdapter extends BaseAdapter {
     Context context;
     ViewHolder holder;
     private LayoutInflater myInflater;
     List<HashMap<String, String>> list = new ArrayList<>();
-    HashMap<String, Drawable> member_photo;
 
     public Task_ListAdapter(Context context) {
         myInflater = LayoutInflater.from(context);
         this.context = context;
-        this.member_photo = TaskActivity.member_photo;
     }
 
     public void setData(List<HashMap<String, String>> list) {
@@ -71,7 +70,19 @@ public class Task_ListAdapter extends BaseAdapter {
         String state = list.get(position).get("state").trim();
 
         //set Photo
-        holder.personal_photo.setImageDrawable(member_photo.get(list.get(position).get("auth")));
+        //holder.personal_photo.setImageDrawable(member_photo.get(list.get(position).get("auth")));
+        try {
+            Drawable photo = TargetActivity.photo_handle.getPhotoByID(authID);
+            if (photo == null) {
+                holder.personal_photo.setImageDrawable(context.getResources().getDrawable(R.drawable.item_default_member,null));
+            } else {
+                holder.personal_photo.setImageDrawable(photo);
+            }
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
 
         // set mission Name
