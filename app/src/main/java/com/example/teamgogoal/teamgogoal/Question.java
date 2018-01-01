@@ -66,28 +66,4 @@ public class Question extends AppCompatActivity {
         expandableListView.setAdapter(adapter);
     }
 
-
-    public void toEditProfile(View view) {
-        finish();
-        Intent intent = new Intent(this, EditProfile.class);
-        startActivity(intent);
-    }
-
-    public void toTarget(View view) {
-        finish();
-    }
-
-    public void toMemory(View view) {
-        finish();
-        Intent intent = new Intent(this, Review.class);
-        startActivity(intent);
-    }
-
-    public void toRequest(View view) {
-        finish();
-        Intent intent = new Intent();
-        intent.setClass(this, RequestActivity.class);
-        startActivity(intent);
-    }
-
 }

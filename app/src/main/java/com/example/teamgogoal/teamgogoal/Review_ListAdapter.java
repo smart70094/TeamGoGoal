@@ -34,7 +34,7 @@ public class Review_ListAdapter extends WheelArrayAdapter {
             convertView = myInflater.inflate(R.layout.item_review, null);
             holder = new ViewHolder();
             holder.planet = (ImageView) convertView.findViewById(R.id.planet);
-            //holder.targetName = (TextView)convertView.findViewById(R.id.targetName);
+            holder.targetName = (TextView)convertView.findViewById(R.id.targetName);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -43,7 +43,7 @@ public class Review_ListAdapter extends WheelArrayAdapter {
         GalleryModel gm = (GalleryModel) getItem(position);
         //set Photo
         holder.planet.setImageDrawable((Drawable) gm.getDrawable());
-        //holder.targetName.setText(gm.getText());
+        holder.targetName.setText(gm.getText());
 
         convertView.setDrawingCacheEnabled(true);
 
