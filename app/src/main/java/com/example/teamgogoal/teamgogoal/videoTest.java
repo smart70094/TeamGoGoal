@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.VideoView;
 
+import com.teamgogoal.view.activity.R;
+
 public class videoTest extends AppCompatActivity {
 
     private VideoView v;

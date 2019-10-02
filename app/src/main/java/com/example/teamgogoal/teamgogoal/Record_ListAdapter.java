@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.teamgogoal.view.activity.R;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

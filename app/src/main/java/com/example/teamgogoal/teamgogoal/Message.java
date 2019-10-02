@@ -18,6 +18,8 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.ToggleButton;
 
+import com.teamgogoal.view.activity.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

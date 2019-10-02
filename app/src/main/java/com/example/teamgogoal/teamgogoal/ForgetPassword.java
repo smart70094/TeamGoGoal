@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.teamgogoal.view.activity.R;
+
 public class ForgetPassword extends AppCompatActivity {
     AlertDialog dialog = null;
     EditText account,email;

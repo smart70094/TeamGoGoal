@@ -12,6 +12,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.teamgogoal.view.activity.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

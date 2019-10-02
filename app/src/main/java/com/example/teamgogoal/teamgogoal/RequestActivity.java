@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.widget.ListView;
 
+import com.teamgogoal.view.activity.R;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 

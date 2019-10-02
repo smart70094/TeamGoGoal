@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lukedeighton.wheelview.adapter.WheelArrayAdapter;
+import com.teamgogoal.view.activity.R;
 
 import java.util.List;
 

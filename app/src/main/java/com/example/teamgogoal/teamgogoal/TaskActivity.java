@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
+import com.teamgogoal.view.activity.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;

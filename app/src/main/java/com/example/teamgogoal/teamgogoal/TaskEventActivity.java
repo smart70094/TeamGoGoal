@@ -12,6 +12,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.teamgogoal.view.activity.R;
+
 import java.util.Calendar;
 
 public class TaskEventActivity extends AppCompatActivity {

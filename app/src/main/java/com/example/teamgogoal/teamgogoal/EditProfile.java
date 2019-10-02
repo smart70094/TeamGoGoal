@@ -26,6 +26,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.teamgogoal.view.activity.R;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;

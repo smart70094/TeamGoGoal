@@ -13,6 +13,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.teamgogoal.view.activity.R;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -43,7 +45,7 @@ public class TargetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_target);
+            setContentView(R.layout.activity_target_bk);
             db = new TargetDB();
             photo_handle = new Photo_Handle(this);
             user = LoginActivity.getUser();

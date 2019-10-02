@@ -12,6 +12,8 @@ import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import com.teamgogoal.view.activity.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

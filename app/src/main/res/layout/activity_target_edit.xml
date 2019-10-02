@@ -124,7 +124,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight=".91"
                         android:background="@color/item_bg_color"
-                        android:onClick="onClick"
+                        android:onClick="onViewClicked"
                         android:scaleType="fitCenter"
                         app:srcCompat="@drawable/item_calendar" />
 
@@ -171,7 +171,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight=".91"
                         android:background="@color/item_bg_color"
-                        android:onClick="onClick"
+                        android:onClick="onViewClicked"
                         android:scaleType="fitCenter"
                         app:srcCompat="@drawable/item_calendar" />
 
@@ -201,15 +201,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="onClick"
-                android:text="新增目標" />
+                android:onClick="onViewClicked"
+                android:text="確認" />
 
             <Button
                 android:id="@+id/clearMessageBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="onClick"
+                android:onClick="onViewClicked"
                 android:text="重新填寫" />
 
             <Button
@@ -217,7 +217,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="onClick"
+                android:onClick="onViewClicked"
                 android:text="取消" />
 
         </LinearLayout>

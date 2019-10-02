@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.lukedeighton.wheelview.WheelView;
+import com.teamgogoal.view.activity.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;

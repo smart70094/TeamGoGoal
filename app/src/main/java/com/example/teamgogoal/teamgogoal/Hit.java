@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.teamgogoal.view.activity.R;
+
 /**
  * Created by Gary on 2017/11/15.
  */
