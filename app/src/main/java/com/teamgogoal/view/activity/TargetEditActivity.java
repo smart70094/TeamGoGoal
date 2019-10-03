@@ -10,10 +10,15 @@ import android.widget.ImageButton;
 
 import com.teamgogoal.model.TargetModel;
 import com.teamgogoal.presenter.TargetEditPresenter;
+import com.teamgogoal.utils.EditTextUtls;
 import com.teamgogoal.utils.ToastUtils;
 import com.teamgogoal.view.interfaces.TargetEditView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class TargetEditActivity extends AppCompatActivity implements TargetEditView {
@@ -25,8 +30,6 @@ public class TargetEditActivity extends AppCompatActivity implements TargetEditV
     EditText startTimeEditText;
     @BindView(R.id.selectStartTimeBtn)
     ImageButton selectStartTimeButton;
-    @BindView(R.id.EndTimeTxt)
-    EditText EndTimeEditText;
     @BindView(R.id.selectEndTimeBtn)
     ImageButton selectEndTimeButton;
     @BindView(R.id.submitTargetBtn)
@@ -35,6 +38,8 @@ public class TargetEditActivity extends AppCompatActivity implements TargetEditV
     Button clearMessageButton;
     @BindView(R.id.cannelBtn)
     Button cannelButton;
+    @BindView(R.id.EndTimeTxt)
+    EditText endTimeTxt;
 
     private TargetEditPresenter targetEditPresenter;
 
@@ -43,11 +48,34 @@ public class TargetEditActivity extends AppCompatActivity implements TargetEditV
         super.onCreate(savedInstanceState);
         targetEditPresenter = new TargetEditPresenter(this, new TargetModel());
         targetEditPresenter.onCreate();
+        ButterKnife.bind(this);
+    }
+
+    @Override
+    public void showShortMessage(String message) {
+        ToastUtils.showShortMessage(this, message);
     }
 
     @Override
     public void setContentView() {
         setContentView(R.layout.activity_target_edit);
+    }
+
+    private void addTarget() {
+        submitTargetButton.setEnabled(false);
+        Map<String, Object> params = new HashMap<>();
+        params.put("title", EditTextUtls.getText(targetNameEditText));
+        params.put("content", EditTextUtls.getText(targetContentEditText));
+        params.put("startdate", EditTextUtls.getText(startTimeEditText));
+        params.put("enddate", EditTextUtls.getText(endTimeTxt));
+
+        targetEditPresenter.addTarget(params);
+    }
+
+    @Override
+    public void addTargetComplete() {
+        showShortMessage("新增目標成功!");
+        submitTargetButton.setEnabled(true);
     }
 
     @OnClick({R.id.selectStartTimeBtn, R.id.selectEndTimeBtn, R.id.submitTargetBtn, R.id.clearMessageBtn, R.id.cannelBtn})
@@ -60,7 +88,7 @@ public class TargetEditActivity extends AppCompatActivity implements TargetEditV
                 ToastUtils.showShortMessage(this, "3");
                 break;
             case R.id.submitTargetBtn:
-                ToastUtils.showShortMessage(this, "4");
+                addTarget();
                 break;
             case R.id.clearMessageBtn:
                 ToastUtils.showShortMessage(this, "5");
