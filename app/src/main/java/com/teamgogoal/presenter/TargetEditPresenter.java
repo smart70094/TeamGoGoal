@@ -16,18 +16,23 @@ public class TargetEditPresenter extends BasePresenter {
         this.targetModel = targetModel;
     }
 
-    public void showShortMessage(String message) {
-        targetEditView.showShortMessage(message);
-    }
-
     public void addTarget(Map<String, Object> params) {
         targetModel.addTarget(this, params);
     }
 
-    public void addTargetComplete() {
-        showShortMessage("新增目標成功!");
+    public void updateTarget(Map<String, Object> params) { targetModel.updateTarget(this, params);}
+
+    public void updateTargetComplete() {
+        targetEditView.updateTargetComplete();
     }
 
-
     public void onCreate() { targetEditView.setContentView();}
+
+    public void readOneTarget(int id) {
+        targetModel.readOneTarget(this, id);
+    }
+
+    public void readOneTargetComplete(Map<String, Object> data) {
+        targetEditView.readOneTargetComplete(data);
+    }
 }

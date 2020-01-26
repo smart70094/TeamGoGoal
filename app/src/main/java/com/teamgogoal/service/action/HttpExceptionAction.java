@@ -23,24 +23,23 @@ public class HttpExceptionAction implements Action1 {
     @Override
     public void call(Object o) {
         HttpException httpException = (HttpException) o;
-        String response = getExceptionResponse(httpException);
-
-        JsonObject responseJson = new Gson().fromJson(response, JsonObject.class);
-        String message = responseJson.get("Message").getAsString();
+        String message = getExceptionMessage(httpException);
         basePresenter.showMessage(message);
     }
 
-    private String getExceptionResponse(HttpException httpException) {
-        String response = "系統發生異常！";
+    private String getExceptionMessage(HttpException httpException) {
+        String message = "系統發生異常！";
         try {
             int code = httpException.code();
-            if(code == 666) {
-                response = httpException.response().errorBody().string();
+            if(code == 666 || code == 400) {
+                String response = httpException.response().errorBody().string();
+                JsonObject responseJson = new Gson().fromJson(response, JsonObject.class);
+                message =  responseJson.get("Message").getAsString();
             }
         } catch (IOException e) {
             Log.e("IO", "read data failure", e);
         }
 
-        return response;
+        return message;
     }
 }

@@ -112,9 +112,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight=".09"
+                        android:autoText="false"
                         android:background="@color/item_bg_color"
+                        android:editable="false"
                         android:ems="8"
-                        android:inputType="textPersonName|date"
+                        android:inputType="none"
                         android:padding="5dp"
                         android:textSize="24sp" />
 
@@ -160,8 +162,9 @@
                         android:layout_height="wrap_content"
                         android:layout_weight=".09"
                         android:background="@color/item_bg_color"
+                        android:editable="false"
                         android:ems="8"
-                        android:inputType="textPersonName|date"
+                        android:inputType="none"
                         android:padding="5dp"
                         android:textSize="24sp" />
 

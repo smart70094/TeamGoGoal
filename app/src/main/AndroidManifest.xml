@@ -59,7 +59,7 @@
             android:screenOrientation="portrait" />
         <activity android:name=".Member" />
         <activity android:name=".TargetEditActivity" />
-        <activity android:name=".TaskEventActivity" />
+        <activity android:name=".TaskEditActivity" />
         <activity android:name=".videoTest" />
         <activity android:name=".Message" />
         <activity android:name=".ForgetPassword" />

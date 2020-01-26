@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/bg_hit_two_btn_cancel"
-            android:text="確認"
+            android:text="取消"
             android:textColor="@color/basicColor"
             android:textSize="18sp"
             android:textStyle="bold" />

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1000114543593",
+    "firebase_url": "https://teamgogoal-80aba.firebaseio.com",
+    "project_id": "teamgogoal-80aba",
+    "storage_bucket": "teamgogoal-80aba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1000114543593:android:37f006eabd2c1765938978",
+        "android_client_info": {
+          "package_name": "com.teamgogoal.view.activity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1000114543593-eagvkflftr0gjnl5ddt7ua6ks9j8ra4d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.teamgogoal.view.activity",
+            "certificate_hash": "8cd9702438abc55d2b2af155a9244112a2ff7cb4"
+          }
+        },
+        {
+          "client_id": "1000114543593-qiv7v13bfkabh3j2fm2187a04q3k4c1c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLZyVYOLMgpBOeVTl-gTydsp-trcYcoaw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1000114543593-qiv7v13bfkabh3j2fm2187a04q3k4c1c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
