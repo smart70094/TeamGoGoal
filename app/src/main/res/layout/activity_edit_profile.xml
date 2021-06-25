@@ -177,7 +177,6 @@
                                 android:background="@color/top_bg_color"
                                 android:gravity="center_vertical"
                                 android:paddingLeft="5dp"
-                                android:text="TextView"
                                 android:textColor="@color/black" />
 
                             <ImageButton
@@ -220,7 +219,6 @@
                             android:background="@color/top_bg_color"
                             android:gravity="center"
                             android:paddingLeft="5dp"
-                            android:text="TextView"
                             android:textAlignment="viewStart"
                             android:textColor="@color/black" />
                     </LinearLayout>
@@ -257,7 +255,7 @@
                                 android:background="@color/top_bg_color"
                                 android:gravity="center_vertical"
                                 android:paddingLeft="5dp"
-                                android:text="********"
+                                android:text="**********"
                                 android:textColor="@color/black" />
 
                             <ImageButton
@@ -308,11 +306,10 @@
                                 android:background="@color/top_bg_color"
                                 android:gravity="center_vertical"
                                 android:paddingLeft="5dp"
-                                android:text="123"
                                 android:textColor="@color/black" />
 
                             <ImageButton
-                                android:id="@+id/imageButton6"
+                                android:id="@+id/imageButton7"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"

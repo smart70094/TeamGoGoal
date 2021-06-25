@@ -35,4 +35,13 @@ public class TargetEditPresenter extends BasePresenter {
     public void readOneTargetComplete(Map<String, Object> data) {
         targetEditView.readOneTargetComplete(data);
     }
+
+    @Override
+    public void dismissProgressDialog() {
+        targetEditView.dismissProgressDialog();
+    }
+
+    public void showMessage(String message) {
+        targetEditView.showMessage(message);
+    }
 }

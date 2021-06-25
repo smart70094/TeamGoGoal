@@ -69,7 +69,6 @@ public class TaskAdapter extends BaseAdapter {
         else
             viewHolder.complete_btn.setVisibility(View.INVISIBLE);
 
-
         return view;
     }
 

@@ -52,5 +52,8 @@ public class TaskEditPresenter extends BasePresenter{
         this.taskEditView.showMessage(message);
     }
 
-
+    @Override
+    public void dismissProgressDialog() {
+        taskEditView.dismissProgressDialog();
+    }
 }

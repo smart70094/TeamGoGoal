@@ -11,4 +11,6 @@ public interface LoginView {
     <T> void switchView(Class<T> activityClass);
 
     void showMessage(String message);
+
+    void dismissProgressDialog();
 }

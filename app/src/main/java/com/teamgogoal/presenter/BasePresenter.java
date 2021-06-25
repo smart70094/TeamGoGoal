@@ -2,7 +2,7 @@ package com.teamgogoal.presenter;
 
 public abstract class BasePresenter {
 
-    public void showMessage(String message) {
-        throw new IllegalStateException("method not implement");
-    }
+    public abstract void showMessage(String message);
+
+    public abstract void dismissProgressDialog();
 }

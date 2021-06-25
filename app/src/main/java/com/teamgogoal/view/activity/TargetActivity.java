@@ -1,10 +1,12 @@
 package com.teamgogoal.view.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -44,6 +46,8 @@ public class TargetActivity extends AppCompatActivity implements TargetView {
     Button addTargetButton;
     private TargetPresenter targetPresenter;
 
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +55,18 @@ public class TargetActivity extends AppCompatActivity implements TargetView {
         targetPresenter.onCreate();
         ButterKnife.bind(this);
 
+        registerTargetClickEvent();
+        registerTargetLongClickEvent();
+
+    }
+
+    // 跳到會員編輯頁
+    public void moveProfilleActivity(View view) {
+        startActivity(new Intent(this, ProfileActivity.class));
+    }
+
+    // 註冊目標點擊事件
+    private void registerTargetClickEvent() {
         targetListView.setOnItemClickListener((adapterView, view, i, l) -> {
             Map<String, Object> data = (Map<String, Object>) adapterView.getItemAtPosition(i);
             int id = (int) data.get("id");
@@ -64,7 +80,10 @@ public class TargetActivity extends AppCompatActivity implements TargetView {
             intent.setClass(TargetActivity.this, TaskActivity.class);
             startActivity(intent);
         });
+    }
 
+    // 註冊任務點擊事件
+    private void registerTargetLongClickEvent() {
         targetListView.setOnItemLongClickListener((adapterView, view, i, l) -> {
 
             View targetOperationDialogView = LayoutInflater.from(this).inflate(R.layout.target_selector, null);
@@ -99,7 +118,6 @@ public class TargetActivity extends AppCompatActivity implements TargetView {
             targetOperationDialog.show();
             return true;
         });
-
     }
 
 
@@ -129,5 +147,16 @@ public class TargetActivity extends AppCompatActivity implements TargetView {
     @Override
     public void showMessage(String message) {
         ToastUtils.showShortMessage(this, message);
+    }
+
+    @Override
+    public void moveProfile() {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void dismissProgressDialog() {
+        progressDialog.dismiss();
     }
 }

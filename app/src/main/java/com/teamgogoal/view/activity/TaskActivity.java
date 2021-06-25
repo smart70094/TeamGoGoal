@@ -1,5 +1,6 @@
 package com.teamgogoal.view.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -38,8 +39,6 @@ import butterknife.OnClick;
 
 public class TaskActivity extends AppCompatActivity implements TaskView {
 
-    private TaskPresenter taskPresenter;
-
     @BindView(R.id.listview_task)
     ListView taskListView;
 
@@ -54,6 +53,12 @@ public class TaskActivity extends AppCompatActivity implements TaskView {
 
     @BindView(R.id.showAddTaskBtn)
     Button addTaskButton;
+
+    private TaskPresenter taskPresenter;
+
+    private TaskAdapter taskAdapter;
+
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,9 +107,11 @@ public class TaskActivity extends AppCompatActivity implements TaskView {
             TaskDto taskDto = (TaskDto) adapterView.getItemAtPosition(i);
 
              AlertDialogUtils.buildComfirmAlertDialog(
-                    this, "title", "content",
+                    this, "TeamGoGoal", "是否完成任務？",
             (dialogInterface, j)->{
                 taskPresenter.updateIsComplete(taskDto.getId(), "Y");
+                taskDto.setIscomplete("Y");
+                taskAdapter.notifyDataSetChanged();
             }, (dialogInterface, j)->{
                  taskPresenter.updateIsComplete(taskDto.getId(), "N");
              });
@@ -131,8 +138,8 @@ public class TaskActivity extends AppCompatActivity implements TaskView {
         circularProgressBar.setProgressWithAnimation(taskListDto.getCompleteProgressRate(), animationDuration); // Default duration = 1500ms
 
         LayoutInflater layoutInflater = LayoutInflater.from(this);
-        ListAdapter targetAdapter = new TaskAdapter(layoutInflater, taskListDto);
-        taskListView.setAdapter(targetAdapter);
+        taskAdapter = new TaskAdapter(layoutInflater, taskListDto);
+        taskListView.setAdapter(taskAdapter);
     }
 
     private void moveToTaskEditActivity() {
@@ -163,5 +170,10 @@ public class TaskActivity extends AppCompatActivity implements TaskView {
     @Override
     public void showMessage(String message) {
         ToastUtils.showShortMessage(this, message);
+    }
+
+    @Override
+    public void dismissProgressDialog() {
+        progressDialog.dismiss();
     }
 }

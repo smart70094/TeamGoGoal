@@ -1,5 +1,7 @@
 package com.teamgogoal.presenter;
 
+import android.util.Log;
+
 import com.google.gson.JsonObject;
 import com.teamgogoal.dto.TaskListDto;
 import com.teamgogoal.model.TargetModel;
@@ -49,5 +51,10 @@ public class TaskPresenter extends BasePresenter {
 
     public void showMessage(String message) {
         taskView.showMessage(message);
+    }
+
+    @Override
+    public void dismissProgressDialog() {
+        taskView.dismissProgressDialog();
     }
 }

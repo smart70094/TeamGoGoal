@@ -31,4 +31,9 @@ public class LoginPresenter extends BasePresenter{
     public void showMessage(String message) {
         loginView.showMessage(message);
     }
+
+    @Override
+    public void dismissProgressDialog() {
+        loginView.dismissProgressDialog();
+    }
 }

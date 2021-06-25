@@ -7,6 +7,7 @@ import okhttp3.Request;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class TggRetrofitUtils {
 
@@ -15,6 +16,7 @@ public class TggRetrofitUtils {
     private static String token = "";
 
     private static final String BACKEND_URL = "https://teamgogoal.herokuapp.com/";
+//private static final String BACKEND_URL = "https://885c40d0.ngrok.io/";
 
     static {
         OkHttpClient client = new OkHttpClient.Builder()
@@ -31,6 +33,7 @@ public class TggRetrofitUtils {
         tggRetrofit = new Retrofit.Builder()
                             .client(client)
                             .baseUrl(BACKEND_URL)
+//                            .addConverterFactory(JacksonConverterFactory.create())
                             .addConverterFactory(GsonConverterFactory.create())
                             .addCallAdapterFactory(RxJavaCallAdapterFactory.create()) // 支持RxJava
                             .build();

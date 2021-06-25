@@ -15,6 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+
         <activity
             android:name=".LoginActivity"
             android:screenOrientation="portrait">
@@ -34,7 +35,7 @@
             android:name=".RequestActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Review"
+            android:name=".ProfileActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Record"
@@ -64,7 +65,7 @@
         <activity android:name=".Message" />
         <activity android:name=".ForgetPassword" />
         <activity android:name=".Question" />
-        <activity android:name=".Index"></activity>
+        <activity android:name=".Index" />
     </application>
 
 </manifest>

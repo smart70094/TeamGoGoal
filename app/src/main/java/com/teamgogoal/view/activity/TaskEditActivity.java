@@ -1,5 +1,6 @@
 package com.teamgogoal.view.activity;
 
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,6 +41,8 @@ public class TaskEditActivity extends AppCompatActivity implements TaskEditView 
     ImageButton selectTimeImageButton;
 
     private TaskEditPresenter taskEditPresenter;
+
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -129,5 +132,10 @@ public class TaskEditActivity extends AppCompatActivity implements TaskEditView 
 
     private void selectTime() {
         TimeUtils.showTimePickerDialog(this, remindTimeEditText);
+    }
+
+    @Override
+    public void dismissProgressDialog() {
+        progressDialog.dismiss();
     }
 }

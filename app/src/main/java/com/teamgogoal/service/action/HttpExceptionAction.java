@@ -24,6 +24,7 @@ public class HttpExceptionAction implements Action1 {
     public void call(Object o) {
         HttpException httpException = (HttpException) o;
         String message = getExceptionMessage(httpException);
+        basePresenter.dismissProgressDialog();
         basePresenter.showMessage(message);
     }
 

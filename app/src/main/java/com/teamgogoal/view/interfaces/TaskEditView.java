@@ -6,5 +6,7 @@ public interface TaskEditView {
 
     void showMessage(String message);
 
+    void dismissProgressDialog();
+
     void getOneTaskComplete(TaskDto taskDto);
 }

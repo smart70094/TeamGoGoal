@@ -16,4 +16,8 @@ public interface TargetView {
     void deleteTargetComplete();
 
     void showMessage(String message);
+
+    void dismissProgressDialog();
+
+    void moveProfile();
 }

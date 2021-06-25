@@ -1,5 +1,6 @@
 package com.teamgogoal.view.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -42,6 +43,8 @@ public class TargetEditActivity extends AppCompatActivity implements TargetEditV
 
 
     private TargetEditPresenter targetEditPresenter;
+
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -151,5 +154,15 @@ public class TargetEditActivity extends AppCompatActivity implements TargetEditV
             default:
                 break;
         }
+    }
+
+    @Override
+    public void dismissProgressDialog() {
+        progressDialog.dismiss();
+    }
+
+    @Override
+    public void showMessage(String message) {
+        ToastUtils.showShortMessage(this, message);
     }
 }

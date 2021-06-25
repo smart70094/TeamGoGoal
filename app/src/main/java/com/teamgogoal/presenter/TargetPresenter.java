@@ -38,4 +38,9 @@ public class TargetPresenter extends BasePresenter {
     public void showMessage(String message) {
         targetView.showMessage(message);
     }
+
+    @Override
+    public void dismissProgressDialog() {
+        targetView.dismissProgressDialog();
+    }
 }

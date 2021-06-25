@@ -13,4 +13,6 @@ public interface TaskView {
     void readOneTaskComplete(Map<String, Object> data);
 
     void getTaskWithTargetIdComplete(TaskListDto taskListDto);
+
+    void dismissProgressDialog();
 }
