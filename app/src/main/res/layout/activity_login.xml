@@ -147,7 +147,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:background="@color/empty"
-                            android:onClick="forgetPassword"
+                            android:onClick="moveForgetPassword"
                             android:text="忘記密碼? "
                             android:textAlignment="textEnd"
                             android:textColor="@color/black" />
@@ -198,7 +198,7 @@
                             android:layout_gravity="center_vertical"
                             android:background="@color/empty"
                             android:gravity="bottom"
-                            android:onClick="creat"
+                            android:onClick="moveRegisterAccount"
                             android:text="按我註冊"
                             android:textAlignment="viewStart"
                             android:textColor="@color/black"

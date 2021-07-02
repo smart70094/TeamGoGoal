@@ -17,7 +17,6 @@ public class TargetPresenter extends BasePresenter {
     }
 
     public void onCreate() {
-        targetView.setContentView();
         targetModel.readTarget(this);
     }
 

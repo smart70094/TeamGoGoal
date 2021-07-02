@@ -4,10 +4,12 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.support.annotation.Nullable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -20,17 +22,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.room.Room;
-
 import com.teamgogoal.dto.ProfileDto;
-import com.teamgogoal.jpa.AppDatabase;
-import com.teamgogoal.jpa.entity.File;
 import com.teamgogoal.presenter.ProfilePresenter;
-import com.teamgogoal.utils.Base64Utils;
+import com.teamgogoal.utils.BitmapUtils;
 import com.teamgogoal.utils.DialogUtils;
 import com.teamgogoal.utils.EditTextUtils;
 import com.teamgogoal.utils.ProgressDialogUtils;
-import com.teamgogoal.utils.StringUtils;
 import com.teamgogoal.utils.ToastUtils;
 import com.teamgogoal.view.interfaces.ProfileView;
 
@@ -75,6 +72,8 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
 
     private Bitmap headImageBitmap;
 
+    private Integer headImageId;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,22 +85,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
         progressDialog.show();
 
         profilePresenter = new ProfilePresenter(this);
-        profilePresenter.initProfile();
-
-        new Thread(()->{
-            AppDatabase appDatabase = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "teamgogoal").build();
-
-            File file =
-                    File.builder()
-                            .id(1)
-                            .image("123".getBytes())
-                            .build();
-
-            appDatabase.fileDao().insertAll(file);
-
-            File result = appDatabase.fileDao().findById(1);
-            System.out.println(result);
-        }).start();
+        profilePresenter.initProfile(this);
     }
 
     public void initProfile(ProfileDto profileDto) {
@@ -110,12 +94,22 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
         account.setText(profileDto.getAccount());
         mail.setText(profileDto.getEmail());
 
-        if(StringUtils.hasAssignment(profileDto.getHeadImage())) {
-            headImageBitmap = Base64Utils.decodeImageToBitmap(profileDto.getHeadImage());
-            loadingHeadImage(headImageBitmap);
-        }
+        headImageId = profileDto.getHeadImageId();
+        profilePresenter.initHeadImage(this, profileDto.getHeadImageId());
+    }
 
+    @Override
+    public void initHeadImage(Bitmap bitmap) {
+        loadingHeadImage(bitmap);
         progressDialog.dismiss();
+    }
+
+    @Override
+    public void initHeadImageId(Integer headImageId) {
+        this.headImageId = headImageId;
+        progressDialog.dismiss();
+        DialogUtils.showHit(this, "修改成功", "圖片已上傳，儲存後生效");
+
     }
 
     @OnClick(R.id.imageButton5)
@@ -209,7 +203,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
                         .account(account.getText().toString())
                         .password(password.getText().toString())
                         .email(mail.getText().toString())
-                        .headImage(Base64Utils.encodeImage(headImageBitmap))
+                        .headImageId(headImageId)
                         .build();
 
         progressDialog.show();
@@ -235,18 +229,47 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
+
+            progressDialog.show();
+
             Uri uri = data.getData();
-            Log.e("uri", uri.toString());
             ContentResolver cr = this.getContentResolver();
+
+            String filename = getFileName(uri);
+
+            Log.i("ProfileActivity", filename);
+
             try {
                 headImageBitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
                 loadingHeadImage(headImageBitmap);
-                profileDto.setHeadImage(Base64Utils.encodeImage(headImageBitmap));
+                profilePresenter.uploadHeadImage(this, filename, BitmapUtils.toBytes(headImageBitmap));
             } catch (FileNotFoundException e) {
                 Log.e("Exception", e.getMessage(), e);
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
     }
 
     private void loadingHeadImage(Bitmap bitmap) {

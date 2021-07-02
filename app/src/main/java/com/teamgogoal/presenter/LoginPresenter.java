@@ -16,12 +16,12 @@ public class LoginPresenter extends BasePresenter{
         this.loginModel = loginModel;
     }
 
-    public void onCreate() {
-        loginView.setContentView();
-    }
-
     public void login(String account, String password) {
         loginModel.login(this, account, password);
+    }
+
+    public void startNotificationService() {
+        loginView.startNotificationService();
     }
 
     public <T>  void switchView(Class<T> activityClass) {

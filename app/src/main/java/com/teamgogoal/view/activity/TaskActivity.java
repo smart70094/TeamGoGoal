@@ -63,13 +63,30 @@ public class TaskActivity extends AppCompatActivity implements TaskView {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_task);
+
         this.taskPresenter = new TaskPresenter(this, new TaskModel());
-        taskPresenter.onCreate();
         ButterKnife.bind(this);
 
         initialBundleProcessing();
         onClickTaskList();
         onLongClickTaskList();
+    }
+
+    @Override
+    public void showMessage(String message) {
+        ToastUtils.showShortMessage(this, message);
+    }
+
+    @Override
+    public void dismissProgressDialog() {
+        progressDialog.dismiss();
+    }
+
+    @Override
+    public <T> void switchView(Class<T> activityClass) {
+        Intent intent = new Intent(this, activityClass);
+        startActivity(intent);
     }
 
     private void initialBundleProcessing() {
@@ -101,7 +118,6 @@ public class TaskActivity extends AppCompatActivity implements TaskView {
         });
     }
 
-
     private void onClickTaskList() {
         taskListView.setOnItemClickListener((adapterView, view, i, l) -> {
             TaskDto taskDto = (TaskDto) adapterView.getItemAtPosition(i);
@@ -116,11 +132,6 @@ public class TaskActivity extends AppCompatActivity implements TaskView {
                  taskPresenter.updateIsComplete(taskDto.getId(), "N");
              });
         });
-    }
-
-    @Override
-    public void setContentView() {
-        setContentView(R.layout.activity_task);
     }
 
     @Override
@@ -167,13 +178,8 @@ public class TaskActivity extends AppCompatActivity implements TaskView {
         }
     }
 
-    @Override
-    public void showMessage(String message) {
-        ToastUtils.showShortMessage(this, message);
-    }
-
-    @Override
-    public void dismissProgressDialog() {
-        progressDialog.dismiss();
+    @OnClick(R.id.imageButton6)
+    public void moveParticipantActivity() {
+        switchView(ParticipantActivity.class);
     }
 }

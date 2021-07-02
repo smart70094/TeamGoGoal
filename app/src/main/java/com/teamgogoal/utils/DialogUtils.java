@@ -23,7 +23,7 @@ public class DialogUtils {
         return dialog;
     }
 
-    public static void showHit(AppCompatActivity appCompatActivity, String title, String content) {
+    public static Dialog showHit(AppCompatActivity appCompatActivity, String title, String content) {
         View hitView = LayoutInflater.from(appCompatActivity).inflate(R.layout.hit_dialog, null);
         final Dialog hitDialog = createDialog(appCompatActivity, hitView, R.style.hitStyle);
 
@@ -37,6 +37,8 @@ public class DialogUtils {
         hitComfirm.setOnClickListener((view) -> hitDialog.dismiss());
 
         hitDialog.show();
+
+        return hitDialog;
     }
 
     public static void adjustLayoutParams(AppCompatActivity appCompatActivity, Dialog dialog) {

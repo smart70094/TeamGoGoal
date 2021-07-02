@@ -26,8 +26,6 @@ public class TargetEditPresenter extends BasePresenter {
         targetEditView.updateTargetComplete();
     }
 
-    public void onCreate() { targetEditView.setContentView();}
-
     public void readOneTarget(int id) {
         targetModel.readOneTarget(this, id);
     }

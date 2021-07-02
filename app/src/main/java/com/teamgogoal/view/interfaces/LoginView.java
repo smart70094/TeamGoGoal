@@ -2,15 +2,10 @@ package com.teamgogoal.view.interfaces;
 
 import android.view.View;
 
-public interface LoginView {
-
-    void setContentView();
+public interface LoginView extends BaseView{
 
     void login(View view);
 
-    <T> void switchView(Class<T> activityClass);
+    void startNotificationService();
 
-    void showMessage(String message);
-
-    void dismissProgressDialog();
 }

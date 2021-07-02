@@ -51,6 +51,8 @@ public class TargetActivity extends AppCompatActivity implements TargetView {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_target);
+
         targetPresenter = new TargetPresenter(this, new TargetModel());
         targetPresenter.onCreate();
         ButterKnife.bind(this);
@@ -58,6 +60,22 @@ public class TargetActivity extends AppCompatActivity implements TargetView {
         registerTargetClickEvent();
         registerTargetLongClickEvent();
 
+    }
+
+    @Override
+    public void showMessage(String message) {
+        ToastUtils.showShortMessage(this, message);
+    }
+
+    @Override
+    public <T> void switchView(Class<T> activityClass) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void dismissProgressDialog() {
+        progressDialog.dismiss();
     }
 
     // 跳到會員編輯頁
@@ -120,12 +138,6 @@ public class TargetActivity extends AppCompatActivity implements TargetView {
         });
     }
 
-
-    @Override
-    public void setContentView() {
-        setContentView(R.layout.activity_target);
-    }
-
     @Override
     public void showTargetEdit(View view) {
         Intent intent = new Intent(this, TargetEditActivity.class);
@@ -144,19 +156,4 @@ public class TargetActivity extends AppCompatActivity implements TargetView {
         ToastUtils.showShortMessage(this, "刪除目標成功!");
     }
 
-    @Override
-    public void showMessage(String message) {
-        ToastUtils.showShortMessage(this, message);
-    }
-
-    @Override
-    public void moveProfile() {
-        Intent intent = new Intent(this, ProfileActivity.class);
-        startActivity(intent);
-    }
-
-    @Override
-    public void dismissProgressDialog() {
-        progressDialog.dismiss();
-    }
 }

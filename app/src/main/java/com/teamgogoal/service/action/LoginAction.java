@@ -18,7 +18,12 @@ public class LoginAction implements Action1<JsonObject> {
     @Override
     public void call(JsonObject jsonData) {
         String token = jsonData.get("authorization").getAsString();
+        String id = jsonData.get("id").getAsString();
+
         TggRetrofitUtils.setToken(token);
+        TggRetrofitUtils.setId(id);
+
+        loginPresenter.startNotificationService();
         loginPresenter.showMessage("登入成功！");
         loginPresenter.switchView(TargetActivity.class);
     }

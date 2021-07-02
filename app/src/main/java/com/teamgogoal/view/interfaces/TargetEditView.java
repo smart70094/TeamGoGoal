@@ -2,13 +2,7 @@ package com.teamgogoal.view.interfaces;
 
 import java.util.Map;
 
-public interface TargetEditView {
-
-    void dismissProgressDialog();
-
-    void setContentView();
-
-    void showShortMessage(String message);
+public interface TargetEditView extends BaseView {
 
     void readOneTargetComplete(Map<String, Object> data);
 

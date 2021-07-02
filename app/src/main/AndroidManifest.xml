@@ -40,9 +40,7 @@
         <activity
             android:name=".Record"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".EditProfile"
-            android:screenOrientation="portrait" />
+
 
         <service android:name=".RegisterAlarmService" />
 
@@ -55,15 +53,17 @@
 
         <service android:name=".NofyService" />
 
+        <service android:name=".NotificationService" />
+
         <activity
-            android:name=".RegisterAccount"
+            android:name=".RegisterAccountActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Member" />
+        <activity android:name=".ParticipantActivity" />
         <activity android:name=".TargetEditActivity" />
         <activity android:name=".TaskEditActivity" />
         <activity android:name=".videoTest" />
         <activity android:name=".Message" />
-        <activity android:name=".ForgetPassword" />
+        <activity android:name=".ForgetPasswordActivity" />
         <activity android:name=".Question" />
         <activity android:name=".Index" />
     </application>

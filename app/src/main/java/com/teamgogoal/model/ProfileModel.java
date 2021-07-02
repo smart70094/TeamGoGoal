@@ -2,16 +2,17 @@ package com.teamgogoal.model;
 
 import com.google.gson.JsonObject;
 import com.teamgogoal.dto.ProfileDto;
+import com.teamgogoal.service.FileApiService;
 import com.teamgogoal.service.ProfileApiService;
 import com.teamgogoal.utils.TggRetrofitUtils;
-
-import org.json.JSONObject;
 
 import rx.Observable;
 
 public class ProfileModel {
 
     private ProfileApiService profileApiService;
+
+    private FileApiService fileApiService;
 
     public ProfileModel() {
         this.profileApiService = TggRetrofitUtils.getTggService(ProfileApiService.class);

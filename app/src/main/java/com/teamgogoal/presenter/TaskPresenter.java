@@ -26,11 +26,6 @@ public class TaskPresenter extends BasePresenter {
         this.taskModel = taskModel;
     }
 
-    public void onCreate() {
-        taskView.setContentView();
-    }
-
-
     public void getTaskWithTargetId(int targetid) {
         taskModel.getTaskWithTargetId(this, targetid);
     }

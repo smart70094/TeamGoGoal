@@ -231,7 +231,7 @@
                             android:layout_weight="1"
                             android:adjustViewBounds="true"
                             android:background="@color/empty"
-                            android:onClick="checkMember"
+                            android:onClick="moveParticipantActivity"
                             android:padding="3dp"
                             android:scaleType="fitCenter"
                             app:srcCompat="@drawable/item_member" />

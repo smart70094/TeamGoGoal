@@ -12,5 +12,4 @@ public class ProfileDto {
     private String password;
     private String email;
     private Integer headImageId;
-    private String headImage;
 }

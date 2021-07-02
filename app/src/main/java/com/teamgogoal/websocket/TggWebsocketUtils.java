@@ -1,6 +1,11 @@
 package com.teamgogoal.websocket;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.util.Log;
+
+import com.teamgogoal.utils.ConfigUtils;
+import com.teamgogoal.utils.TggRetrofitUtils;
 
 import java.net.URISyntaxException;
 import java.util.concurrent.ExecutorService;
@@ -10,19 +15,19 @@ public class TggWebsocketUtils {
 
     private static TggWebsocket tggWebsocket = null;
 
-    private static ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-    public static void createWebosocketConnection(String url) {
-        TggWebsocket tggWebsocket = null;
+
+    public static void createWebosocketConnection(Context context, NotificationManager notificationManager) {
         try {
-            tggWebsocket = new TggWebsocket("ws://885c40d0.ngrok.io/teamgogoal/123456678");
+            String url = String.format("wss://%s/teamgogoal/%s", ConfigUtils.SERVER_URL, TggRetrofitUtils.getId());
+            tggWebsocket = new TggWebsocket(context, notificationManager, url);
             tggWebsocket.connect();
         } catch (URISyntaxException e) {
             Log.e("createWebosocketConnection", "uri syntax failure:", e);
         }
     }
 
-    private static void send(String requestString) {
+    public static void send(String requestString) {
         tggWebsocket.send(requestString);
     }
 }

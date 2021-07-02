@@ -15,8 +15,9 @@ public class TggRetrofitUtils {
 
     private static String token = "";
 
-    private static final String BACKEND_URL = "https://teamgogoal.herokuapp.com/";
-//private static final String BACKEND_URL = "https://885c40d0.ngrok.io/";
+    private static String id = "";
+
+    private static final String BACKEND_URL = String.format("https://%s/", ConfigUtils.SERVER_URL);
 
     static {
         OkHttpClient client = new OkHttpClient.Builder()
@@ -55,5 +56,12 @@ public class TggRetrofitUtils {
         return token;
     }
 
+    public static void setId(String id) {
+        TggRetrofitUtils.id = id;
+    }
+
+    public static String getId() {
+        return id;
+    }
 
 }

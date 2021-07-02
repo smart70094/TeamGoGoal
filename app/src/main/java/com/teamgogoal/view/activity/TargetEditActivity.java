@@ -41,7 +41,6 @@ public class TargetEditActivity extends AppCompatActivity implements TargetEditV
     @BindView(R.id.TargetEventBtn)
     Button submitTargetButton;
 
-
     private TargetEditPresenter targetEditPresenter;
 
     private ProgressDialog progressDialog;
@@ -49,8 +48,9 @@ public class TargetEditActivity extends AppCompatActivity implements TargetEditV
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_target_event_acivity);
+
         targetEditPresenter = new TargetEditPresenter(this, new TargetModel());
-        targetEditPresenter.onCreate();
         ButterKnife.bind(this);
 
         Bundle bundle = getIntent().getExtras();
@@ -68,13 +68,19 @@ public class TargetEditActivity extends AppCompatActivity implements TargetEditV
     }
 
     @Override
-    public void showShortMessage(String message) {
-        ToastUtils.showShortMessage(this, message);
+    public <T> void switchView(Class<T> activityClass) {
+        Intent intent = new Intent(this, activityClass);
+        startActivity(intent);
     }
 
     @Override
-    public void setContentView() {
-        setContentView(R.layout.activity_target_event_acivity);
+    public void dismissProgressDialog() {
+        progressDialog.dismiss();
+    }
+
+    @Override
+    public void showMessage(String message) {
+        ToastUtils.showShortMessage(this, message);
     }
 
     private Map<String, Object> getTargetDataMap() {
@@ -110,7 +116,7 @@ public class TargetEditActivity extends AppCompatActivity implements TargetEditV
 
     @Override
     public void updateTargetComplete() {
-        showShortMessage("目標儲存成功!");
+        showMessage("目標儲存成功!");
         submitTargetButton.setEnabled(true);
         moveToTarget();
     }
@@ -154,15 +160,5 @@ public class TargetEditActivity extends AppCompatActivity implements TargetEditV
             default:
                 break;
         }
-    }
-
-    @Override
-    public void dismissProgressDialog() {
-        progressDialog.dismiss();
-    }
-
-    @Override
-    public void showMessage(String message) {
-        ToastUtils.showShortMessage(this, message);
     }
 }

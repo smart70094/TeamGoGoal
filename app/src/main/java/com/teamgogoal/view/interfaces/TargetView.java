@@ -5,9 +5,7 @@ import android.view.View;
 import java.util.List;
 import java.util.Map;
 
-public interface TargetView {
-
-    void setContentView();
+public interface TargetView extends BaseView{
 
     void showTargetEdit(View view);
 
@@ -15,9 +13,4 @@ public interface TargetView {
 
     void deleteTargetComplete();
 
-    void showMessage(String message);
-
-    void dismissProgressDialog();
-
-    void moveProfile();
 }
