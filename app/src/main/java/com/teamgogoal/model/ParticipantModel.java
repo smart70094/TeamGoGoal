@@ -4,8 +4,6 @@ import com.teamgogoal.dto.ParticipantDto;
 import com.teamgogoal.service.ParticipantApiService;
 import com.teamgogoal.utils.TggRetrofitUtils;
 
-import java.util.List;
-
 import rx.Observable;
 
 public class ParticipantModel {
@@ -16,7 +14,19 @@ public class ParticipantModel {
         participantApiService = TggRetrofitUtils.getTggService(ParticipantApiService.class);
     }
 
-    public Observable<List<ParticipantDto>> getParticipant() {
-        return participantApiService.getParticipant();
+    public Observable<ParticipantDto> getParticipant(int targetId) {
+        return participantApiService.getParticipant(targetId);
+    }
+
+    public Observable<Void> inviteParticipant(ParticipantDto.Participant participant) {
+        return participantApiService.inviteParticipant(participant);
+    }
+
+    public Observable<Void> deleteParticipant(ParticipantDto.Participant participant) {
+        return participantApiService.deleteParticipant(participant);
+    }
+
+    public Observable<Void> acceptInvite() {
+        return null;
     }
 }

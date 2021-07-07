@@ -32,11 +32,27 @@ public class ParticipantPresenter extends BasePresenter {
         participantView.dismissProgressDialog();
     }
 
-    public void getParticipant() {
-        Observable<List<ParticipantDto>> apiObservable = participantModel.getParticipant();
+    public void getParticipant(int targetId) {
+        Observable<ParticipantDto> apiObservable = participantModel.getParticipant(targetId);
 
         apiObservable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe((participantDtoList -> participantView.initialParticipantAdapter(participantDtoList)), new HttpExceptionAction(this));
+                .subscribe((participantDto -> participantView.initialParticipantAdapter(participantDto)), new HttpExceptionAction(this));
+    }
+
+    public void inviteParticipant(ParticipantDto.Participant participant) {
+        Observable<Void> apiObservable = participantModel.inviteParticipant(participant);
+
+        apiObservable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe((object)-> participantView.inviteParticipantSuccess(), new HttpExceptionAction(this));
+    }
+
+    public void deleteParticipant(ParticipantDto.Participant participant) {
+        Observable<Void> apiObservable = participantModel.deleteParticipant(participant);
+
+        apiObservable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
     }
 }

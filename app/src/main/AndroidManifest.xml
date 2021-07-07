@@ -32,7 +32,7 @@
             android:name=".TargetActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".RequestActivity"
+            android:name=".MessageActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ProfileActivity"
@@ -62,7 +62,7 @@
         <activity android:name=".TargetEditActivity" />
         <activity android:name=".TaskEditActivity" />
         <activity android:name=".videoTest" />
-        <activity android:name=".Message" />
+        <activity android:name=".TargetMessageActivity" />
         <activity android:name=".ForgetPasswordActivity" />
         <activity android:name=".Question" />
         <activity android:name=".Index" />

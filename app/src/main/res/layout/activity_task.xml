@@ -38,7 +38,7 @@
                     android:layout_weight="1"
                     android:adjustViewBounds="true"
                     android:background="@color/empty"
-                    android:onClick="cancel"
+                    android:onClick="moveTargetMessageActivity"
                     android:padding="13dp"
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/item_arrow" />
@@ -243,7 +243,7 @@
                             android:layout_weight="1"
                             android:adjustViewBounds="true"
                             android:background="@color/empty"
-                            android:onClick="checkMessage"
+                            android:onClick="moveTargetMessageActivity"
                             android:padding="2dp"
                             android:scaleType="fitCenter"
                             app:srcCompat="@drawable/item_mes" />

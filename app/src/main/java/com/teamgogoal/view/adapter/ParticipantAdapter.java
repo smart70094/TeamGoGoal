@@ -9,10 +9,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.teamgogoal.dto.ParticipantDto;
+import com.teamgogoal.jpa.entity.File;
+import com.teamgogoal.model.FileModel;
+import com.teamgogoal.presenter.FilePresenter;
+import com.teamgogoal.utils.ToastUtils;
 import com.teamgogoal.view.activity.R;
+import com.teamgogoal.view.interfaces.FileView;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class ParticipantAdapter extends BaseAdapter {
@@ -21,9 +25,14 @@ public class ParticipantAdapter extends BaseAdapter {
 
     private LayoutInflater layoutInflater;
 
-    private List<ParticipantDto> datas;
+    private List<ParticipantDto.Participant> datas;
 
-    public ParticipantAdapter(Context context, List<ParticipantDto> data) {
+    private FilePresenter filePresenter;
+
+    public ParticipantAdapter(Context context, List<ParticipantDto.Participant> data) {
+        this.filePresenter = new FilePresenter();
+
+        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.context = context;
         this.datas = data;
     }
@@ -34,7 +43,7 @@ public class ParticipantAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int i) {
+    public ParticipantDto.Participant getItem(int i) {
         return datas.get(i);
     }
 
@@ -61,8 +70,10 @@ public class ParticipantAdapter extends BaseAdapter {
         } else
             holder = (ViewHolder) view.getTag();
 
-        Map<String, Object> item = (Map) getItem(i);
-        holder.name.setText((String) item.get("name"));
+        ParticipantDto.Participant item = getItem(i);
+        holder.name.setText(item.getName());
+
+        filePresenter.initHeadImage(context, item.getHeadImageId(), holder.personPhoto);
 
         return view;
     }

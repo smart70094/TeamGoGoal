@@ -19,9 +19,11 @@ public class LoginAction implements Action1<JsonObject> {
     public void call(JsonObject jsonData) {
         String token = jsonData.get("authorization").getAsString();
         String id = jsonData.get("id").getAsString();
+        String account = jsonData.get("account").getAsString();
 
         TggRetrofitUtils.setToken(token);
         TggRetrofitUtils.setId(id);
+        TggRetrofitUtils.setAccount(account);
 
         loginPresenter.startNotificationService();
         loginPresenter.showMessage("登入成功！");

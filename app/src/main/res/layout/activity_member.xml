@@ -26,7 +26,7 @@
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:background="@color/empty"
-                android:onClick="cancel"
+                android:onClick="moveTarget"
                 android:padding="13dp"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/item_arrow" />
@@ -144,7 +144,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/bg_new_task_btn"
-                android:onClick="addMember"
+                android:onClick="inviteParticipant"
                 android:text="邀請新成員"
                 android:textSize="18sp"
                 tools:layout_editor_absoluteX="0dp"

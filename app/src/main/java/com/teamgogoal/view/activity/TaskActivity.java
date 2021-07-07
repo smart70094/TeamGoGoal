@@ -179,7 +179,23 @@ public class TaskActivity extends AppCompatActivity implements TaskView {
     }
 
     @OnClick(R.id.imageButton6)
-    public void moveParticipantActivity() {
-        switchView(ParticipantActivity.class);
+    public void moveParticipantActivity(View view) {
+        int targetId = getIntent().getExtras().getInt("id");
+        Intent intent = new Intent(this, ParticipantActivity.class);
+        intent.putExtra("TargetId", targetId);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.imageButton2)
+    public void moveTargetctivity(View view) {
+        switchView(TargetActivity.class);
+    }
+
+    @OnClick(R.id.imageButton3)
+    public void moveTargetMessageActivity(View view) {
+        int targetId = getIntent().getExtras().getInt("id");
+        Intent intent = new Intent(this, TargetMessageActivity.class);
+        intent.putExtra("TargetId", targetId);
+        startActivity(intent);
     }
 }

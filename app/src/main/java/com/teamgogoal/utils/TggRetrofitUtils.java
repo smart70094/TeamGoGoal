@@ -17,6 +17,8 @@ public class TggRetrofitUtils {
 
     private static String id = "";
 
+    private static String account = "";
+
     private static final String BACKEND_URL = String.format("https://%s/", ConfigUtils.SERVER_URL);
 
     static {
@@ -64,4 +66,11 @@ public class TggRetrofitUtils {
         return id;
     }
 
+    public static String getAccount() {
+        return account;
+    }
+
+    public static void setAccount(String account) {
+        TggRetrofitUtils.account = account;
+    }
 }

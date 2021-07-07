@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.example.teamgogoal.teamgogoal.Message;
 import com.teamgogoal.model.TargetModel;
 import com.teamgogoal.presenter.TargetPresenter;
 import com.teamgogoal.utils.ToastUtils;
@@ -27,6 +28,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class TargetActivity extends AppCompatActivity implements TargetView {
 
@@ -69,7 +71,7 @@ public class TargetActivity extends AppCompatActivity implements TargetView {
 
     @Override
     public <T> void switchView(Class<T> activityClass) {
-        Intent intent = new Intent(this, ProfileActivity.class);
+        Intent intent = new Intent(this, activityClass);
         startActivity(intent);
     }
 
@@ -154,6 +156,11 @@ public class TargetActivity extends AppCompatActivity implements TargetView {
     @Override
     public void deleteTargetComplete() {
         ToastUtils.showShortMessage(this, "刪除目標成功!");
+    }
+
+    @OnClick(R.id.Target)
+    public void moveMessageActivity(View view) {
+        switchView(MessageActivity.class);
     }
 
 }
